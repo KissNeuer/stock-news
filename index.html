@@ -1,0 +1,1860 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+  <meta name="color-scheme" content="dark" />
+  <meta
+    name="description"
+    content="專屬 GAS 雲端代理全球財經新聞監控大牆"
+  />
+  <title>全球權威財經新聞監控大牆</title>
+
+  <style>
+    :root {
+      --bg: #080a0b;
+      --surface: #0e1213;
+      --surface-2: #151b1d;
+      --surface-3: #1a2224;
+      --line: #283135;
+      --line-strong: #3e4a4e;
+      --text: #dce8e4;
+      --muted: #81908c;
+      --green: #00ff88;
+      --green-soft: rgba(0, 255, 136, 0.13);
+      --amber: #ffaa00;
+      --amber-soft: rgba(255, 170, 0, 0.13);
+      --cyan: #00c8ff;
+      --cyan-soft: rgba(0, 200, 255, 0.13);
+      --red: #ff5d79;
+      --red-soft: rgba(255, 93, 121, 0.13);
+      --shadow: 0 18px 46px rgba(0, 0, 0, 0.4);
+      --radius: 9px;
+      --mono:
+        "Cascadia Code",
+        "JetBrains Mono",
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        Menlo,
+        monospace;
+      --sans:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Noto Sans TC",
+        "Microsoft JhengHei",
+        sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-width: 320px;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+    }
+
+    body {
+      height: 100vh;
+      overflow: hidden;
+      color: var(--text);
+      background:
+        radial-gradient(
+          circle at 15% -10%,
+          rgba(0, 255, 136, 0.07),
+          transparent 32%
+        ),
+        radial-gradient(
+          circle at 88% 0%,
+          rgba(255, 170, 0, 0.055),
+          transparent 28%
+        ),
+        linear-gradient(
+          180deg,
+          #0b0e0f 0%,
+          #080a0b 100%
+        );
+      font-family: var(--sans);
+    }
+
+    body::before {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      content: "";
+      opacity: 0.11;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          transparent 0,
+          transparent 2px,
+          rgba(255, 255, 255, 0.018) 3px,
+          transparent 4px
+        );
+      mix-blend-mode: screen;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .app-shell {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-rows:
+        auto
+        auto
+        minmax(0, 1fr)
+        auto;
+      gap: 10px;
+      width: min(1920px, 100%);
+      height: 100vh;
+      margin: 0 auto;
+      padding: 12px;
+    }
+
+    .terminal-header {
+      display: grid;
+      grid-template-columns:
+        minmax(300px, 1fr)
+        auto;
+      gap: 16px;
+      align-items: center;
+      min-height: 82px;
+      padding: 13px 15px;
+      border: 1px solid var(--line);
+      border-top-color: var(--green);
+      border-radius: var(--radius);
+      background: rgba(12, 16, 17, 0.96);
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      min-width: 0;
+    }
+
+    .brand h1 {
+      margin: 0;
+      overflow: hidden;
+      color: #f1fff8;
+      font:
+        800
+        clamp(20px, 2vw, 30px) /
+        1.2
+        var(--mono);
+      letter-spacing: -0.045em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .brand-subtitle {
+      display: flex;
+      gap: 9px;
+      align-items: center;
+      margin: 7px 0 0;
+      color: var(--green);
+      font: 700 10px/1.4 var(--mono);
+      letter-spacing: 0.1em;
+    }
+
+    .brand-subtitle::before {
+      width: 7px;
+      height: 7px;
+      flex: none;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 12px var(--green);
+      content: "";
+      animation:
+        pulse
+        1.7s
+        ease-in-out
+        infinite;
+    }
+
+    .header-controls {
+      display: grid;
+      grid-template-columns:
+        repeat(3, auto);
+      gap: 9px;
+      align-items: stretch;
+    }
+
+    .stat-box {
+      min-width: 145px;
+      padding: 9px 11px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background:
+        rgba(255, 255, 255, 0.018);
+    }
+
+    .stat-label {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font: 700 9px/1.3 var(--mono);
+      letter-spacing: 0.08em;
+    }
+
+    .stat-value {
+      display: block;
+      color: var(--amber);
+      font: 800 12px/1.35 var(--mono);
+      white-space: nowrap;
+    }
+
+    .refresh-button {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      min-width: 142px;
+      padding: 0 14px;
+      border:
+        1px solid
+        rgba(0, 255, 136, 0.72);
+      border-radius: 6px;
+      color: var(--green);
+      background: var(--green-soft);
+      font: 800 11px/1 var(--mono);
+      cursor: pointer;
+      transition: 120ms ease;
+    }
+
+    .refresh-button:hover:not(:disabled) {
+      background:
+        rgba(0, 255, 136, 0.22);
+      box-shadow:
+        0 0 24px
+        rgba(0, 255, 136, 0.13);
+      transform: translateY(-1px);
+    }
+
+    .refresh-button:disabled {
+      cursor: wait;
+      opacity: 0.6;
+    }
+
+    .refresh-button.is-loading
+    .refresh-icon {
+      animation:
+        spin
+        900ms
+        linear
+        infinite;
+    }
+
+    .system-strip {
+      display: grid;
+      grid-template-columns:
+        minmax(0, 1fr)
+        auto;
+      gap: 12px;
+      align-items: center;
+      min-height: 38px;
+      padding: 8px 12px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: rgba(14, 18, 19, 0.9);
+      font: 650 10px/1.35 var(--mono);
+    }
+
+    .system-message {
+      min-width: 0;
+      overflow: hidden;
+      color: var(--green);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .system-summary {
+      display: flex;
+      gap: 13px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .system-summary strong {
+      color: var(--amber);
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .category-column {
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(12, 16, 17, 0.86);
+      box-shadow:
+        0 12px 30px
+        rgba(0, 0, 0, 0.24);
+    }
+
+    .category-column[data-accent="green"] {
+      --accent: var(--green);
+      --accent-soft: var(--green-soft);
+    }
+
+    .category-column[data-accent="amber"] {
+      --accent: var(--amber);
+      --accent-soft: var(--amber-soft);
+    }
+
+    .category-column[data-accent="cyan"] {
+      --accent: var(--cyan);
+      --accent-soft: var(--cyan-soft);
+    }
+
+    .category-header {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      height: 60px;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 13px;
+      border-bottom:
+        1px solid var(--line);
+      border-left:
+        3px solid var(--accent);
+      background: #111718;
+    }
+
+    .category-header h2 {
+      margin: 0;
+      color: #f0f7f4;
+      font: 850 14px/1.3 var(--mono);
+    }
+
+    .category-code {
+      display: block;
+      margin-top: 3px;
+      color: var(--accent);
+      font: 750 9px/1.2 var(--mono);
+      letter-spacing: 0.12em;
+    }
+
+    .category-count {
+      padding: 4px 7px;
+      border:
+        1px solid
+        color-mix(
+          in srgb,
+          var(--accent) 44%,
+          transparent
+        );
+      border-radius: 4px;
+      color: var(--accent);
+      background: var(--accent-soft);
+      font: 850 10px/1 var(--mono);
+    }
+
+    .source-stack {
+      display: grid;
+      grid-template-rows:
+        repeat(
+          var(--source-count),
+          minmax(220px, 1fr)
+        );
+      gap: 9px;
+      height: calc(100% - 60px);
+      min-height: 0;
+      padding: 9px;
+      overflow: hidden;
+    }
+
+    .news-box {
+      height: 100%;
+      min-width: 0;
+      min-height: 220px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background:
+        linear-gradient(
+          180deg,
+          #171d1f,
+          #0e1213
+        );
+    }
+
+    .news-box-header {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      height: 46px;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 10px;
+      border-bottom:
+        1px solid var(--line);
+      background: #192123;
+    }
+
+    .source-identity {
+      display: flex;
+      min-width: 0;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .source-code {
+      display: inline-grid;
+      width: 31px;
+      height: 24px;
+      flex: none;
+      place-items: center;
+      border:
+        1px solid
+        var(--line-strong);
+      border-radius: 4px;
+      color: var(--accent);
+      background: var(--accent-soft);
+      font: 900 9px/1 var(--mono);
+    }
+
+    .source-name {
+      min-width: 0;
+      margin: 0;
+      overflow: hidden;
+      color: #e7efec;
+      font: 800 11px/1.25 var(--mono);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .source-status {
+      display: inline-flex;
+      flex: none;
+      gap: 6px;
+      align-items: center;
+      color: var(--muted);
+      font: 800 8px/1.2 var(--mono);
+      letter-spacing: 0.05em;
+    }
+
+    .source-status::before {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 8px currentColor;
+      content: "";
+    }
+
+    .source-status[data-status="online"] {
+      color: var(--green);
+    }
+
+    .source-status[data-status="loading"] {
+      color: var(--amber);
+    }
+
+    .source-status[data-status="stale"] {
+      color: var(--cyan);
+    }
+
+    .source-status[data-status="error"] {
+      color: var(--red);
+    }
+
+    .news-content {
+      height: calc(100% - 46px);
+      min-height: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-gutter: stable;
+      scrollbar-width: thin;
+      scrollbar-color:
+        var(--accent)
+        rgba(255, 255, 255, 0.025);
+    }
+
+    .news-content::-webkit-scrollbar {
+      width: 9px;
+    }
+
+    .news-content::-webkit-scrollbar-track {
+      border-left:
+        1px solid
+        rgba(255, 255, 255, 0.03);
+      background:
+        rgba(255, 255, 255, 0.018);
+    }
+
+    .news-content::-webkit-scrollbar-thumb {
+      border: 2px solid transparent;
+      border-radius: 999px;
+      background:
+        color-mix(
+          in srgb,
+          var(--accent) 58%,
+          #30383a
+        );
+      background-clip: padding-box;
+    }
+
+    .news-item {
+      position: relative;
+      display: grid;
+      gap: 7px;
+      padding: 11px 12px 12px 16px;
+      border-bottom:
+        1px solid
+        rgba(40, 49, 53, 0.8);
+      transition: background 120ms ease;
+    }
+
+    .news-item:last-child {
+      border-bottom: 0;
+    }
+
+    .news-item::before {
+      position: absolute;
+      top: 15px;
+      left: 7px;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 7px var(--accent);
+      content: "";
+    }
+
+    .news-item:hover {
+      background:
+        rgba(255, 255, 255, 0.028);
+    }
+
+    .news-title {
+      display: -webkit-box;
+      overflow: hidden;
+      color: #e0e9e6;
+      font: 650 12.5px/1.5 var(--sans);
+      text-decoration: none;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+
+    .news-title:hover,
+    .news-title:focus-visible {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .news-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 8px;
+      align-items: center;
+      color: var(--muted);
+      font: 650 9px/1.35 var(--mono);
+    }
+
+    .news-source {
+      padding: 2px 5px;
+      border:
+        1px solid
+        color-mix(
+          in srgb,
+          var(--accent) 46%,
+          transparent
+        );
+      border-radius: 3px;
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .news-time::before {
+      margin-right: 7px;
+      color: var(--line-strong);
+      content: "//";
+    }
+
+    .state-message {
+      display: grid;
+      min-height: 100%;
+      padding: 18px 14px;
+      place-items: center;
+      color: var(--muted);
+      font: 650 10px/1.6 var(--mono);
+      text-align: center;
+    }
+
+    .state-message.error {
+      color: #ff8ca1;
+      background: var(--red-soft);
+    }
+
+    .skeleton-row {
+      display: grid;
+      gap: 8px;
+      padding: 13px;
+      border-bottom:
+        1px solid
+        rgba(40, 49, 53, 0.75);
+    }
+
+    .skeleton-line {
+      height: 8px;
+      overflow: hidden;
+      border-radius: 3px;
+      background:
+        rgba(255, 255, 255, 0.055);
+    }
+
+    .skeleton-line::after {
+      display: block;
+      width: 55%;
+      height: 100%;
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.12),
+          transparent
+        );
+      content: "";
+      animation:
+        shimmer
+        1.2s
+        linear
+        infinite;
+    }
+
+    .skeleton-line:nth-child(1) {
+      width: 94%;
+    }
+
+    .skeleton-line:nth-child(2) {
+      width: 76%;
+    }
+
+    .skeleton-line:nth-child(3) {
+      width: 42%;
+      height: 6px;
+    }
+
+    .terminal-footer {
+      display: grid;
+      grid-template-columns:
+        minmax(0, 1fr)
+        auto;
+      gap: 14px;
+      align-items: center;
+      min-height: 34px;
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      color: var(--muted);
+      background: rgba(14, 18, 19, 0.9);
+      font: 650 9px/1.4 var(--mono);
+    }
+
+    .footer-status {
+      color: var(--green);
+      white-space: nowrap;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes pulse {
+      0%,
+      100% {
+        opacity: 0.55;
+        transform: scale(0.85);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.12);
+      }
+    }
+
+    @keyframes shimmer {
+      from {
+        transform: translateX(-130%);
+      }
+
+      to {
+        transform: translateX(260%);
+      }
+    }
+
+    @media (max-width: 1280px) {
+      body {
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto;
+      }
+
+      .app-shell {
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .terminal-header {
+        grid-template-columns: 1fr;
+      }
+
+      .header-controls {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+      }
+
+      .refresh-button {
+        min-height: 46px;
+        grid-column: 1 / -1;
+      }
+
+      .dashboard {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+        overflow: visible;
+      }
+
+      .category-column {
+        height: 920px;
+      }
+
+      .category-column:last-child {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .app-shell {
+        padding: 8px;
+      }
+
+      .brand h1 {
+        white-space: normal;
+      }
+
+      .header-controls,
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .refresh-button,
+      .category-column:last-child {
+        grid-column: auto;
+      }
+
+      .system-strip,
+      .terminal-footer {
+        grid-template-columns: 1fr;
+      }
+
+      .system-message {
+        white-space: normal;
+      }
+
+      .system-summary {
+        justify-content: space-between;
+      }
+
+      .category-column {
+        height: auto;
+        min-height: 0;
+      }
+
+      .source-stack {
+        grid-template-rows: none;
+        height: auto;
+        overflow: visible;
+      }
+
+      .news-box {
+        height: 390px;
+      }
+
+      .footer-status {
+        white-space: normal;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app-shell">
+    <header class="terminal-header">
+      <section class="brand">
+        <h1>全球權威財經新聞監控大牆</h1>
+
+        <p class="brand-subtitle">
+          OFFICIAL SOURCE NORMALIZER / GAS RSS /
+          AUTO REFRESH 300 SEC
+        </p>
+      </section>
+
+      <section
+        class="header-controls"
+        aria-label="更新控制區"
+      >
+        <div class="stat-box">
+          <span class="stat-label">
+            最後更新時間
+          </span>
+
+          <time
+            id="last-updated"
+            class="stat-value"
+          >
+            尚未更新
+          </time>
+        </div>
+
+        <div class="stat-box">
+          <span class="stat-label">
+            下次更新倒數
+          </span>
+
+          <span
+            id="countdown"
+            class="stat-value"
+          >
+            300 秒
+          </span>
+        </div>
+
+        <button
+          id="refresh-button"
+          class="refresh-button"
+          type="button"
+        >
+          <span
+            class="refresh-icon"
+            aria-hidden="true"
+          >
+            ↻
+          </span>
+
+          <span class="refresh-label">
+            立即重新整理
+          </span>
+        </button>
+      </section>
+    </header>
+
+    <section
+      class="system-strip"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      <div
+        id="system-message"
+        class="system-message"
+      >
+        SYSTEM READY // 準備透過 GAS 同步六個官方來源
+      </div>
+
+      <div class="system-summary">
+        <span>
+          ONLINE
+          <strong id="online-count">0</strong>
+        </span>
+
+        <span>
+          ITEMS
+          <strong id="item-count">0</strong>
+        </span>
+      </div>
+    </section>
+
+    <section
+      class="dashboard"
+      aria-label="財經新聞分類"
+    >
+      <section
+        class="category-column"
+        data-accent="green"
+      >
+        <header class="category-header">
+          <div>
+            <h2>美股／國際</h2>
+            <span class="category-code">
+              US · GLOBAL MARKETS
+            </span>
+          </div>
+
+          <span
+            id="count-global"
+            class="category-count"
+          >
+            0
+          </span>
+        </header>
+
+        <div
+          id="stack-global"
+          class="source-stack"
+          style="--source-count: 2"
+        ></div>
+      </section>
+
+      <section
+        class="category-column"
+        data-accent="amber"
+      >
+        <header class="category-header">
+          <div>
+            <h2>中港股／亞太</h2>
+            <span class="category-code">
+              CN · HK · APAC
+            </span>
+          </div>
+
+          <span
+            id="count-asia"
+            class="category-count"
+          >
+            0
+          </span>
+        </header>
+
+        <div
+          id="stack-asia"
+          class="source-stack"
+          style="--source-count: 2"
+        ></div>
+      </section>
+
+      <section
+        class="category-column"
+        data-accent="cyan"
+      >
+        <header class="category-header">
+          <div>
+            <h2>台股個股與大盤</h2>
+            <span class="category-code">
+              TWSE · TPEx · TAIWAN
+            </span>
+          </div>
+
+          <span
+            id="count-taiwan"
+            class="category-count"
+          >
+            0
+          </span>
+        </header>
+
+        <div
+          id="stack-taiwan"
+          class="source-stack"
+          style="--source-count: 2"
+        ></div>
+      </section>
+    </section>
+
+    <footer class="terminal-footer">
+      <span>
+        單檔版只連線專屬 Google Apps Script；GAS 將官方 RSS、API 與 Sitemap 統一轉為標準 RSS。
+      </span>
+
+      <span
+        id="footer-status"
+        class="footer-status"
+      >
+        NETWORK: CONNECTING
+      </span>
+    </footer>
+  </main>
+
+  <script>
+"use strict";
+
+const GAS_URL =
+  "https://script.google.com/macros/s/AKfycbzkLAbbXpOHINRxPAvO9Mx8SXOiE0uxwijEtpQZPjJ8db0EN2GTAlnXd0-JbROZUQORZQ/exec";
+
+const REFRESH_INTERVAL_MS = 300_000;
+const COUNTDOWN_INTERVAL_MS = 1_000;
+const FETCH_TIMEOUT_MS = 25_000;
+const MAX_ITEMS_PER_SOURCE = 8;
+const CACHE_KEY = "global-total-news-official-gas-cache-v1";
+
+const SOURCE_META = Object.freeze([
+  Object.freeze({
+    id: "reuters",
+    gasSource: "reuters",
+    code: "RTR",
+    name: "Reuters 路透社",
+    group: "global"
+  }),
+  Object.freeze({
+    id: "wsj",
+    gasSource: "wsj",
+    code: "WSJ",
+    name: "The Wall Street Journal",
+    group: "global"
+  }),
+  Object.freeze({
+    id: "futu",
+    gasSource: "futu",
+    code: "FUT",
+    name: "富途牛牛 Futu",
+    group: "asia"
+  }),
+  Object.freeze({
+    id: "edn",
+    gasSource: "edn",
+    code: "EDN",
+    name: "經濟日報",
+    group: "asia"
+  }),
+  Object.freeze({
+    id: "cnyes",
+    gasSource: "anue",
+    code: "ANU",
+    name: "鉅亨網 Anue",
+    group: "taiwan"
+  }),
+  Object.freeze({
+    id: "yahoo",
+    gasSource: "yahoo",
+    code: "YAH",
+    name: "Yahoo 股市",
+    group: "taiwan"
+  })
+]);
+
+const VALID_GAS_SOURCES = Object.freeze(
+  new Set(["reuters", "wsj", "futu", "edn", "anue", "yahoo"])
+);
+
+function buildGasRequestUrl(source) {
+  const gasSource = String(source.gasSource || "")
+    .trim()
+    .toLowerCase();
+
+  if (!VALID_GAS_SOURCES.has(gasSource)) {
+    throw new Error(`未授權的 GAS source 代號：${gasSource || "EMPTY"}`);
+  }
+
+  return `${GAS_URL}?source=${gasSource}`;
+}
+
+const state = {
+  isRefreshing: false,
+  lastUpdatedAt: null,
+  nextRefreshAt: Date.now() + REFRESH_INTERVAL_MS,
+  refreshTimerId: null,
+  countdownTimerId: null,
+  itemsBySource: new Map(),
+  statusBySource: new Map()
+};
+
+const dom = {
+  lastUpdated: document.getElementById("last-updated"),
+  countdown: document.getElementById("countdown"),
+  refreshButton: document.getElementById("refresh-button"),
+  refreshLabel: document.querySelector("#refresh-button .refresh-label"),
+  systemMessage: document.getElementById("system-message"),
+  onlineCount: document.getElementById("online-count"),
+  itemCount: document.getElementById("item-count"),
+  footerStatus: document.getElementById("footer-status"),
+  stacks: {
+    global: document.getElementById("stack-global"),
+    asia: document.getElementById("stack-asia"),
+    taiwan: document.getElementById("stack-taiwan")
+  },
+  counts: {
+    global: document.getElementById("count-global"),
+    asia: document.getElementById("count-asia"),
+    taiwan: document.getElementById("count-taiwan")
+  }
+};
+
+function createElement(tagName, className, textContent) {
+  const element = document.createElement(tagName);
+
+  if (className) {
+    element.className = className;
+  }
+
+  if (typeof textContent === "string") {
+    element.textContent = textContent;
+  }
+
+  return element;
+}
+
+function pad2(value) {
+  return String(value).padStart(2, "0");
+}
+
+function startOfLocalDay(date) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function formatNewsTime(value) {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "時間未知";
+  }
+
+  const now = new Date();
+  const targetDay = startOfLocalDay(date).getTime();
+  const today = startOfLocalDay(now).getTime();
+  const oneDay = 86_400_000;
+  const time = `${pad2(date.getHours())}:${pad2(date.getMinutes())}`;
+
+  if (targetDay === today) {
+    return `今天 ${time}`;
+  }
+
+  if (targetDay === today - oneDay) {
+    return `昨日 ${time}`;
+  }
+
+  return `${pad2(date.getMonth() + 1)}-${pad2(date.getDate())} ${time}`;
+}
+
+function formatUpdatedTime(value) {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "尚未更新";
+  }
+
+  return (
+    `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())} ` +
+    `${pad2(date.getHours())}:${pad2(date.getMinutes())}:${pad2(date.getSeconds())}`
+  );
+}
+
+function normalizeTitleKey(title) {
+  return String(title || "")
+    .normalize("NFKC")
+    .toLocaleLowerCase("zh-Hant")
+    .replace(/[\s\p{P}\p{S}]+/gu, "")
+    .trim();
+}
+
+function decodeXmlEntities(value) {
+  return String(value || "")
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => {
+      const codePoint = Number.parseInt(hex, 16);
+      return Number.isFinite(codePoint) ? String.fromCodePoint(codePoint) : _;
+    })
+    .replace(/&#([0-9]+);/g, (_, decimal) => {
+      const codePoint = Number.parseInt(decimal, 10);
+      return Number.isFinite(codePoint) ? String.fromCodePoint(codePoint) : _;
+    })
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, '"')
+    .replace(/&apos;|&#39;/gi, "'")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">");
+}
+
+function cleanExtractedText(value) {
+  return decodeXmlEntities(
+    String(value || "")
+      .replace(/^\s*<!\[CDATA\[/i, "")
+      .replace(/\]\]>\s*$/i, "")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+  );
+}
+
+function cleanHeadline(rawTitle, sourceName) {
+  let title = cleanExtractedText(rawTitle);
+
+  const suffixes = [
+    sourceName,
+    "Reuters",
+    "The Wall Street Journal",
+    "WSJ",
+    "富途資訊",
+    "富途牛牛",
+    "經濟日報",
+    "鉅亨網",
+    "Yahoo股市",
+    "Yahoo Finance"
+  ];
+
+  for (const suffix of suffixes) {
+    const escaped = suffix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    title = title
+      .replace(new RegExp(`\\s+[-–—|]\\s+${escaped}$`, "i"), "")
+      .trim();
+  }
+
+  return title;
+}
+
+function normalizeHttpUrl(value) {
+  const decodedValue = cleanExtractedText(value);
+
+  try {
+    const url = new URL(decodedValue);
+    return /^https?:$/.test(url.protocol) ? url.toString() : "";
+  } catch {
+    return "";
+  }
+}
+
+function unwrapGasPayload(rawText) {
+  const text = String(rawText || "")
+    .replace(/^\uFEFF/, "")
+    .trim();
+
+  if (!text) {
+    throw new Error("GAS 回傳空白內容");
+  }
+
+  if (!/^[\[{]/.test(text)) {
+    return text;
+  }
+
+  let payload;
+
+  try {
+    payload = JSON.parse(text);
+  } catch {
+    return text;
+  }
+
+  if (typeof payload === "string") {
+    return payload;
+  }
+
+  const xmlCandidates = [
+    payload?.xml,
+    payload?.content,
+    payload?.contents,
+    payload?.data,
+    payload?.body,
+    payload?.result
+  ];
+
+  for (const candidate of xmlCandidates) {
+    if (
+      typeof candidate === "string" &&
+      /<(?:[\w.-]+:)?(?:rss|channel|item)\b/i.test(candidate)
+    ) {
+      return candidate;
+    }
+  }
+
+  const errorMessage =
+    payload?.error ||
+    payload?.message ||
+    payload?.detail ||
+    payload?.statusText ||
+    "GAS 回傳 JSON，但其中沒有 RSS XML";
+
+  throw new Error(String(errorMessage));
+}
+
+function extractRegexField(block, tagName) {
+  const escapedTag = tagName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  const standardPattern = new RegExp(
+    `<${escapedTag}>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?<\\/${escapedTag}>`,
+    "i"
+  );
+
+  const standardMatch = block.match(standardPattern);
+
+  if (standardMatch) {
+    return standardMatch[1] || "";
+  }
+
+  const tolerantPattern = new RegExp(
+    `<(?:[\\w.-]+:)?${escapedTag}\\b([^>]*)>` +
+      `(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?` +
+      `<\\/(?:[\\w.-]+:)?${escapedTag}\\s*>`,
+    "i"
+  );
+
+  const tolerantMatch = block.match(tolerantPattern);
+
+  if (tolerantMatch) {
+    return tolerantMatch[2] || "";
+  }
+
+  if (tagName.toLowerCase() === "link") {
+    const selfClosingLinkPattern =
+      /<(?:[\w.-]+:)?link\b[^>]*\bhref\s*=\s*(["'])([\s\S]*?)\1[^>]*\/?>/i;
+
+    const selfClosingMatch = block.match(selfClosingLinkPattern);
+
+    if (selfClosingMatch) {
+      return selfClosingMatch[2] || "";
+    }
+  }
+
+  return "";
+}
+
+function extractItemBlocks(text) {
+  const standardItems =
+    text.match(/<item>[\s\S]*?<\/item>/g);
+
+  if (standardItems && standardItems.length > 0) {
+    return standardItems;
+  }
+
+  return (
+    text.match(
+      /<(?:[\w.-]+:)?item\b[^>]*>[\s\S]*?<\/(?:[\w.-]+:)?item\s*>/gi
+    ) || []
+  );
+}
+
+function parseOfficialRssText(rawText, source) {
+  const rssText = unwrapGasPayload(rawText);
+  const itemBlocks = extractItemBlocks(rssText);
+
+  if (itemBlocks.length === 0) {
+    const preview = rssText.slice(0, 180).replace(/\s+/g, " ");
+    throw new Error(
+      `GAS 已回傳文字，但找不到 item 區塊。內容開頭：${preview}`
+    );
+  }
+
+  const articles = itemBlocks
+    .map((block, index) => {
+      const titleRaw = extractRegexField(block, "title");
+      const linkRaw =
+        extractRegexField(block, "link") ||
+        extractRegexField(block, "guid");
+      const pubDateRaw =
+        extractRegexField(block, "pubDate") ||
+        extractRegexField(block, "date") ||
+        extractRegexField(block, "published") ||
+        extractRegexField(block, "updated");
+
+      const title = cleanHeadline(titleRaw, source.name);
+      const link = normalizeHttpUrl(linkRaw);
+      const dateText = cleanExtractedText(pubDateRaw);
+      const dateObject = new Date(dateText);
+      const validDate = !Number.isNaN(dateObject.getTime());
+
+      if (!title || !link) {
+        return null;
+      }
+
+      return {
+        id: `${source.id}:${normalizeTitleKey(title).slice(0, 96)}:${index}`,
+        sourceId: source.id,
+        source: source.name,
+        group: source.group,
+        title,
+        url: link,
+        publishedAt: validDate ? dateObject.toISOString() : null,
+        timestamp: validDate ? dateObject.getTime() : 0,
+        dateObject: validDate ? dateObject : new Date(0)
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.dateObject - a.dateObject);
+
+  const seen = new Set();
+
+  return articles
+    .filter((article) => {
+      const key = normalizeTitleKey(article.title);
+
+      if (!key || seen.has(key)) {
+        return false;
+      }
+
+      seen.add(key);
+      return true;
+    })
+    .slice(0, MAX_ITEMS_PER_SOURCE)
+    .map(({ dateObject, ...article }) => article);
+}
+
+async function fetchText(url, timeoutMs) {
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(
+    () => controller.abort(),
+    timeoutMs
+  );
+
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      mode: "cors",
+      cache: "no-store",
+      credentials: "omit",
+      redirect: "follow",
+      signal: controller.signal
+    });
+
+    if (!response.ok) {
+      throw new Error(`GAS HTTP ${response.status}`);
+    }
+
+    return await response.text();
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
+}
+
+async function fetchSource(source) {
+  try {
+    const requestUrl = buildGasRequestUrl(source);
+    const rawText = await fetchText(requestUrl, FETCH_TIMEOUT_MS);
+    const items = parseOfficialRssText(rawText, source);
+
+    if (items.length === 0) {
+      throw new Error("GAS 回傳成功，但沒有可顯示新聞");
+    }
+
+    return {
+      source,
+      items,
+      channel: `GAS:${source.gasSource}`
+    };
+  } catch (error) {
+    const reason =
+      error?.name === "AbortError"
+        ? "GAS 連線逾時"
+        : error?.message || "GAS 未知錯誤";
+
+    throw new Error(reason);
+  }
+}
+
+function createSkeleton() {
+  const fragment = document.createDocumentFragment();
+
+  for (let index = 0; index < 4; index += 1) {
+    const row = createElement("div", "skeleton-row");
+
+    row.append(
+      createElement("div", "skeleton-line"),
+      createElement("div", "skeleton-line"),
+      createElement("div", "skeleton-line")
+    );
+
+    fragment.appendChild(row);
+  }
+
+  return fragment;
+}
+
+function createSourceBox(source) {
+  const box = createElement("section", "news-box");
+  box.dataset.sourceId = source.id;
+
+  const header = createElement("header", "news-box-header");
+  const identity = createElement("div", "source-identity");
+  const code = createElement("span", "source-code", source.code);
+  const name = createElement("h3", "source-name", source.name);
+  const status = createElement("span", "source-status", "WAIT");
+
+  status.dataset.role = "status";
+  status.dataset.status = "loading";
+
+  identity.append(code, name);
+  header.append(identity, status);
+
+  const content = createElement("div", "news-content");
+  content.dataset.role = "content";
+  content.tabIndex = 0;
+  content.setAttribute("aria-label", `${source.name} 新聞清單，可獨立滾動`);
+  content.appendChild(createSkeleton());
+
+  box.append(header, content);
+  return box;
+}
+
+function mountSourceBoxes() {
+  Object.values(dom.stacks).forEach((stack) => stack.replaceChildren());
+
+  SOURCE_META.forEach((source) => {
+    dom.stacks[source.group].appendChild(createSourceBox(source));
+    state.statusBySource.set(source.id, {
+      status: "loading",
+      error: null,
+      channel: null
+    });
+  });
+}
+
+function getSourceBox(sourceId) {
+  return document.querySelector(`[data-source-id="${sourceId}"]`);
+}
+
+function createNewsItem(item, source) {
+  const article = createElement("article", "news-item");
+  const link = createElement("a", "news-title", item.title || "未命名新聞");
+
+  link.href = item.url;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.referrerPolicy = "no-referrer";
+
+  const meta = createElement("div", "news-meta");
+  const sourceLabel = createElement("span", "news-source", source.name);
+  const time = createElement(
+    "time",
+    "news-time",
+    item.publishedAt ? formatNewsTime(item.publishedAt) : "時間未知"
+  );
+
+  if (item.publishedAt) {
+    time.dateTime = item.publishedAt;
+  }
+
+  meta.append(sourceLabel, time);
+  article.append(link, meta);
+  return article;
+}
+
+function renderSource(source) {
+  const box = getSourceBox(source.id);
+
+  if (!box) {
+    return;
+  }
+
+  const statusElement = box.querySelector('[data-role="status"]');
+  const content = box.querySelector('[data-role="content"]');
+  const previousScrollTop = content.scrollTop;
+  const statusInfo = state.statusBySource.get(source.id) || {
+    status: "loading",
+    error: null,
+    channel: null
+  };
+  const items = state.itemsBySource.get(source.id) || [];
+  const statusLabels = {
+    online: "LIVE",
+    loading: "SYNC",
+    stale: "CACHE",
+    error: "ERROR"
+  };
+
+  statusElement.dataset.status = statusInfo.status;
+  statusElement.textContent = statusLabels[statusInfo.status] || "WAIT";
+  statusElement.title = statusInfo.channel
+    ? `連線通道：${statusInfo.channel}`
+    : statusInfo.error || "";
+
+  content.replaceChildren();
+
+  if (statusInfo.status === "loading" && items.length === 0) {
+    content.appendChild(createSkeleton());
+    return;
+  }
+
+  if (items.length > 0) {
+    const sortedItems = [...items].sort(
+      (a, b) => new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0)
+    );
+    const fragment = document.createDocumentFragment();
+
+    sortedItems.forEach((item) => {
+      fragment.appendChild(createNewsItem(item, source));
+    });
+
+    content.appendChild(fragment);
+    content.scrollTop = Math.min(previousScrollTop, content.scrollHeight);
+    return;
+  }
+
+  content.appendChild(
+    createElement(
+      "div",
+      `state-message${statusInfo.status === "error" ? " error" : ""}`,
+      statusInfo.error || "目前沒有可顯示的最新新聞"
+    )
+  );
+}
+
+function renderSummary() {
+  const totals = { global: 0, asia: 0, taiwan: 0 };
+  let online = 0;
+  let totalItems = 0;
+
+  SOURCE_META.forEach((source) => {
+    const items = state.itemsBySource.get(source.id) || [];
+    const status = state.statusBySource.get(source.id)?.status;
+
+    totals[source.group] += items.length;
+    totalItems += items.length;
+
+    if (status === "online") {
+      online += 1;
+    }
+  });
+
+  dom.onlineCount.textContent = String(online);
+  dom.itemCount.textContent = String(totalItems);
+
+  Object.entries(totals).forEach(([group, total]) => {
+    dom.counts[group].textContent = String(total);
+  });
+
+  dom.footerStatus.textContent = state.isRefreshing
+    ? "GAS: SYNCHRONIZING"
+    : `GAS: ${online}/${SOURCE_META.length} SOURCES ONLINE`;
+}
+
+function renderAll() {
+  SOURCE_META.forEach(renderSource);
+  renderSummary();
+}
+
+function setLoading(isLoading) {
+  state.isRefreshing = isLoading;
+  dom.refreshButton.disabled = isLoading;
+  dom.refreshButton.classList.toggle("is-loading", isLoading);
+  dom.refreshLabel.textContent = isLoading ? "同步資料中" : "立即重新整理";
+}
+
+function setSystemMessage(message) {
+  dom.systemMessage.textContent = message;
+}
+
+function updateCountdown() {
+  const remaining = Math.max(0, state.nextRefreshAt - Date.now());
+  const seconds = Math.ceil(remaining / 1000);
+  dom.countdown.textContent = seconds > 0 ? `${seconds} 秒` : "即將更新";
+}
+
+function resetRefreshTimer() {
+  if (state.refreshTimerId !== null) {
+    window.clearInterval(state.refreshTimerId);
+  }
+
+  state.nextRefreshAt = Date.now() + REFRESH_INTERVAL_MS;
+  state.refreshTimerId = window.setInterval(
+    () => refreshNews("auto"),
+    REFRESH_INTERVAL_MS
+  );
+  updateCountdown();
+}
+
+function saveCache() {
+  const sources = {};
+
+  SOURCE_META.forEach((source) => {
+    sources[source.id] = state.itemsBySource.get(source.id) || [];
+  });
+
+  try {
+    localStorage.setItem(
+      CACHE_KEY,
+      JSON.stringify({
+        savedAt: new Date().toISOString(),
+        sources
+      })
+    );
+  } catch {
+    /* 私密模式或儲存空間不足時，略過快取。 */
+  }
+}
+
+function restoreCache() {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+
+    if (!raw) {
+      return false;
+    }
+
+    const cache = JSON.parse(raw);
+    let restored = 0;
+
+    SOURCE_META.forEach((source) => {
+      const items = Array.isArray(cache?.sources?.[source.id])
+        ? cache.sources[source.id].slice(0, MAX_ITEMS_PER_SOURCE)
+        : [];
+
+      if (items.length > 0) {
+        state.itemsBySource.set(source.id, items);
+        state.statusBySource.set(source.id, {
+          status: "stale",
+          error: null,
+          channel: "LOCAL CACHE"
+        });
+        restored += items.length;
+      }
+    });
+
+    if (restored > 0) {
+      state.lastUpdatedAt = cache.savedAt ? new Date(cache.savedAt) : null;
+      dom.lastUpdated.textContent = formatUpdatedTime(state.lastUpdatedAt);
+      renderAll();
+      setSystemMessage(`CACHE RESTORED // 已載入 ${restored} 則上次成功資料`);
+      return true;
+    }
+  } catch {
+    /* 快取資料損壞時忽略。 */
+  }
+
+  return false;
+}
+
+async function refreshNews(trigger = "manual") {
+  if (state.isRefreshing) {
+    return;
+  }
+
+  setLoading(true);
+  setSystemMessage(
+    trigger === "auto"
+      ? "AUTO REFRESH // 正在透過專屬 GAS 同步六個官方來源"
+      : "MANUAL REFRESH // 正在透過專屬 GAS 同步六個官方財經來源"
+  );
+
+  SOURCE_META.forEach((source) => {
+    const existingItems = state.itemsBySource.get(source.id) || [];
+    state.statusBySource.set(source.id, {
+      status: existingItems.length > 0 ? "stale" : "loading",
+      error: null,
+      channel: null
+    });
+  });
+
+  renderAll();
+
+  const settled = await Promise.allSettled(SOURCE_META.map(fetchSource));
+  let successfulSources = 0;
+  let failedSources = 0;
+
+  settled.forEach((result, index) => {
+    const source = SOURCE_META[index];
+
+    if (result.status === "fulfilled") {
+      state.itemsBySource.set(source.id, result.value.items);
+      state.statusBySource.set(source.id, {
+        status: "online",
+        error: null,
+        channel: result.value.channel
+      });
+      successfulSources += 1;
+      return;
+    }
+
+    const existingItems = state.itemsBySource.get(source.id) || [];
+    const detail = result.reason?.message || "專屬 GAS 無法取得資料";
+
+    state.statusBySource.set(source.id, {
+      status: existingItems.length > 0 ? "stale" : "error",
+      error: existingItems.length > 0
+        ? `即時連線失敗，顯示上次成功資料。${detail}`
+        : `無法取得新聞。${detail}`,
+      channel: existingItems.length > 0 ? "LOCAL CACHE" : null
+    });
+    failedSources += 1;
+  });
+
+  state.lastUpdatedAt = new Date();
+  dom.lastUpdated.textContent = formatUpdatedTime(state.lastUpdatedAt);
+  dom.lastUpdated.dateTime = state.lastUpdatedAt.toISOString();
+
+  if (successfulSources > 0) {
+    saveCache();
+  }
+
+  const totalItems = Array.from(state.itemsBySource.values()).reduce(
+    (sum, items) => sum + items.length,
+    0
+  );
+
+  if (failedSources === 0) {
+    setSystemMessage(
+      `SYNC COMPLETE // ${successfulSources}/${SOURCE_META.length} GAS 來源正常，共 ${totalItems} 則新聞`
+    );
+  } else if (successfulSources > 0) {
+    setSystemMessage(
+      `PARTIAL SYNC // ${successfulSources}/${SOURCE_META.length} GAS 來源正常，${failedSources} 個來源使用快取或等待重試`
+    );
+  } else {
+    setSystemMessage(
+      "GAS OFFLINE // 專屬 GAS 目前無法回傳可解析資料，已保留可用快取"
+    );
+  }
+
+  setLoading(false);
+  renderAll();
+  resetRefreshTimer();
+}
+
+function handleVisibilityChange() {
+  if (
+    document.visibilityState === "visible" &&
+    Date.now() >= state.nextRefreshAt &&
+    !state.isRefreshing
+  ) {
+    refreshNews("auto");
+  }
+}
+
+function initialize() {
+  mountSourceBoxes();
+  restoreCache();
+  renderAll();
+
+  dom.refreshButton.addEventListener("click", () => refreshNews("manual"));
+  document.addEventListener("visibilitychange", handleVisibilityChange);
+
+  state.countdownTimerId = window.setInterval(
+    updateCountdown,
+    COUNTDOWN_INTERVAL_MS
+  );
+  resetRefreshTimer();
+  refreshNews("initial");
+}
+
+initialize();
+</script>
+</body>
+</html>
