@@ -12,6 +12,8 @@
     content="專屬 GAS 雲端代理全球財經新聞監控大牆"
   />
   <title>CABUNI // FINANCIAL HUB</title>
+  <link rel="icon" type="image/png" href="./logo.png" />
+  <link rel="apple-touch-icon" href="./logo.png" />
 
   <style>
     :root {
@@ -146,6 +148,21 @@
 
     .brand {
       min-width: 0;
+    }
+
+    .brand-title-row {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+    }
+
+    .brand-logo {
+      display: block;
+      width: auto;
+      height: 48px;
+      flex: none;
+      margin-right: 15px;
+      object-fit: contain;
     }
 
     .brand h1 {
@@ -825,7 +842,17 @@
   <main class="app-shell">
     <header class="terminal-header">
       <section class="brand">
-        <h1>FINANCIAL // GLO-TO-NEWS HUB</h1>
+        <div class="brand-title-row">
+          <img
+            class="brand-logo"
+            src="./logo.png"
+            alt="CABUNI 金色狂牛 Logo"
+            width="48"
+            height="48"
+          />
+
+          <h1>FINANCIAL // GLO-TO-NEWS HUB</h1>
+        </div>
 
         <p class="brand-subtitle">
           OFFICIAL SOURCE NORMALIZER / GAS RSS /
