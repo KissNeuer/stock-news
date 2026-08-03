@@ -1,21 +1,15 @@
 <!DOCTYPE html>
+
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
-  <meta name="color-scheme" content="dark" />
-  <meta
-    name="description"
-    content="專屬 GAS 雲端代理全球財經新聞監控大牆"
-  />
-  <title>CABUNI // FINANCIAL HUB</title>
-  <link rel="icon" type="image/png" href="./logo.png" />
-  <link rel="apple-touch-icon" href="./logo.png" />
-
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="dark" name="color-scheme"/>
+<meta content="專屬 GAS 雲端代理全球財經新聞監控大牆" name="description"/>
+<title>CABUNI // FINANCIAL HUB</title>
+<link href="./logo.png" rel="icon" type="image/png"/>
+<link href="./logo.png" rel="apple-touch-icon"/>
+<style>
     :root {
       --bg: #080a0b;
       --surface: #0e1213;
@@ -835,206 +829,459 @@
         transition-duration: 0.01ms !important;
       }
     }
-  </style>
+  
+    /* =======================================================
+       CABUNI CORNER PAGE PEEL NAVIGATION
+       ======================================================= */
+
+    .corner-peel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 100;
+      width: min(300px, calc(100vw - 12px));
+      height: 174px;
+      pointer-events: none;
+      font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        "Liberation Mono",
+        monospace;
+      isolation: isolate;
+    }
+
+    .corner-peel-trigger {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 3;
+      display: block;
+      width: 68px;
+      height: 68px;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      border: 0;
+      color: #67e8f9;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(17, 24, 44, 0.24) 0%,
+          rgba(17, 24, 44, 0.78) 58%,
+          rgba(8, 47, 73, 0.82) 100%
+        );
+      clip-path: polygon(100% 0, 100% 100%, 0 0);
+      cursor: pointer;
+      pointer-events: auto;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      filter:
+        drop-shadow(-6px 8px 12px rgba(0, 0, 0, 0.34))
+        drop-shadow(-1px 1px 5px rgba(6, 182, 212, 0.16));
+      transform-origin: top right;
+      transition:
+        width 300ms ease-out,
+        height 300ms ease-out,
+        filter 300ms ease-out,
+        background 300ms ease-out;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .corner-peel-trigger::before {
+      position: absolute;
+      inset: 0;
+      border-left: 1px solid rgba(6, 182, 212, 0.38);
+      border-bottom: 1px solid rgba(6, 182, 212, 0.38);
+      content: "";
+      clip-path: inherit;
+    }
+
+    .corner-peel-trigger::after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 1px;
+      height: 94px;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(103, 232, 249, 0.8),
+          rgba(6, 182, 212, 0)
+        );
+      content: "";
+      opacity: 0.52;
+      transform: rotate(45deg);
+      transform-origin: top right;
+    }
+
+    .corner-peel-code {
+      position: absolute;
+      top: 15px;
+      right: 4px;
+      display: block;
+      width: 48px;
+      color: #a5f3fc;
+      font-size: 8px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: 0.055em;
+      text-align: center;
+      text-shadow:
+        0 0 8px rgba(34, 211, 238, 0.65);
+      transform: rotate(45deg);
+      transition:
+        opacity 180ms ease,
+        transform 300ms ease-out;
+    }
+
+    .corner-peel-panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 2;
+      width: min(286px, calc(100vw - 12px));
+      min-height: 150px;
+      padding: 44px 14px 14px 28px;
+      overflow: hidden;
+      border: 1px solid rgba(6, 182, 212, 0.5);
+      border-top: 0;
+      border-right: 0;
+      border-radius: 0 0 0 16px;
+      color: #e5eef5;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(17, 24, 44, 0.975) 0%,
+          rgba(13, 21, 39, 0.965) 62%,
+          rgba(8, 47, 73, 0.94) 100%
+        );
+      box-shadow:
+        0 18px 38px rgba(0, 0, 0, 0.42),
+        0 0 20px rgba(6, 182, 212, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      clip-path:
+        polygon(
+          20% 0,
+          100% 0,
+          100% 100%,
+          0 100%,
+          0 24%
+        );
+      transform:
+        translate3d(18px, -14px, 0)
+        scale(0.7);
+      transform-origin: top right;
+      transition:
+        opacity 220ms ease-out,
+        visibility 0s linear 300ms,
+        transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .corner-peel-panel::before {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(103, 232, 249, 0.08),
+          transparent 42%,
+          rgba(34, 211, 238, 0.035)
+        );
+      content: "";
+    }
+
+    .corner-peel-panel::after {
+      position: absolute;
+      top: 13px;
+      right: 14px;
+      color: rgba(103, 232, 249, 0.5);
+      font-size: 8px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      content: "ROUTE MATRIX";
+    }
+
+    .corner-peel-list {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .corner-peel-item {
+      display: flex;
+      min-height: 38px;
+      align-items: center;
+      padding: 8px 10px;
+      border: 1px solid rgba(71, 85, 105, 0.55);
+      border-radius: 7px;
+      color: #a8b4c4;
+      background: rgba(2, 8, 23, 0.42);
+      font-size: 10px;
+      font-weight: 800;
+      line-height: 1.35;
+      letter-spacing: 0.025em;
+      text-decoration: none;
+      transition:
+        border-color 180ms ease,
+        color 180ms ease,
+        background 180ms ease,
+        box-shadow 180ms ease,
+        transform 180ms ease;
+    }
+
+    a.corner-peel-item:hover,
+    a.corner-peel-item:focus-visible {
+      border-color: rgba(34, 211, 238, 0.62);
+      color: #cffafe;
+      background: rgba(8, 47, 73, 0.52);
+      box-shadow:
+        0 0 14px rgba(6, 182, 212, 0.12);
+      outline: none;
+      transform: translateX(-2px);
+    }
+
+    .corner-peel-item.is-current {
+      cursor: default;
+      user-select: none;
+    }
+
+    .corner-peel-item.is-current-green {
+      border-color: rgba(0, 255, 136, 0.4);
+      color: #00ff88;
+      background: rgba(0, 255, 136, 0.075);
+      box-shadow:
+        inset 3px 0 0 rgba(0, 255, 136, 0.72),
+        0 0 12px rgba(0, 255, 136, 0.06);
+    }
+
+    .corner-peel-item.is-current-blue {
+      border-color: rgba(34, 211, 238, 0.46);
+      color: #67e8f9;
+      background: rgba(6, 182, 212, 0.09);
+      box-shadow:
+        inset 3px 0 0 rgba(34, 211, 238, 0.8),
+        0 0 12px rgba(6, 182, 212, 0.08);
+    }
+
+    .corner-peel:hover .corner-peel-panel,
+    .corner-peel:focus-within .corner-peel-panel,
+    .corner-peel.is-open .corner-peel-panel {
+      pointer-events: auto;
+      opacity: 1;
+      visibility: visible;
+      transform:
+        translate3d(0, 0, 0)
+        scale(1);
+      transition:
+        opacity 220ms ease-out,
+        visibility 0s linear 0s,
+        transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .corner-peel:hover .corner-peel-trigger,
+    .corner-peel:focus-within .corner-peel-trigger,
+    .corner-peel.is-open .corner-peel-trigger {
+      width: 88px;
+      height: 88px;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(17, 24, 44, 0.34) 0%,
+          rgba(17, 24, 44, 0.96) 62%,
+          rgba(8, 47, 73, 0.95) 100%
+        );
+      filter:
+        drop-shadow(-8px 10px 16px rgba(0, 0, 0, 0.42))
+        drop-shadow(-2px 2px 8px rgba(6, 182, 212, 0.25));
+    }
+
+    .corner-peel:hover .corner-peel-code,
+    .corner-peel:focus-within .corner-peel-code,
+    .corner-peel.is-open .corner-peel-code {
+      opacity: 0.82;
+      transform:
+        translate(-7px, 7px)
+        rotate(45deg);
+    }
+
+    @media (min-width: 768px) {
+      .corner-peel-item {
+        font-size: 11px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .corner-peel {
+        width: min(278px, calc(100vw - 8px));
+      }
+
+      .corner-peel-panel {
+        width: min(270px, calc(100vw - 8px));
+        padding-left: 24px;
+      }
+
+      .corner-peel-trigger {
+        width: 62px;
+        height: 62px;
+      }
+
+      .corner-peel-code {
+        top: 13px;
+        right: 2px;
+        font-size: 7px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .corner-peel-trigger,
+      .corner-peel-code,
+      .corner-peel-panel,
+      .corner-peel-item {
+        transition-duration: 0.01ms !important;
+      }
+    }
+</style>
 </head>
-
-<body>
-  <main class="app-shell">
-    <header class="terminal-header">
-      <section class="brand">
-        <div class="brand-title-row">
-          <img
-            class="brand-logo"
-            src="./logo.png"
-            alt="CABUNI 金色狂牛 Logo"
-            width="48"
-            height="48"
-          />
-
-          <h1>FINANCIAL // GLO-TO-NEWS HUB</h1>
-        </div>
-
-        <p class="brand-subtitle">
+<body><nav aria-label="網站快速切換" class="corner-peel fixed top-0 right-0 z-[100]" data-corner-peel="">
+<button aria-controls="cornerPeelMenu" aria-expanded="false" aria-label="開啟網站導航選單" class="corner-peel-trigger" data-corner-peel-trigger="" type="button">
+<span class="corner-peel-code">[// NAV]</span>
+</button>
+<div class="corner-peel-panel" id="cornerPeelMenu">
+<ol class="corner-peel-list">
+<li>
+<span aria-current="page" class="corner-peel-item is-current is-current-green">
+            01 // FINANCIAL HUB
+          </span>
+</li>
+<li>
+<a class="corner-peel-item" href="./stock.html">
+            02 // CYBER FIN-HUB ↗
+          </a>
+</li>
+</ol>
+</div>
+</nav>
+<main class="app-shell">
+<header class="terminal-header">
+<section class="brand">
+<div class="brand-title-row">
+<img alt="CABUNI 金色狂牛 Logo" class="brand-logo" height="48" src="./logo.png" width="48"/>
+<h1>FINANCIAL // GLO-TO-NEWS HUB</h1>
+</div>
+<p class="brand-subtitle">
           OFFICIAL SOURCE NORMALIZER / GAS RSS /
           AUTO REFRESH 300 SEC
         </p>
-      </section>
-
-      <section
-        class="header-controls"
-        aria-label="更新控制區"
-      >
-        <div class="stat-box">
-          <span class="stat-label">
+</section>
+<section aria-label="更新控制區" class="header-controls">
+<div class="stat-box">
+<span class="stat-label">
             最後更新時間
           </span>
-
-          <time
-            id="last-updated"
-            class="stat-value"
-          >
+<time class="stat-value" id="last-updated">
             尚未更新
           </time>
-        </div>
-
-        <div class="stat-box">
-          <span class="stat-label">
+</div>
+<div class="stat-box">
+<span class="stat-label">
             下次更新倒數
           </span>
-
-          <span
-            id="countdown"
-            class="stat-value"
-          >
+<span class="stat-value" id="countdown">
             300 秒
           </span>
-        </div>
-
-        <button
-          id="refresh-button"
-          class="refresh-button"
-          type="button"
-        >
-          <span
-            class="refresh-icon"
-            aria-hidden="true"
-          >
+</div>
+<button class="refresh-button" id="refresh-button" type="button">
+<span aria-hidden="true" class="refresh-icon">
             ↻
           </span>
-
-          <span class="refresh-label">
+<span class="refresh-label">
             立即重新整理
           </span>
-        </button>
-      </section>
-    </header>
-
-    <section
-      class="system-strip"
-      aria-live="polite"
-      aria-atomic="true"
-    >
-      <div
-        id="system-message"
-        class="system-message"
-      >
+</button>
+</section>
+</header>
+<section aria-atomic="true" aria-live="polite" class="system-strip">
+<div class="system-message" id="system-message">
         SYSTEM READY // 準備透過 GAS 同步六個官方來源
       </div>
-
-      <div class="system-summary">
-        <span>
+<div class="system-summary">
+<span>
           ONLINE
           <strong id="online-count">0</strong>
-        </span>
-
-        <span>
+</span>
+<span>
           ITEMS
           <strong id="item-count">0</strong>
-        </span>
-      </div>
-    </section>
-
-    <section
-      class="dashboard"
-      aria-label="財經新聞分類"
-    >
-      <section
-        class="category-column"
-        data-accent="green"
-      >
-        <header class="category-header">
-          <div>
-            <h2>美股／國際</h2>
-            <span class="category-code">
+</span>
+</div>
+</section>
+<section aria-label="財經新聞分類" class="dashboard">
+<section class="category-column" data-accent="green">
+<header class="category-header">
+<div>
+<h2>美股／國際</h2>
+<span class="category-code">
               US · GLOBAL MARKETS
             </span>
-          </div>
-
-          <span
-            id="count-global"
-            class="category-count"
-          >
+</div>
+<span class="category-count" id="count-global">
             0
           </span>
-        </header>
-
-        <div
-          id="stack-global"
-          class="source-stack"
-          style="--source-count: 2"
-        ></div>
-      </section>
-
-      <section
-        class="category-column"
-        data-accent="amber"
-      >
-        <header class="category-header">
-          <div>
-            <h2>中港股／亞太</h2>
-            <span class="category-code">
+</header>
+<div class="source-stack" id="stack-global" style="--source-count: 2"></div>
+</section>
+<section class="category-column" data-accent="amber">
+<header class="category-header">
+<div>
+<h2>中港股／亞太</h2>
+<span class="category-code">
               CN · HK · APAC
             </span>
-          </div>
-
-          <span
-            id="count-asia"
-            class="category-count"
-          >
+</div>
+<span class="category-count" id="count-asia">
             0
           </span>
-        </header>
-
-        <div
-          id="stack-asia"
-          class="source-stack"
-          style="--source-count: 2"
-        ></div>
-      </section>
-
-      <section
-        class="category-column"
-        data-accent="cyan"
-      >
-        <header class="category-header">
-          <div>
-            <h2>台股個股與大盤</h2>
-            <span class="category-code">
+</header>
+<div class="source-stack" id="stack-asia" style="--source-count: 2"></div>
+</section>
+<section class="category-column" data-accent="cyan">
+<header class="category-header">
+<div>
+<h2>台股個股與大盤</h2>
+<span class="category-code">
               TWSE · TPEx · TAIWAN
             </span>
-          </div>
-
-          <span
-            id="count-taiwan"
-            class="category-count"
-          >
+</div>
+<span class="category-count" id="count-taiwan">
             0
           </span>
-        </header>
-
-        <div
-          id="stack-taiwan"
-          class="source-stack"
-          style="--source-count: 2"
-        ></div>
-      </section>
-    </section>
-
-    <footer class="terminal-footer">
-      <span>
+</header>
+<div class="source-stack" id="stack-taiwan" style="--source-count: 2"></div>
+</section>
+</section>
+<footer class="terminal-footer">
+<span>
         單檔版只連線專屬 Google Apps Script；GAS 將官方 RSS、API 與 Sitemap 統一轉為標準 RSS。
       </span>
-
-      <span
-        id="footer-status"
-        class="footer-status"
-      >
+<span class="footer-status" id="footer-status">
         NETWORK: CONNECTING
       </span>
-    </footer>
-  </main>
-
-  <script>
+</footer>
+</main>
+<script>
 "use strict";
 
 const GAS_URL =
@@ -1883,5 +2130,94 @@ function initialize() {
 
 initialize();
 </script>
-</body>
+<script>
+    (() => {
+      "use strict";
+
+      const peel =
+        document.querySelector(
+          "[data-corner-peel]"
+        );
+
+      if (!peel) {
+        return;
+      }
+
+      const trigger =
+        peel.querySelector(
+          "[data-corner-peel-trigger]"
+        );
+
+      const closePeel = () => {
+        peel.classList.remove(
+          "is-open"
+        );
+
+        trigger.setAttribute(
+          "aria-expanded",
+          "false"
+        );
+      };
+
+      const openPeel = () => {
+        peel.classList.add(
+          "is-open"
+        );
+
+        trigger.setAttribute(
+          "aria-expanded",
+          "true"
+        );
+      };
+
+      trigger.addEventListener(
+        "click",
+        (event) => {
+          event.stopPropagation();
+
+          if (
+            peel.classList.contains(
+              "is-open"
+            )
+          ) {
+            closePeel();
+          } else {
+            openPeel();
+          }
+        }
+      );
+
+      peel.addEventListener(
+        "click",
+        (event) => {
+          event.stopPropagation();
+        }
+      );
+
+      document.addEventListener(
+        "click",
+        closePeel
+      );
+
+      document.addEventListener(
+        "keydown",
+        (event) => {
+          if (
+            event.key ===
+            "Escape"
+          ) {
+            closePeel();
+            trigger.focus({
+              preventScroll: true
+            });
+          }
+        }
+      );
+
+      window.addEventListener(
+        "pageshow",
+        closePeel
+      );
+    })();
+  </script></body>
 </html>
