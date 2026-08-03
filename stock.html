@@ -1,0 +1,5650 @@
+<!DOCTYPE html>
+
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<meta content="#0a0f1d" name="theme-color"/>
+<meta content="dark" name="color-scheme"/>
+<meta content="美國 CPI、Fed 利率機率、四大券商導航、個人 PDF、AlphaMemo、雙源研報與 Yahoo 個股新聞。" name="description"/>
+<title>CABUNI // CYBER FIN-HUB</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: [
+              "Inter",
+              "Noto Sans TC",
+              "PingFang TC",
+              "Microsoft JhengHei",
+              "system-ui",
+              "sans-serif"
+            ]
+          },
+          boxShadow: {
+            panel:
+              "0 24px 60px rgba(0, 0, 0, 0.38)"
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    :root {
+      --safe-top:
+        env(safe-area-inset-top, 0px);
+      --safe-bottom:
+        env(safe-area-inset-bottom, 0px);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      overflow-x: hidden;
+      background: #030712;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      min-height: 100%;
+      margin: 0;
+      overflow-x: hidden;
+      background:
+        radial-gradient(
+          circle at 12% 0%,
+          rgba(14, 165, 233, 0.14),
+          transparent 30rem
+        ),
+        radial-gradient(
+          circle at 90% 8%,
+          rgba(99, 102, 241, 0.12),
+          transparent 28rem
+        ),
+        #030712;
+      color: #f8fafc;
+      font-family:
+        Inter,
+        "Noto Sans TC",
+        "PingFang TC",
+        "Microsoft JhengHei",
+        system-ui,
+        sans-serif;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button,
+    a {
+      touch-action: manipulation;
+    }
+
+    .safe-top {
+      padding-top:
+        var(--safe-top);
+    }
+
+    .safe-bottom {
+      padding-bottom:
+        var(--safe-bottom);
+    }
+
+    .line-clamp-2-fallback {
+      display: -webkit-box;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+
+    .loading-shimmer {
+      overflow: hidden;
+      background:
+        linear-gradient(
+          105deg,
+          rgba(30, 41, 59, 0.72) 8%,
+          rgba(51, 65, 85, 0.96) 18%,
+          rgba(30, 41, 59, 0.72) 33%
+        );
+      background-size:
+        220% 100%;
+      animation:
+        shimmer 1.15s linear infinite;
+    }
+
+    .macro-progress-track {
+      overflow: hidden;
+      height: 6px;
+      border-radius: 9999px;
+      background: rgba(51, 65, 85, 0.95);
+    }
+
+    .macro-progress-bar {
+      height: 100%;
+      min-width: 0;
+      border-radius: 9999px;
+      background:
+        linear-gradient(
+          90deg,
+          #38bdf8,
+          #818cf8
+        );
+      transition:
+        width 320ms ease;
+    }
+
+    .alphamemo-glow {
+      box-shadow:
+        0 18px 46px rgba(16, 185, 129, 0.24),
+        inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    }
+
+    .pdf-modal-open {
+      overflow: hidden !important;
+      overscroll-behavior: none;
+    }
+
+    .pdf-reader-surface {
+      touch-action: pan-y pinch-zoom;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .pdf-page-shell {
+      position: relative;
+      margin: 0 auto 16px;
+      width: fit-content;
+      max-width: 100%;
+      overflow: hidden;
+      border-radius: 10px;
+      background: #ffffff;
+      box-shadow:
+        0 18px 38px rgba(0, 0, 0, 0.48);
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .pdf-page-canvas {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .pdf-page-watermark {
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: rgba(15, 23, 42, 0.11);
+      font-size: clamp(14px, 4vw, 28px);
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-align: center;
+      transform: rotate(-27deg);
+      user-select: none;
+    }
+
+    .pdf-reader-no-select {
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    @media print {
+      body {
+        display: none !important;
+      }
+    }
+
+    @keyframes shimmer {
+      to {
+        background-position-x:
+          -220%;
+      }
+    }
+
+    @media (
+      prefers-reduced-motion: reduce
+    ) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior:
+          auto !important;
+        animation-duration:
+          0.01ms !important;
+        animation-iteration-count:
+          1 !important;
+        transition-duration:
+          0.01ms !important;
+      }
+    }
+  
+    /* =======================================================
+       TACTICAL FOUR-QUADRANT DASHBOARD OVERRIDES
+       ======================================================= */
+
+    html,
+    body {
+      background: #0a0f1d;
+      font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        "Liberation Mono",
+        "Noto Sans Mono CJK TC",
+        "Microsoft JhengHei",
+        monospace;
+    }
+
+    .dashboard-card {
+      position: relative;
+      isolation: isolate;
+    }
+
+    .dashboard-card::after {
+      content: "";
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(0, 225, 255, 0.025),
+          transparent 38%,
+          rgba(0, 255, 136, 0.015)
+        );
+      z-index: -1;
+    }
+
+    .intel-pane {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .intel-pane > div:first-child {
+      margin-bottom: 0.45rem;
+    }
+
+    .compact-list {
+      flex: 1 1 auto;
+    }
+
+    #macroContent > article,
+    .dashboard-broker,
+    .dashboard-alpha {
+      scrollbar-width: none;
+    }
+
+    #macroContent > article::-webkit-scrollbar,
+    .dashboard-broker::-webkit-scrollbar,
+    .dashboard-alpha::-webkit-scrollbar {
+      display: none;
+    }
+
+    @media (min-width: 1024px) {
+      body {
+        overflow: hidden;
+      }
+
+      #tacticalDashboardGrid {
+        grid-template-rows:
+          minmax(0, 1.12fr)
+          minmax(0, 0.88fr);
+      }
+
+      .dashboard-card {
+        display: flex;
+        height: 100%;
+        min-height: 0;
+        flex-direction: column;
+        margin: 0 !important;
+      }
+
+      .dashboard-macro,
+      .dashboard-broker,
+      .dashboard-alpha,
+      .dashboard-intel {
+        overflow: hidden;
+      }
+
+      #macroContent {
+        align-items: stretch;
+      }
+
+      #macroContent > article {
+        overflow: hidden;
+      }
+
+      #macroLoadingPanel > div {
+        height: 100% !important;
+        min-height: 0 !important;
+      }
+
+      #macroContent .min-h-28 {
+        min-height: 4.25rem !important;
+      }
+
+      #macroContent .mt-4 {
+        margin-top: 0.5rem !important;
+      }
+
+      #macroContent .mt-3 {
+        margin-top: 0.4rem !important;
+      }
+
+      #macroContent .p-4 {
+        padding: 0.6rem !important;
+      }
+
+      #fedProbabilityRows > :nth-child(n + 4) {
+        display: none;
+      }
+
+      .macro-source-link {
+        display: none !important;
+      }
+
+      .dashboard-broker > div:first-child,
+      .dashboard-alpha > div:first-child {
+        margin-bottom: 0.5rem !important;
+      }
+
+      .dashboard-broker .mt-4,
+      .dashboard-alpha .mt-4 {
+        margin-top: 0.5rem !important;
+      }
+
+      .dashboard-broker .p-4,
+      .dashboard-alpha .p-4 {
+        padding: 0.65rem !important;
+      }
+
+      .dashboard-broker p.mt-3.text-xs,
+      .dashboard-broker p.mt-3.font-mono {
+        display: none;
+      }
+
+      .dashboard-alpha {
+        justify-content: flex-start;
+      }
+
+      #marketIntelHub > div:last-child {
+        min-height: 0;
+      }
+
+      .intel-pane {
+        height: 100%;
+      }
+
+      .compact-list > article:nth-child(n + 5) {
+        display: none;
+      }
+
+      #reportsLoadingPanel > div:nth-child(n + 4),
+      #newsLoadingPanel > div:nth-child(n + 4) {
+        display: none;
+      }
+    }
+
+    @media (max-width: 1023.98px) {
+      body {
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+      .dashboard-card {
+        width: 100%;
+      }
+
+      .compact-list > article {
+        display: block;
+      }
+    }
+
+    /* =======================================================
+       FINAL 1 : 1 : 2 RESPONSIVE TACTICAL LAYOUT
+       ======================================================= */
+
+    html,
+    body {
+      min-height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto !important;
+      background: #0a0f1d;
+      font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        "Liberation Mono",
+        "Noto Sans Mono CJK TC",
+        "Microsoft JhengHei",
+        monospace;
+    }
+
+    main {
+      height: auto !important;
+      overflow: visible !important;
+    }
+
+    #tacticalThreeColumnGrid,
+    #tacticalRightColumn,
+    #marketIntelHub,
+    #reportsList,
+    #newsList,
+    [data-pane="reports"],
+    [data-pane="news"] {
+      min-height: 0;
+      overflow: visible !important;
+    }
+
+    #reportsList > article,
+    #newsList > article {
+      display: block !important;
+    }
+
+    #reportsList h3,
+    #newsList h3 {
+      display: block !important;
+      overflow: visible !important;
+      white-space: normal !important;
+      text-overflow: clip !important;
+      -webkit-line-clamp: unset !important;
+      -webkit-box-orient: initial !important;
+    }
+
+    #reportsList time,
+    #newsList time {
+      overflow: visible !important;
+      white-space: normal !important;
+      text-overflow: clip !important;
+    }
+
+    .compact-list > article:nth-child(n) {
+      display: block !important;
+    }
+
+    .macro-source-link {
+      display: inline-flex !important;
+    }
+
+    @media (min-width: 1024px) {
+      body {
+        overflow-y: auto !important;
+      }
+
+      #tacticalThreeColumnGrid {
+        grid-template-columns:
+          minmax(0, 1fr)
+          minmax(0, 1fr)
+          minmax(0, 1fr)
+          minmax(0, 1fr);
+      }
+
+      #tacticalRightColumn {
+        grid-template-rows:
+          minmax(0, 1fr)
+          minmax(0, 1fr);
+      }
+
+      .dashboard-card,
+      .cyber-card {
+        height: auto !important;
+        overflow: visible !important;
+      }
+
+      #fedProbabilityRows > :nth-child(n) {
+        display: block !important;
+      }
+    }
+
+    @media (max-width: 1023.98px) {
+      #tacticalThreeColumnGrid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      #tacticalRightColumn {
+        display: flex;
+      }
+
+      #tacticalThreeColumnGrid > *,
+      #tacticalRightColumn > * {
+        width: 100%;
+      }
+    }
+
+    /* =======================================================
+       FINAL 40 / 40 / 20 TACTICAL DASHBOARD
+       ======================================================= */
+
+    :root {
+      --tactical-grid-height: auto;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      overflow-x: hidden;
+      background: #0a0f1d;
+      font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        "Liberation Mono",
+        "Noto Sans Mono CJK TC",
+        "Microsoft JhengHei",
+        monospace;
+    }
+
+    .tactical-scrollbar {
+      scrollbar-width: thin;
+      scrollbar-color:
+        rgba(34, 211, 238, 0.48)
+        rgba(8, 14, 28, 0.68);
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tactical-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .tactical-scrollbar::-webkit-scrollbar-track {
+      border-radius: 9999px;
+      background: rgba(8, 14, 28, 0.68);
+    }
+
+    .tactical-scrollbar::-webkit-scrollbar-thumb {
+      border-radius: 9999px;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(34, 211, 238, 0.74),
+          rgba(59, 130, 246, 0.62)
+        );
+    }
+
+    #reportsList,
+    #newsList,
+    #reportsLoadingPanel,
+    #newsLoadingPanel,
+    #reportsEmptyPanel,
+    #newsEmptyPanel,
+    #macroDashboard,
+    #tacticalRightColumn > section {
+      scrollbar-width: thin;
+      scrollbar-color:
+        rgba(34, 211, 238, 0.48)
+        rgba(8, 14, 28, 0.68);
+    }
+
+    #reportsList::-webkit-scrollbar,
+    #newsList::-webkit-scrollbar,
+    #reportsLoadingPanel::-webkit-scrollbar,
+    #newsLoadingPanel::-webkit-scrollbar,
+    #reportsEmptyPanel::-webkit-scrollbar,
+    #newsEmptyPanel::-webkit-scrollbar,
+    #macroDashboard::-webkit-scrollbar,
+    #tacticalRightColumn > section::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #reportsList::-webkit-scrollbar-track,
+    #newsList::-webkit-scrollbar-track,
+    #reportsLoadingPanel::-webkit-scrollbar-track,
+    #newsLoadingPanel::-webkit-scrollbar-track,
+    #reportsEmptyPanel::-webkit-scrollbar-track,
+    #newsEmptyPanel::-webkit-scrollbar-track,
+    #macroDashboard::-webkit-scrollbar-track,
+    #tacticalRightColumn > section::-webkit-scrollbar-track {
+      border-radius: 9999px;
+      background: rgba(8, 14, 28, 0.68);
+    }
+
+    #reportsList::-webkit-scrollbar-thumb,
+    #newsList::-webkit-scrollbar-thumb,
+    #reportsLoadingPanel::-webkit-scrollbar-thumb,
+    #newsLoadingPanel::-webkit-scrollbar-thumb,
+    #reportsEmptyPanel::-webkit-scrollbar-thumb,
+    #newsEmptyPanel::-webkit-scrollbar-thumb,
+    #macroDashboard::-webkit-scrollbar-thumb,
+    #tacticalRightColumn > section::-webkit-scrollbar-thumb {
+      border-radius: 9999px;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(34, 211, 238, 0.74),
+          rgba(59, 130, 246, 0.62)
+        );
+    }
+
+    @media (min-width: 1024px) {
+      #tacticalThreeColumnGrid {
+        height:
+          var(
+            --tactical-grid-height,
+            calc(100dvh - 160px)
+          );
+        min-height: 0;
+        grid-template-columns:
+          minmax(0, 2fr)
+          minmax(0, 2fr)
+          minmax(0, 1fr);
+        align-items: stretch;
+      }
+
+      #tacticalThreeColumnGrid > * {
+        height: 100%;
+        min-height: 0;
+      }
+
+      #marketIntelHub > div:last-child {
+        height: 100%;
+        min-height: 0;
+        grid-template-rows:
+          minmax(0, 1fr)
+          minmax(0, 1fr);
+      }
+
+      [data-pane="reports"],
+      [data-pane="news"] {
+        height: 100%;
+        min-height: 0;
+      }
+
+      #reportsList,
+      #newsList,
+      #reportsLoadingPanel,
+      #newsLoadingPanel,
+      #reportsEmptyPanel,
+      #newsEmptyPanel {
+        min-height: 0;
+        overflow-y: auto !important;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      #macroDashboard,
+      #tacticalRightColumn > section {
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      #tacticalRightColumn {
+        grid-template-rows:
+          minmax(0, 1fr)
+          minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 1023.98px) {
+      :root {
+        --tactical-grid-height: auto;
+      }
+
+      #tacticalThreeColumnGrid,
+      #tacticalRightColumn,
+      #marketIntelHub > div:last-child {
+        display: flex;
+        height: auto !important;
+        min-height: 0;
+        flex-direction: column;
+      }
+
+      #tacticalThreeColumnGrid {
+        gap: 0.75rem;
+      }
+
+      #tacticalRightColumn,
+      #marketIntelHub > div:last-child {
+        gap: 0.75rem;
+      }
+
+      #tacticalThreeColumnGrid > *,
+      #tacticalRightColumn > *,
+      [data-pane="reports"],
+      [data-pane="news"] {
+        width: 100%;
+        height: auto !important;
+        min-height: 0;
+        overflow: visible !important;
+      }
+
+      #reportsList,
+      #newsList,
+      #reportsLoadingPanel,
+      #newsLoadingPanel,
+      #reportsEmptyPanel,
+      #newsEmptyPanel,
+      #macroDashboard,
+      #tacticalRightColumn > section {
+        max-height: none !important;
+        overflow: visible !important;
+        padding-right: inherit;
+      }
+    }
+
+    /* =======================================================
+       FINAL OVERFLOW CONTAINMENT — DESKTOP FIX
+       此區塊必須位於樣式表最末端，以覆蓋歷史版本規則。
+       ======================================================= */
+
+    @media (min-width: 1024px) {
+      #tacticalThreeColumnGrid {
+        height:
+          var(
+            --tactical-grid-height,
+            calc(100dvh - 156px)
+          ) !important;
+        min-height: 360px !important;
+        max-height:
+          var(
+            --tactical-grid-height,
+            calc(100dvh - 156px)
+          ) !important;
+        grid-template-columns:
+          minmax(0, 2fr)
+          minmax(0, 2fr)
+          minmax(0, 1fr) !important;
+        align-items: stretch !important;
+        overflow: hidden !important;
+      }
+
+      #tacticalThreeColumnGrid > * {
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        max-height: 100% !important;
+        overflow: hidden !important;
+      }
+
+      #macroDashboard {
+        height: 100% !important;
+        min-height: 0 !important;
+        max-height: 100% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        padding-right: 0.25rem !important;
+        overscroll-behavior: contain;
+        scrollbar-gutter: stable;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      #marketIntelHub {
+        display: flex !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        max-height: 100% !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+      }
+
+      #marketIntelHub > div:first-child {
+        flex: 0 0 auto !important;
+      }
+
+      #marketIntelHub > div:last-child {
+        display: grid !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        flex: 1 1 0% !important;
+        grid-template-rows:
+          minmax(0, 1fr)
+          minmax(0, 1fr) !important;
+        overflow: hidden !important;
+      }
+
+      [data-pane="reports"],
+      [data-pane="news"] {
+        display: flex !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        max-height: 100% !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+      }
+
+      [data-pane="reports"] > div:first-child,
+      [data-pane="news"] > div:first-child {
+        flex: 0 0 auto !important;
+      }
+
+      #reportsList,
+      #newsList,
+      #reportsLoadingPanel,
+      #newsLoadingPanel,
+      #reportsEmptyPanel,
+      #newsEmptyPanel {
+        min-height: 0 !important;
+        max-height: 100% !important;
+        flex: 1 1 0% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        padding-right: 0.25rem !important;
+        overscroll-behavior: contain;
+        scrollbar-gutter: stable;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      #tacticalRightColumn {
+        display: grid !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        max-height: 100% !important;
+        grid-template-rows:
+          minmax(0, 1fr)
+          minmax(0, 1fr) !important;
+        overflow: hidden !important;
+      }
+
+      #tacticalRightColumn > section {
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        max-height: 100% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        padding-right: 0.25rem !important;
+        overscroll-behavior: contain;
+        scrollbar-gutter: stable;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      #tacticalRightColumn > section > * {
+        max-width: 100%;
+      }
+
+      #personalPdfStatus {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+      }
+    }
+
+    /* =======================================================
+       MOBILE RESET — 解除桌機固定高度與所有局部滾動限制
+       ======================================================= */
+
+    @media (max-width: 1023.98px) {
+      #tacticalThreeColumnGrid,
+      #marketIntelHub,
+      #marketIntelHub > div:last-child,
+      #tacticalRightColumn,
+      #tacticalThreeColumnGrid > *,
+      #tacticalRightColumn > section,
+      [data-pane="reports"],
+      [data-pane="news"] {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+      }
+
+      #tacticalThreeColumnGrid,
+      #marketIntelHub > div:last-child,
+      #tacticalRightColumn {
+        display: flex !important;
+        flex-direction: column !important;
+      }
+
+      #tacticalThreeColumnGrid,
+      #marketIntelHub > div:last-child,
+      #tacticalRightColumn {
+        gap: 0.75rem !important;
+      }
+
+      #reportsList,
+      #newsList,
+      #reportsLoadingPanel,
+      #newsLoadingPanel,
+      #reportsEmptyPanel,
+      #newsEmptyPanel,
+      #macroDashboard,
+      #tacticalRightColumn > section {
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+        padding-right: inherit !important;
+        scrollbar-gutter: auto;
+      }
+    }
+
+    /* =======================================================
+       ALL-DEVICE FIXED INTELLIGENCE SCROLLBOXES
+       研報與新聞不分裝置永久固定 250px 並獨立捲動。
+       此區塊必須置於樣式表最末端，覆蓋所有 mobile reset。
+       ======================================================= */
+
+    #reportsList,
+    #newsList,
+    #reportsLoadingPanel,
+    #newsLoadingPanel,
+    #reportsEmptyPanel,
+    #newsEmptyPanel {
+      width: 100% !important;
+      height: 250px !important;
+      min-height: 250px !important;
+      max-height: 250px !important;
+      flex: 0 0 250px !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      padding-right: 0.25rem !important;
+      overscroll-behavior: contain;
+      scrollbar-gutter: stable;
+      touch-action: pan-y;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color:
+        rgba(34, 211, 238, 0.58)
+        rgba(8, 14, 28, 0.72);
+    }
+
+    #reportsList::-webkit-scrollbar,
+    #newsList::-webkit-scrollbar,
+    #reportsLoadingPanel::-webkit-scrollbar,
+    #newsLoadingPanel::-webkit-scrollbar,
+    #reportsEmptyPanel::-webkit-scrollbar,
+    #newsEmptyPanel::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #reportsList::-webkit-scrollbar-track,
+    #newsList::-webkit-scrollbar-track,
+    #reportsLoadingPanel::-webkit-scrollbar-track,
+    #newsLoadingPanel::-webkit-scrollbar-track,
+    #reportsEmptyPanel::-webkit-scrollbar-track,
+    #newsEmptyPanel::-webkit-scrollbar-track {
+      border-radius: 9999px;
+      background: rgba(8, 14, 28, 0.72);
+    }
+
+    #reportsList::-webkit-scrollbar-thumb,
+    #newsList::-webkit-scrollbar-thumb,
+    #reportsLoadingPanel::-webkit-scrollbar-thumb,
+    #newsLoadingPanel::-webkit-scrollbar-thumb,
+    #reportsEmptyPanel::-webkit-scrollbar-thumb,
+    #newsEmptyPanel::-webkit-scrollbar-thumb {
+      min-height: 32px;
+      border-radius: 9999px;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(34, 211, 238, 0.82),
+          rgba(59, 130, 246, 0.72)
+        );
+    }
+
+    #reportsList::-webkit-scrollbar-thumb:hover,
+    #newsList::-webkit-scrollbar-thumb:hover,
+    #reportsLoadingPanel::-webkit-scrollbar-thumb:hover,
+    #newsLoadingPanel::-webkit-scrollbar-thumb:hover,
+    #reportsEmptyPanel::-webkit-scrollbar-thumb:hover,
+    #newsEmptyPanel::-webkit-scrollbar-thumb:hover {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(103, 232, 249, 0.92),
+          rgba(96, 165, 250, 0.86)
+        );
+    }
+
+    @media (max-width: 1023.98px) {
+      #marketIntelHub,
+      #marketIntelHub > div:last-child,
+      [data-pane="reports"],
+      [data-pane="news"] {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+      }
+
+      #marketIntelHub > div:last-child {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+        overflow: visible !important;
+      }
+
+      [data-pane="reports"],
+      [data-pane="news"] {
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: visible !important;
+      }
+
+      #reportsList,
+      #newsList,
+      #reportsLoadingPanel,
+      #newsLoadingPanel,
+      #reportsEmptyPanel,
+      #newsEmptyPanel {
+        height: 250px !important;
+        min-height: 250px !important;
+        max-height: 250px !important;
+        flex: 0 0 250px !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        padding-right: 0.25rem !important;
+        scrollbar-gutter: stable;
+      }
+    }
+
+    /* =======================================================
+       CABUNI CORNER PAGE PEEL NAVIGATION
+       ======================================================= */
+
+    .corner-peel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 100;
+      width: min(300px, calc(100vw - 12px));
+      height: 174px;
+      pointer-events: none;
+      font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        "Liberation Mono",
+        monospace;
+      isolation: isolate;
+    }
+
+    .corner-peel-trigger {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 3;
+      display: block;
+      width: 68px;
+      height: 68px;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      border: 0;
+      color: #67e8f9;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(17, 24, 44, 0.24) 0%,
+          rgba(17, 24, 44, 0.78) 58%,
+          rgba(8, 47, 73, 0.82) 100%
+        );
+      clip-path: polygon(100% 0, 100% 100%, 0 0);
+      cursor: pointer;
+      pointer-events: auto;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      filter:
+        drop-shadow(-6px 8px 12px rgba(0, 0, 0, 0.34))
+        drop-shadow(-1px 1px 5px rgba(6, 182, 212, 0.16));
+      transform-origin: top right;
+      transition:
+        width 300ms ease-out,
+        height 300ms ease-out,
+        filter 300ms ease-out,
+        background 300ms ease-out;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .corner-peel-trigger::before {
+      position: absolute;
+      inset: 0;
+      border-left: 1px solid rgba(6, 182, 212, 0.38);
+      border-bottom: 1px solid rgba(6, 182, 212, 0.38);
+      content: "";
+      clip-path: inherit;
+    }
+
+    .corner-peel-trigger::after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 1px;
+      height: 94px;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(103, 232, 249, 0.8),
+          rgba(6, 182, 212, 0)
+        );
+      content: "";
+      opacity: 0.52;
+      transform: rotate(45deg);
+      transform-origin: top right;
+    }
+
+    .corner-peel-code {
+      position: absolute;
+      top: 15px;
+      right: 4px;
+      display: block;
+      width: 48px;
+      color: #a5f3fc;
+      font-size: 8px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: 0.055em;
+      text-align: center;
+      text-shadow:
+        0 0 8px rgba(34, 211, 238, 0.65);
+      transform: rotate(45deg);
+      transition:
+        opacity 180ms ease,
+        transform 300ms ease-out;
+    }
+
+    .corner-peel-panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 2;
+      width: min(286px, calc(100vw - 12px));
+      min-height: 150px;
+      padding: 44px 14px 14px 28px;
+      overflow: hidden;
+      border: 1px solid rgba(6, 182, 212, 0.5);
+      border-top: 0;
+      border-right: 0;
+      border-radius: 0 0 0 16px;
+      color: #e5eef5;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(17, 24, 44, 0.975) 0%,
+          rgba(13, 21, 39, 0.965) 62%,
+          rgba(8, 47, 73, 0.94) 100%
+        );
+      box-shadow:
+        0 18px 38px rgba(0, 0, 0, 0.42),
+        0 0 20px rgba(6, 182, 212, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      clip-path:
+        polygon(
+          20% 0,
+          100% 0,
+          100% 100%,
+          0 100%,
+          0 24%
+        );
+      transform:
+        translate3d(18px, -14px, 0)
+        scale(0.7);
+      transform-origin: top right;
+      transition:
+        opacity 220ms ease-out,
+        visibility 0s linear 300ms,
+        transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .corner-peel-panel::before {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(103, 232, 249, 0.08),
+          transparent 42%,
+          rgba(34, 211, 238, 0.035)
+        );
+      content: "";
+    }
+
+    .corner-peel-panel::after {
+      position: absolute;
+      top: 13px;
+      right: 14px;
+      color: rgba(103, 232, 249, 0.5);
+      font-size: 8px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      content: "ROUTE MATRIX";
+    }
+
+    .corner-peel-list {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .corner-peel-item {
+      display: flex;
+      min-height: 38px;
+      align-items: center;
+      padding: 8px 10px;
+      border: 1px solid rgba(71, 85, 105, 0.55);
+      border-radius: 7px;
+      color: #a8b4c4;
+      background: rgba(2, 8, 23, 0.42);
+      font-size: 10px;
+      font-weight: 800;
+      line-height: 1.35;
+      letter-spacing: 0.025em;
+      text-decoration: none;
+      transition:
+        border-color 180ms ease,
+        color 180ms ease,
+        background 180ms ease,
+        box-shadow 180ms ease,
+        transform 180ms ease;
+    }
+
+    a.corner-peel-item:hover,
+    a.corner-peel-item:focus-visible {
+      border-color: rgba(34, 211, 238, 0.62);
+      color: #cffafe;
+      background: rgba(8, 47, 73, 0.52);
+      box-shadow:
+        0 0 14px rgba(6, 182, 212, 0.12);
+      outline: none;
+      transform: translateX(-2px);
+    }
+
+    .corner-peel-item.is-current {
+      cursor: default;
+      user-select: none;
+    }
+
+    .corner-peel-item.is-current-green {
+      border-color: rgba(0, 255, 136, 0.4);
+      color: #00ff88;
+      background: rgba(0, 255, 136, 0.075);
+      box-shadow:
+        inset 3px 0 0 rgba(0, 255, 136, 0.72),
+        0 0 12px rgba(0, 255, 136, 0.06);
+    }
+
+    .corner-peel-item.is-current-blue {
+      border-color: rgba(34, 211, 238, 0.46);
+      color: #67e8f9;
+      background: rgba(6, 182, 212, 0.09);
+      box-shadow:
+        inset 3px 0 0 rgba(34, 211, 238, 0.8),
+        0 0 12px rgba(6, 182, 212, 0.08);
+    }
+
+    .corner-peel:hover .corner-peel-panel,
+    .corner-peel:focus-within .corner-peel-panel,
+    .corner-peel.is-open .corner-peel-panel {
+      pointer-events: auto;
+      opacity: 1;
+      visibility: visible;
+      transform:
+        translate3d(0, 0, 0)
+        scale(1);
+      transition:
+        opacity 220ms ease-out,
+        visibility 0s linear 0s,
+        transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .corner-peel:hover .corner-peel-trigger,
+    .corner-peel:focus-within .corner-peel-trigger,
+    .corner-peel.is-open .corner-peel-trigger {
+      width: 88px;
+      height: 88px;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(17, 24, 44, 0.34) 0%,
+          rgba(17, 24, 44, 0.96) 62%,
+          rgba(8, 47, 73, 0.95) 100%
+        );
+      filter:
+        drop-shadow(-8px 10px 16px rgba(0, 0, 0, 0.42))
+        drop-shadow(-2px 2px 8px rgba(6, 182, 212, 0.25));
+    }
+
+    .corner-peel:hover .corner-peel-code,
+    .corner-peel:focus-within .corner-peel-code,
+    .corner-peel.is-open .corner-peel-code {
+      opacity: 0.82;
+      transform:
+        translate(-7px, 7px)
+        rotate(45deg);
+    }
+
+    @media (min-width: 768px) {
+      .corner-peel-item {
+        font-size: 11px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .corner-peel {
+        width: min(278px, calc(100vw - 8px));
+      }
+
+      .corner-peel-panel {
+        width: min(270px, calc(100vw - 8px));
+        padding-left: 24px;
+      }
+
+      .corner-peel-trigger {
+        width: 62px;
+        height: 62px;
+      }
+
+      .corner-peel-code {
+        top: 13px;
+        right: 2px;
+        font-size: 7px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .corner-peel-trigger,
+      .corner-peel-code,
+      .corner-peel-panel,
+      .corner-peel-item {
+        transition-duration: 0.01ms !important;
+      }
+    }
+</style>
+</head>
+<body class="bg-[#0a0f1d] font-mono text-xs text-gray-100 antialiased selection:bg-cyan-400/25 selection:text-cyan-50 md:text-sm"><nav aria-label="網站快速切換" class="corner-peel fixed top-0 right-0 z-[100]" data-corner-peel="">
+<button aria-controls="cornerPeelMenu" aria-expanded="false" aria-label="開啟網站導航選單" class="corner-peel-trigger" data-corner-peel-trigger="" type="button">
+<span class="corner-peel-code">[// NAV]</span>
+</button>
+<div class="corner-peel-panel" id="cornerPeelMenu">
+<ol class="corner-peel-list">
+<li>
+<a class="corner-peel-item" href="./index.html">
+            01 // FINANCIAL HUB ↖
+          </a>
+</li>
+<li>
+<span aria-current="page" class="corner-peel-item is-current is-current-blue">
+            02 // CYBER FIN-HUB
+          </span>
+</li>
+</ol>
+</div>
+</nav>
+<div class="min-h-screen w-full overflow-x-hidden">
+<header class="safe-top sticky top-0 z-50 border-b border-gray-800 bg-[#0a0f1d]/90 p-3 shadow-[0_10px_32px_rgba(0,0,0,0.34)] backdrop-blur-lg">
+<div class="mx-auto w-full max-w-[1920px]">
+<div class="mb-2 flex min-w-0 items-center justify-between gap-3"><div class="flex min-w-0 items-center gap-3"><div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-amber-400/20 bg-amber-400/[0.035] shadow-[0_0_18px_rgba(245,158,11,0.14)]"><a aria-label="返回 FINANCIAL HUB" class="block shrink-0 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300/70" href="./index.html" title="返回 FINANCIAL HUB"><img alt="CABUNI" class="h-12 w-12 object-contain drop-shadow-[0_0_9px_rgba(245,158,11,0.42)]" decoding="async" draggable="false" fetchpriority="high" height="48" src="logo.png" width="48"/></a></div><div class="min-w-0"><h1 class="truncate font-mono text-base font-bold tracking-widest text-gray-100 md:text-xl">CYBER FIN-HUB</h1><p aria-live="polite" class="mt-0.5 truncate font-mono text-[9px] tracking-wide text-cyan-300/55 md:text-[10px]" id="currentQueryText">
+              預設查詢：2330
+            </p></div></div><div aria-live="polite" class="shrink-0 rounded-full border border-amber-400/25 bg-amber-400/10 px-2.5 py-1 text-[11px] font-bold text-amber-300" id="statusBadge">
+            準備中
+          </div></div>
+<form class="flex w-full min-w-0 gap-2" id="searchForm" novalidate="">
+<label class="sr-only" for="stockInput">
+            台灣股票代號
+          </label>
+<input autocapitalize="characters" autocomplete="off" class="h-12 min-w-0 flex-1 rounded-xl border border-gray-700 bg-[#0d1528]/95 px-4 font-mono text-base font-black tracking-[0.12em] text-cyan-50 placeholder:text-gray-600 outline-none transition duration-200 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/15 md:text-lg" id="stockInput" inputmode="numeric" maxlength="16" placeholder="輸入股號，例如 3037" spellcheck="false" type="text" value="2330"/>
+<button class="h-12 shrink-0 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-5 font-mono text-xs font-black tracking-wide text-white shadow-[0_0_18px_rgba(6,182,212,0.16)] transition duration-200 hover:brightness-110 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm" id="searchButton" type="submit">
+            搜尋個股
+          </button>
+</form>
+</div>
+</header>
+<main class="safe-bottom mx-auto w-full max-w-[1920px] p-3 lg:p-4">
+<section aria-label="查詢摘要" class="mb-3 grid grid-cols-2 gap-2">
+<div class="rounded-xl border border-gray-800 bg-[#11182c]/70 px-3 py-2 shadow-lg backdrop-blur-md">
+<p class="font-mono text-[9px] font-bold uppercase tracking-wider text-gray-500">
+            查詢商品
+          </p>
+<p class="mt-1 truncate font-mono text-sm font-black text-cyan-100" id="symbolSummary">
+            2330.TW
+          </p>
+</div>
+<div class="rounded-xl border border-gray-800 bg-[#11182c]/70 px-3 py-2 shadow-lg backdrop-blur-md">
+<p class="font-mono text-[9px] font-bold uppercase tracking-wider text-gray-500">
+            情報總數
+          </p>
+<p class="mt-1 truncate font-mono text-sm font-black text-cyan-100" id="totalSummary">
+            —
+          </p>
+</div>
+</section>
+<div aria-live="assertive" class="mb-3 hidden animate-pulse rounded-xl border border-cyan-400/25 bg-cyan-400/5 px-4 py-3 text-center font-mono text-[10px] font-black tracking-[0.14em] text-cyan-200 shadow-[0_0_20px_rgba(0,225,255,0.08)] md:text-xs" id="globalLoadingPanel">🔍 LOADING SECURE TACTICAL DATA...</div>
+<div class="grid grid-cols-1 items-stretch gap-3 lg:grid-cols-[2fr_2fr_1fr] lg:gap-4 lg:overflow-hidden" id="tacticalThreeColumnGrid"><section aria-labelledby="macroDashboardTitle" class="cyber-card w-full min-w-0 rounded-2xl border border-gray-800 bg-[#11182c]/80 p-4 shadow-xl backdrop-blur-md lg:h-full lg:min-h-0 lg:max-h-full lg:overflow-y-auto lg:overflow-x-hidden lg:pr-1" id="macroDashboard">
+<div class="mb-4 flex min-w-0 items-start justify-between gap-3">
+<div class="min-w-0">
+<h2 class="font-mono text-sm font-black leading-5 tracking-wide text-white md:text-base" id="macroDashboardTitle">
+              美國核心總體經濟指標
+            </h2>
+<p class="mt-1 break-words font-mono text-[9px] leading-4 text-gray-500 md:text-[10px]" id="macroUpdatedText">
+              正在載入 Investing.com CPI 與 Fed Rate Monitor...
+            </p>
+</div>
+<span class="shrink-0 rounded-full border border-indigo-400/25 bg-indigo-400/10 px-2.5 py-1 text-[11px] font-bold text-indigo-200" id="macroStatusBadge">
+            載入中
+          </span>
+</div>
+<div aria-live="assertive" class="grid grid-cols-1 gap-3 md:grid-cols-2" id="macroLoadingPanel">
+<div class="loading-shimmer h-72 rounded-2xl"></div>
+<div class="loading-shimmer h-72 rounded-2xl"></div>
+</div>
+<div class="hidden grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2" id="macroContent">
+<article aria-labelledby="cpiCardTitle" class="min-w-0 rounded-xl border border-gray-800 bg-[#0a1020]/78 p-3">
+<div class="flex items-start justify-between gap-3">
+<div>
+<p class="text-[11px] font-black uppercase tracking-wider text-rose-300">
+                  Inflation
+                </p>
+<h3 class="mt-1 font-mono text-xs font-black tracking-wide text-white md:text-sm" id="cpiCardTitle">
+                  美國 CPI 年增率
+                </h3>
+</div>
+<span class="rounded-full border border-slate-700 bg-slate-900 px-2.5 py-1 text-[11px] font-bold text-slate-400" id="cpiStatusBadge">
+                等待資料
+              </span>
+</div>
+<p class="mt-2 break-words font-mono text-[9px] font-bold leading-4 text-gray-500" id="cpiLatestDate">
+              最新發布：—
+            </p>
+<div class="mt-3 grid grid-cols-2 gap-3">
+<div class="flex min-h-24 flex-col items-center justify-center rounded-xl border border-rose-400/20 bg-rose-500/10 p-4 text-center">
+<p class="text-[11px] font-bold tracking-wide text-rose-200/75">
+                  實際值
+                </p>
+<p class="mt-2 font-mono text-3xl font-black tabular-nums text-[#00ff88]" id="cpiActual">
+                  —
+                </p>
+</div>
+<div class="flex min-h-24 flex-col items-center justify-center rounded-xl border border-slate-600 bg-slate-900 p-4 text-center">
+<p class="text-[11px] font-bold tracking-wide text-slate-400">
+                  前值
+                </p>
+<p class="mt-2 font-mono text-3xl font-black tabular-nums text-[#00e1ff]" id="cpiPrevious">
+                  —
+                </p>
+</div>
+</div>
+<div class="mt-4 rounded-xl border border-slate-700 bg-slate-900 p-3">
+<p class="text-[11px] font-black uppercase tracking-wider text-slate-500">
+                下期發布預告
+              </p>
+<p class="mt-2 break-words font-mono text-xs font-black leading-5 text-[#00e1ff]" id="cpiNextRelease">
+                日期與時間：—
+              </p>
+<p class="mt-1 break-words font-mono text-[10px] font-bold leading-4 text-cyan-100/70" id="cpiNextForecast">
+                市場預測：—
+              </p>
+</div>
+<a class="mt-3 inline-flex text-xs font-bold text-sky-300 macro-source-link" href="https://www.investing.com/economic-calendar/cpi-733" rel="noopener noreferrer external" target="_blank">
+              查看 Investing.com CPI 原始頁 ↗
+            </a>
+</article>
+<article aria-labelledby="fedCardTitle" class="min-w-0 rounded-xl border border-gray-800 bg-[#0a1020]/78 p-3">
+<div class="flex items-start justify-between gap-3">
+<div>
+<p class="text-[11px] font-black uppercase tracking-wider text-sky-300">
+                  Fed Funds Futures
+                </p>
+<h3 class="mt-1 font-mono text-xs font-black tracking-wide text-white md:text-sm" id="fedCardTitle">
+                  Fed 利率決議機率
+                </h3>
+</div>
+<span class="rounded-full border border-slate-700 bg-slate-900 px-2.5 py-1 text-[11px] font-bold text-slate-400" id="fedStatusBadge">
+                等待資料
+              </span>
+</div>
+<div class="mt-3 rounded-xl border border-sky-400/20 bg-sky-500/10 p-3 text-center">
+<p class="text-[10px] font-bold uppercase tracking-wider text-sky-200/70">
+                下次決議倒數
+              </p>
+<p class="mt-1 break-words font-mono text-xl font-black tabular-nums text-[#00e1ff]" id="fedCountdown">
+                —
+              </p>
+</div>
+<div class="mt-3 grid grid-cols-2 gap-2">
+<div class="rounded-xl border border-slate-700 bg-slate-900 p-3">
+<p class="text-[10px] font-bold text-slate-500">
+                  會議時間（台北）
+                </p>
+<p class="mt-1 break-words font-mono text-[10px] font-black leading-4 text-cyan-100" id="fedMeetingTime">
+                  —
+                </p>
+</div>
+<div class="rounded-xl border border-slate-700 bg-slate-900 p-3">
+<p class="text-[10px] font-bold text-slate-500">
+                  Fed Funds 期貨價
+                </p>
+<p class="mt-1 font-mono text-base font-black tabular-nums text-[#00ff88]" id="fedFuturePrice">
+                  —
+                </p>
+</div>
+</div>
+<div class="mt-3 overflow-hidden rounded-xl border border-slate-700">
+<div class="grid grid-cols-4 gap-1 bg-slate-900 px-2 py-2 text-center text-[10px] font-black text-slate-400">
+<span>目標區間</span>
+<span>目前</span>
+<span>前一日</span>
+<span>上週</span>
+</div>
+<div class="divide-y divide-slate-800 bg-slate-950/80" id="fedProbabilityRows"></div>
+</div>
+<p class="mt-2 break-words font-mono text-[9px] font-bold leading-4 text-gray-500" id="fedUpdatedAt">
+              Investing.com 更新：—
+            </p>
+<a class="mt-2 inline-flex text-xs font-bold text-sky-300 macro-source-link" href="https://www.investing.com/central-banks/fed-rate-monitor" rel="noopener noreferrer external" target="_blank">
+              查看 Fed Rate Monitor 原始頁 ↗
+            </a>
+</article>
+</div>
+<div class="mt-3 hidden rounded-xl border border-amber-400/25 bg-amber-400/10 p-3 text-xs font-bold leading-5 text-amber-100/85" id="macroErrorPanel" role="status"></div>
+</section><section aria-labelledby="marketIntelHubTitle" class="cyber-card flex w-full min-w-0 flex-col rounded-2xl border border-gray-800 bg-[#11182c]/80 p-4 shadow-xl backdrop-blur-md lg:h-full lg:min-h-0 lg:max-h-full lg:overflow-hidden" id="marketIntelHub"><div class="mb-3 flex min-w-0 shrink-0 items-center justify-between gap-3"><div class="min-w-0"><h2 class="truncate font-mono text-sm font-black tracking-wide text-white" id="marketIntelHubTitle">個股情報整合終端</h2><p class="mt-0.5 truncate font-mono text-[9px] text-gray-500">PTT／鉅亨法人情報 × Yahoo 個股新聞</p></div><span class="shrink-0 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-2 py-0.5 font-mono text-[8px] font-black tracking-wider text-cyan-300/80">DUAL STREAM</span></div><div class="grid min-h-0 flex-1 grid-cols-1 gap-4 lg:h-auto lg:grid-rows-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-3 lg:overflow-hidden"><article aria-labelledby="reportsSectionTitle" class="flex min-w-0 flex-col rounded-xl border border-gray-800 bg-[#0a1020]/72 p-3 lg:h-full lg:min-h-0 lg:max-h-full lg:overflow-hidden" data-pane="reports">
+<div class="mb-2 flex min-w-0 shrink-0 items-center justify-between gap-3">
+<div class="min-w-0">
+<h2 class="font-mono text-xs font-black leading-5 tracking-wide text-white md:text-sm" id="reportsSectionTitle">
+              個股法人研報與深度分析
+            </h2>
+<p class="mt-1 break-words font-mono text-[9px] leading-4 text-gray-500" id="reportsUpdatedText">
+              鉅亨研報＋PTT 股板
+            </p>
+</div>
+<span class="shrink-0 rounded-full border border-gray-700 bg-[#080e1c] px-2 py-1 font-mono text-[9px] font-bold text-gray-400" id="reportsCountBadge">
+            0 則
+          </span>
+</div>
+<div class="hidden h-[250px] max-h-[250px] space-y-1.5 overflow-y-auto overflow-x-hidden pr-1" id="reportsLoadingPanel">
+<div class="loading-shimmer h-16 rounded-lg"></div>
+<div class="loading-shimmer h-16 rounded-lg"></div>
+<div class="loading-shimmer h-16 rounded-lg"></div>
+</div>
+<div aria-live="polite" class="hidden h-[250px] max-h-[250px] space-y-1.5 overflow-y-auto overflow-x-hidden pr-1" id="reportsList"></div>
+<div class="hidden h-[250px] max-h-[250px] overflow-y-auto overflow-x-hidden rounded-xl border border-dashed border-gray-800 bg-[#080e1c]/75 p-5 pr-1 text-center" id="reportsEmptyPanel">
+<div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-800 text-xl text-slate-400">
+            ⎯
+          </div>
+<h3 class="mt-4 text-base font-black text-white">
+            目前沒有符合條件的研報
+          </h3>
+<p class="mt-2 text-sm leading-6 text-slate-400" id="reportsEmptyMessage">
+            鉅亨搜尋與 PTT Stock 此次沒有回傳可顯示的內容。
+          </p>
+</div>
+</article><article aria-labelledby="newsSectionTitle" class="flex min-w-0 flex-col rounded-xl border border-gray-800 bg-[#0a1020]/72 p-3 lg:h-full lg:min-h-0 lg:max-h-full lg:overflow-hidden" data-pane="news">
+<div class="mb-2 flex min-w-0 shrink-0 items-center justify-between gap-3">
+<div class="min-w-0">
+<h2 class="font-mono text-xs font-black leading-5 tracking-wide text-white md:text-sm" id="newsSectionTitle">
+              最新個股專屬新聞
+            </h2>
+<p class="mt-1 break-words font-mono text-[9px] leading-4 text-gray-500" id="newsUpdatedText">
+              等待初始化
+            </p>
+</div>
+<span class="shrink-0 rounded-full border border-gray-700 bg-[#080e1c] px-2 py-1 font-mono text-[9px] font-bold text-gray-400" id="newsCountBadge">
+            0 則
+          </span>
+</div>
+<div class="hidden h-[250px] max-h-[250px] space-y-1.5 overflow-y-auto overflow-x-hidden pr-1" id="newsLoadingPanel">
+<div class="loading-shimmer h-16 rounded-lg"></div>
+<div class="loading-shimmer h-16 rounded-lg"></div>
+<div class="loading-shimmer h-16 rounded-lg"></div>
+</div>
+<div aria-live="polite" class="hidden h-[250px] max-h-[250px] space-y-1.5 overflow-y-auto overflow-x-hidden pr-1" id="newsList"></div>
+<div class="hidden h-[250px] max-h-[250px] overflow-y-auto overflow-x-hidden rounded-xl border border-dashed border-gray-800 bg-[#080e1c]/75 p-5 pr-1 text-center" id="newsEmptyPanel">
+<div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-800 text-xl text-slate-400">
+            ⎯
+          </div>
+<h3 class="mt-4 text-base font-black text-white">
+            目前沒有專屬新聞
+          </h3>
+<p class="mt-2 text-sm leading-6 text-slate-400" id="newsEmptyMessage">
+            Yahoo 股市此次沒有回傳個股新聞。
+          </p>
+</div>
+</article></div></section><div class="flex w-full min-w-0 flex-col gap-3 lg:grid lg:h-full lg:min-h-0 lg:max-h-full lg:grid-rows-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-4 lg:overflow-hidden" id="tacticalRightColumn"><section aria-labelledby="brokerVaultTitle" class="cyber-card w-full min-w-0 rounded-2xl border border-gray-800 bg-[#11182c]/80 p-4 shadow-xl backdrop-blur-md lg:h-full lg:min-h-0 lg:max-h-full lg:overflow-y-auto lg:overflow-x-hidden lg:pr-1">
+<div class="mb-4 flex min-w-0 items-start justify-between gap-3">
+<div class="min-w-0">
+<h2 class="font-mono text-xs font-black leading-5 tracking-wide text-white xl:text-sm" id="brokerVaultTitle">
+              券商導航與個人極密研報庫
+            </h2>
+</div>
+<span class="shrink-0 rounded-full border border-amber-400/25 bg-amber-400/10 px-2.5 py-1 text-[11px] font-bold text-amber-300" id="personalPdfBadge">
+            探測中
+          </span>
+</div>
+<div class="rounded-2xl border border-slate-700 bg-slate-950/65 p-4">
+<div class="flex min-w-0 items-center justify-between gap-2">
+<div class="min-w-0">
+<p class="text-xs font-bold uppercase tracking-wider text-slate-500">
+                個人專屬 PDF
+              </p>
+<p class="mt-1 break-all font-mono text-xs font-black text-amber-100 xl:text-sm" id="personalPdfFileName">
+                2330.pdf
+              </p>
+</div>
+<div aria-hidden="true" class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-amber-400/20 bg-amber-400/10 text-xl">
+              🔐
+            </div>
+</div>
+<p aria-live="polite" class="mt-2 rounded-xl border border-gray-800 bg-[#090f1d]/80 px-3 py-2 font-mono text-[9px] font-bold leading-4 text-gray-400" id="personalPdfStatus">
+            正在檢查個人 2330 專屬研究報告...
+          </p>
+<button class="mt-2 hidden min-h-12 w-full items-center justify-center rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 px-3 py-2 text-center font-mono text-[10px] font-black leading-4 text-[#160d00] shadow-[0_0_22px_rgba(245,158,11,0.16)] transition duration-200 hover:brightness-110 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 xl:text-xs" id="openPersonalPdfButton" type="button">
+            🔒 進入閱讀個人 2330 專屬研究報告（僅供線上觀看）
+          </button>
+</div>
+<div class="mt-4">
+<div class="mb-2 flex items-center justify-between gap-3">
+<p class="text-sm font-black text-slate-200">
+              四大券商官方入口
+            </p>
+<span class="text-[11px] font-bold text-slate-500">
+              部分內容需登入
+            </span>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<a class="flex min-h-10 items-center justify-center rounded-xl border border-gray-700 bg-[#121b2e]/85 px-2 py-2 text-center font-mono text-[9px] font-black leading-4 text-gray-300 transition duration-200 hover:border-cyan-400/45 hover:bg-[#1a243d] hover:text-cyan-100 active:scale-95 xl:text-[10px]" href="https://www.cathayfut.com.tw/F_research.aspx" id="cathayBrokerLink" rel="noopener noreferrer external" target="_blank" title="前往國泰期貨研究報告專區">
+              國泰投顧 ↗
+            </a>
+<a class="flex min-h-10 items-center justify-center rounded-xl border border-gray-700 bg-[#121b2e]/85 px-2 py-2 text-center font-mono text-[9px] font-black leading-4 text-gray-300 transition duration-200 hover:border-cyan-400/45 hover:bg-[#1a243d] hover:text-cyan-100 active:scale-95 xl:text-[10px]" href="https://www.yuanta-consulting.com.tw/account/login?ReturnUrl=%2Freport%2Flist" id="yuantaBrokerLink" rel="noopener noreferrer external" target="_blank" title="前往元大投顧研究報告登入頁">
+              元大投顧 ↗
+            </a>
+<a class="flex min-h-10 items-center justify-center rounded-xl border border-gray-700 bg-[#121b2e]/85 px-2 py-2 text-center font-mono text-[9px] font-black leading-4 text-gray-300 transition duration-200 hover:border-cyan-400/45 hover:bg-[#1a243d] hover:text-cyan-100 active:scale-95 xl:text-[10px]" href="https://www.pscnet.com.tw/pscnetStock/stockIntro.do?searchKeyWord=2330" id="pscBrokerLink" rel="noopener noreferrer external" target="_blank" title="前往統一證券個股分析">
+              統一研報 ↗
+            </a>
+<a class="flex min-h-10 items-center justify-center rounded-xl border border-gray-700 bg-[#121b2e]/85 px-2 py-2 text-center font-mono text-[9px] font-black leading-4 text-gray-300 transition duration-200 hover:border-cyan-400/45 hover:bg-[#1a243d] hover:text-cyan-100 active:scale-95 xl:text-[10px]" href="https://investment.kgisia.com.tw/portal/Report/Index?keyword=2330" id="kgiBrokerLink" rel="noopener noreferrer external" target="_blank" title="前往凱基投顧研究報告">
+              凱基個股 ↗
+            </a>
+</div>
+</div>
+</section><section aria-labelledby="alphaMemoTitle" class="cyber-card w-full min-w-0 rounded-2xl border border-gray-800 bg-[#11182c]/80 p-4 shadow-xl backdrop-blur-md lg:h-full lg:min-h-0 lg:max-h-full lg:overflow-y-auto lg:overflow-x-hidden lg:pr-1">
+<div class="mb-4 flex min-w-0 items-start justify-between gap-3">
+<div class="min-w-0">
+<h2 class="font-mono text-xs font-black leading-5 tracking-wide text-white xl:text-sm" id="alphaMemoTitle">
+              AlphaMemo.ai 官方公開法說會逐字稿紀錄
+            </h2>
+</div>
+<span class="shrink-0 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-2.5 py-1 text-[11px] font-bold text-emerald-300">
+            0 次爬取
+          </span>
+</div>
+<div class="rounded-2xl border border-slate-700 bg-slate-950/65 p-4">
+<p class="text-xs font-bold uppercase tracking-wider text-slate-500">
+            目前綁定股號
+          </p>
+<p class="mt-2 font-mono text-2xl font-black tracking-[0.15em] text-[#00ff88]" id="alphaMemoStockId">
+            2330
+          </p>
+<a class="mt-3 flex min-h-14 w-full items-center justify-center rounded-xl border border-[#00ff88] bg-[#00ff88]/5 px-3 py-2 text-center font-mono text-[10px] font-black leading-4 text-[#00ff88] shadow-[0_0_14px_rgba(0,255,136,0.12)] transition duration-200 hover:bg-[#00ff88]/10 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00ff88]/45 xl:text-xs" href="https://www.alphamemo.ai/free-transcripts" id="alphaMemoButton" rel="noopener noreferrer external" target="_blank">
+            🔍 點擊進入 2330 官方歷屆 AI 法說會逐字稿與摘要紀錄 ↗
+          </a>
+</div>
+</section></div></div>
+<div class="mb-4 hidden rounded-xl border border-amber-400/25 bg-amber-400/10 p-3 text-xs leading-5 text-amber-100/80" id="warningPanel"></div>
+<div class="hidden rounded-2xl border border-rose-400/25 bg-rose-950/30 p-5 shadow-panel" id="errorPanel" role="alert">
+<div class="flex items-start gap-3">
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-rose-400/15 text-lg font-black text-rose-300">
+            !
+          </div>
+<div class="min-w-0 flex-1">
+<h3 class="text-base font-black text-rose-100" id="errorTitle">
+              系統連線失敗
+            </h3>
+<p class="mt-2 break-words text-sm leading-6 text-rose-100/75" id="errorMessage">
+              請檢查 GAS 部署與手機網路。
+            </p>
+<div class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+<button class="h-11 rounded-lg bg-rose-400 px-4 text-sm font-black text-rose-950 transition active:scale-[0.985]" id="retryButton" type="button">
+                再試一次
+              </button>
+<a class="flex h-11 items-center justify-center rounded-lg border border-slate-600 bg-slate-950 px-4 text-center text-sm font-bold text-slate-200 transition active:scale-[0.985]" href="#" id="diagnosticLink" rel="noopener noreferrer external" target="_blank">
+                測試 GAS
+              </a>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<div aria-labelledby="pdfReaderTitle" aria-modal="true" class="pdf-reader-no-select fixed inset-0 z-[100] hidden bg-black" id="pdfReaderModal" role="dialog">
+<div class="flex h-full min-h-0 flex-col bg-black">
+<header class="safe-top shrink-0 border-b border-slate-800 bg-slate-950/98 px-3 pb-3 pt-3 shadow-xl">
+<div class="mx-auto flex w-full max-w-5xl items-center justify-between gap-2">
+<div class="min-w-0">
+<h2 class="truncate text-base font-black text-white" id="pdfReaderTitle">
+              個人專屬研究報告
+            </h2>
+<p class="mt-0.5 truncate text-[11px] font-bold text-slate-400" id="pdfReaderMeta">
+              僅供線上 Canvas 閱讀
+            </p>
+</div>
+<button class="pdf-close-neon min-h-10 shrink-0 rounded-lg border border-[#ff3b6b] bg-[#ff3b6b]/10 px-3 font-mono text-[10px] font-black text-[#ff638c] shadow-[0_0_14px_rgba(255,59,107,0.18)] transition duration-200 hover:bg-[#ff3b6b]/20 active:scale-95" id="closePdfReaderButton" type="button">
+            ❌ 關閉閱讀
+          </button>
+</div>
+<div class="mx-auto mt-3 flex w-full max-w-5xl items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<button aria-label="縮小 PDF" class="h-10 min-w-10 rounded-lg border border-slate-700 bg-slate-900 px-3 text-base font-black text-white" id="pdfZoomOutButton" type="button">
+              −
+            </button>
+<button class="h-10 rounded-lg border border-slate-700 bg-slate-900 px-3 text-xs font-black text-slate-200" id="pdfZoomResetButton" type="button">
+              100%
+            </button>
+<button aria-label="放大 PDF" class="h-10 min-w-10 rounded-lg border border-slate-700 bg-slate-900 px-3 text-base font-black text-white" id="pdfZoomInButton" type="button">
+              ＋
+            </button>
+</div>
+<p class="truncate text-xs font-bold text-slate-400" id="pdfPageCount">
+            等待載入
+          </p>
+</div>
+</header>
+<div class="pdf-reader-surface safe-bottom min-h-0 flex-1 overflow-y-auto bg-slate-900 px-2 py-4 sm:px-4" id="pdfReaderSurface">
+<div aria-live="assertive" class="mx-auto max-w-xl rounded-2xl border border-amber-400/25 bg-amber-400/10 p-5 text-center text-sm font-black leading-6 text-amber-100" id="pdfReaderLoading">
+          正在啟動安全 Canvas 閱讀器...
+        </div>
+<div class="mx-auto hidden max-w-xl rounded-2xl border border-rose-400/25 bg-rose-950/40 p-5 text-center text-sm font-bold leading-6 text-rose-100" id="pdfReaderError" role="alert"></div>
+<div class="mx-auto hidden w-full max-w-5xl" id="pdfPagesContainer"></div>
+</div>
+</div>
+</div>
+<script>
+    "use strict";
+
+    const GAS_DEPLOYMENT_ID =
+      "AKfycbytkZ93zV3P-tu2MXGTIpR-yrFem93f_dfMN1JFjX2PLeJn6ouzqyBN2psB59m7JXrW";
+
+    const GAS_URL =
+      `https://script.google.com/macros/s/${GAS_DEPLOYMENT_ID}/exec`;
+
+    const GAS_CONFIG =
+      Object.freeze({
+        deploymentId:
+          GAS_DEPLOYMENT_ID,
+
+        deploymentUrl:
+          GAS_URL,
+
+        searchMode:
+          "search",
+
+        pingMode:
+          "ping"
+      });
+
+    const PDFJS_MODULE_URL =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/6.1.200/pdf.min.mjs";
+
+    const PDFJS_WORKER_URL =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/6.1.200/pdf.worker.min.mjs";
+
+    /*
+     * 將 2330.pdf、3017.pdf 等檔案放在 index.html 下方的 reports 目錄。
+     * GitHub Pages 範例：
+     * https://使用者.github.io/儲存庫/index.html
+     * https://使用者.github.io/儲存庫/reports/2330.pdf
+     */
+    const PERSONAL_PDF_BASE_URL =
+      new URL(
+        "./reports/",
+        window.location.href
+      ).href;
+
+    const ALPHAMEMO_URL =
+      "https://www.alphamemo.ai/free-transcripts";
+
+    const BROKER_URLS =
+      Object.freeze({
+        cathay:
+          "https://www.cathayfut.com.tw/F_research.aspx",
+
+        yuanta:
+          "https://www.yuanta-consulting.com.tw/account/login?ReturnUrl=%2Freport%2Flist"
+      });
+
+    const DEFAULT_STOCK_ID =
+      "2330";
+
+    const REQUEST_TIMEOUT_MS =
+      25000;
+
+    const MAX_REQUEST_ATTEMPTS =
+      3;
+
+    const RETRY_BASE_DELAY_MS =
+      700;
+
+    const searchForm =
+      document.getElementById(
+        "searchForm"
+      );
+
+    const stockInput =
+      document.getElementById(
+        "stockInput"
+      );
+
+    const searchButton =
+      document.getElementById(
+        "searchButton"
+      );
+
+    const currentQueryText =
+      document.getElementById(
+        "currentQueryText"
+      );
+
+    const statusBadge =
+      document.getElementById(
+        "statusBadge"
+      );
+
+    const symbolSummary =
+      document.getElementById(
+        "symbolSummary"
+      );
+
+    const totalSummary =
+      document.getElementById(
+        "totalSummary"
+      );
+
+    const macroUpdatedText =
+      document.getElementById(
+        "macroUpdatedText"
+      );
+
+    const macroStatusBadge =
+      document.getElementById(
+        "macroStatusBadge"
+      );
+
+    const macroLoadingPanel =
+      document.getElementById(
+        "macroLoadingPanel"
+      );
+
+    const macroContent =
+      document.getElementById(
+        "macroContent"
+      );
+
+    const macroErrorPanel =
+      document.getElementById(
+        "macroErrorPanel"
+      );
+
+    const cpiStatusBadge =
+      document.getElementById(
+        "cpiStatusBadge"
+      );
+
+    const cpiLatestDate =
+      document.getElementById(
+        "cpiLatestDate"
+      );
+
+    const cpiActual =
+      document.getElementById(
+        "cpiActual"
+      );
+
+    const cpiPrevious =
+      document.getElementById(
+        "cpiPrevious"
+      );
+
+    const cpiNextRelease =
+      document.getElementById(
+        "cpiNextRelease"
+      );
+
+    const cpiNextForecast =
+      document.getElementById(
+        "cpiNextForecast"
+      );
+
+    const fedStatusBadge =
+      document.getElementById(
+        "fedStatusBadge"
+      );
+
+    const fedCountdown =
+      document.getElementById(
+        "fedCountdown"
+      );
+
+    const fedMeetingTime =
+      document.getElementById(
+        "fedMeetingTime"
+      );
+
+    const fedFuturePrice =
+      document.getElementById(
+        "fedFuturePrice"
+      );
+
+    const fedProbabilityRows =
+      document.getElementById(
+        "fedProbabilityRows"
+      );
+
+    const fedUpdatedAt =
+      document.getElementById(
+        "fedUpdatedAt"
+      );
+
+    const alphaMemoStockId =
+      document.getElementById(
+        "alphaMemoStockId"
+      );
+
+    const alphaMemoButton =
+      document.getElementById(
+        "alphaMemoButton"
+      );
+
+    const personalPdfBadge =
+      document.getElementById(
+        "personalPdfBadge"
+      );
+
+    const personalPdfFileName =
+      document.getElementById(
+        "personalPdfFileName"
+      );
+
+    const personalPdfStatus =
+      document.getElementById(
+        "personalPdfStatus"
+      );
+
+    const openPersonalPdfButton =
+      document.getElementById(
+        "openPersonalPdfButton"
+      );
+
+    const cathayBrokerLink =
+      document.getElementById(
+        "cathayBrokerLink"
+      );
+
+    const yuantaBrokerLink =
+      document.getElementById(
+        "yuantaBrokerLink"
+      );
+
+    const pscBrokerLink =
+      document.getElementById(
+        "pscBrokerLink"
+      );
+
+    const kgiBrokerLink =
+      document.getElementById(
+        "kgiBrokerLink"
+      );
+
+    const pdfReaderModal =
+      document.getElementById(
+        "pdfReaderModal"
+      );
+
+    const pdfReaderTitle =
+      document.getElementById(
+        "pdfReaderTitle"
+      );
+
+    const pdfReaderMeta =
+      document.getElementById(
+        "pdfReaderMeta"
+      );
+
+    const closePdfReaderButton =
+      document.getElementById(
+        "closePdfReaderButton"
+      );
+
+    const pdfZoomOutButton =
+      document.getElementById(
+        "pdfZoomOutButton"
+      );
+
+    const pdfZoomResetButton =
+      document.getElementById(
+        "pdfZoomResetButton"
+      );
+
+    const pdfZoomInButton =
+      document.getElementById(
+        "pdfZoomInButton"
+      );
+
+    const pdfPageCount =
+      document.getElementById(
+        "pdfPageCount"
+      );
+
+    const pdfReaderSurface =
+      document.getElementById(
+        "pdfReaderSurface"
+      );
+
+    const pdfReaderLoading =
+      document.getElementById(
+        "pdfReaderLoading"
+      );
+
+    const pdfReaderError =
+      document.getElementById(
+        "pdfReaderError"
+      );
+
+    const pdfPagesContainer =
+      document.getElementById(
+        "pdfPagesContainer"
+      );
+
+    const globalLoadingPanel =
+      document.getElementById(
+        "globalLoadingPanel"
+      );
+
+    const newsUpdatedText =
+      document.getElementById(
+        "newsUpdatedText"
+      );
+
+    const newsCountBadge =
+      document.getElementById(
+        "newsCountBadge"
+      );
+
+    const newsLoadingPanel =
+      document.getElementById(
+        "newsLoadingPanel"
+      );
+
+    const newsList =
+      document.getElementById(
+        "newsList"
+      );
+
+    const newsEmptyPanel =
+      document.getElementById(
+        "newsEmptyPanel"
+      );
+
+    const newsEmptyMessage =
+      document.getElementById(
+        "newsEmptyMessage"
+      );
+
+    const reportsUpdatedText =
+      document.getElementById(
+        "reportsUpdatedText"
+      );
+
+    const reportsCountBadge =
+      document.getElementById(
+        "reportsCountBadge"
+      );
+
+    const reportsLoadingPanel =
+      document.getElementById(
+        "reportsLoadingPanel"
+      );
+
+    const reportsList =
+      document.getElementById(
+        "reportsList"
+      );
+
+    const reportsEmptyPanel =
+      document.getElementById(
+        "reportsEmptyPanel"
+      );
+
+    const reportsEmptyMessage =
+      document.getElementById(
+        "reportsEmptyMessage"
+      );
+
+    const warningPanel =
+      document.getElementById(
+        "warningPanel"
+      );
+
+    const errorPanel =
+      document.getElementById(
+        "errorPanel"
+      );
+
+    const errorTitle =
+      document.getElementById(
+        "errorTitle"
+      );
+
+    const errorMessage =
+      document.getElementById(
+        "errorMessage"
+      );
+
+    const retryButton =
+      document.getElementById(
+        "retryButton"
+      );
+
+    const diagnosticLink =
+      document.getElementById(
+        "diagnosticLink"
+      );
+
+    let activeStockId =
+      DEFAULT_STOCK_ID;
+
+    let requestSequence = 0;
+
+    let activeAbortController =
+      null;
+
+    let personalPdfProbeSequence =
+      0;
+
+    let currentPersonalPdfUrl =
+      "";
+
+    let currentPersonalPdfStockId =
+      DEFAULT_STOCK_ID;
+
+    let pdfJsModule =
+      null;
+
+    let activePdfDocument =
+      null;
+
+    let activePdfLoadingTask =
+      null;
+
+    let activePdfFetchController =
+      null;
+
+    let pdfRenderSequence =
+      0;
+
+    let pdfZoom =
+      1;
+
+    let fedCountdownTimer =
+      null;
+
+    function normalizeStockId(
+      rawValue
+    ) {
+      const digits =
+        String(
+          rawValue === null ||
+          rawValue === undefined
+            ? ""
+            : rawValue
+        ).replace(/\D/g, "");
+
+      const normalized =
+        digits ||
+        DEFAULT_STOCK_ID;
+
+      if (
+        !/^\d{4,6}$/.test(
+          normalized
+        )
+      ) {
+        throw new Error(
+          "請輸入 4 至 6 位台股代號。"
+        );
+      }
+
+      return normalized;
+    }
+
+    /**
+     * AlphaMemo 導航完全由前端記憶體產生。
+     * 不對 AlphaMemo 發送 Fetch、XHR 或背景爬取。
+     */
+    function updateAlphaMemoCard(
+      stockId
+    ) {
+      alphaMemoStockId.textContent =
+        stockId;
+
+      alphaMemoButton.href =
+        ALPHAMEMO_URL;
+
+      alphaMemoButton.textContent =
+        `🔍 點擊進入 ${stockId} 官方歷屆 AI 法說會逐字稿與摘要紀錄 ↗`;
+
+    }
+
+    function buildPersonalPdfUrl(
+      stockId
+    ) {
+      return new URL(
+        `${encodeURIComponent(
+          stockId
+        )}.pdf`,
+        PERSONAL_PDF_BASE_URL
+      ).toString();
+    }
+
+    /**
+     * 更新四大券商導航。
+     *
+     * 國泰與元大使用不可變的已驗證研究入口：
+     * - 不拼接股號
+     * - 不使用 replace()
+     * - 不從搜尋輸入重建網域
+     * - 每次搜尋只重新指定同一個固定網址
+     *
+     * 統一與凱基維持既有股號連動。
+     */
+    function updateBrokerLinks(
+      stockId
+    ) {
+      const currentStockId =
+        normalizeStockId(
+          stockId
+        );
+
+      const encoded =
+        encodeURIComponent(
+          currentStockId
+        );
+
+      cathayBrokerLink.href =
+        BROKER_URLS.cathay;
+
+      yuantaBrokerLink.href =
+        BROKER_URLS.yuanta;
+
+      pscBrokerLink.href =
+        `https://www.pscnet.com.tw/pscnetStock/stockIntro.do?searchKeyWord=${encoded}`;
+
+      kgiBrokerLink.href =
+        `https://investment.kgisia.com.tw/portal/Report/Index?keyword=${encoded}`;
+    }
+
+    function setPersonalPdfState(
+      state,
+      stockId,
+      message
+    ) {
+      personalPdfFileName.textContent =
+        `${stockId}.pdf`;
+
+      personalPdfStatus.textContent =
+        message;
+
+      openPersonalPdfButton.classList.add(
+        "hidden"
+      );
+
+      openPersonalPdfButton.classList.remove(
+        "flex"
+      );
+
+      const stateClasses = {
+        checking:
+          "shrink-0 rounded-full border border-amber-400/25 bg-amber-400/10 px-2.5 py-1 text-[11px] font-bold text-amber-300",
+
+        found:
+          "shrink-0 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-2.5 py-1 text-[11px] font-bold text-emerald-300",
+
+        missing:
+          "shrink-0 rounded-full border border-slate-600 bg-slate-800 px-2.5 py-1 text-[11px] font-bold text-slate-300",
+
+        error:
+          "shrink-0 rounded-full border border-rose-400/25 bg-rose-400/10 px-2.5 py-1 text-[11px] font-bold text-rose-300"
+      };
+
+      personalPdfBadge.className =
+        stateClasses[state] ||
+        stateClasses.checking;
+
+      personalPdfBadge.textContent =
+        state === "found"
+          ? "已找到"
+          : state === "missing"
+            ? "未建立"
+            : state === "error"
+              ? "檢查失敗"
+              : "探測中";
+
+      if (
+        state === "found"
+      ) {
+        openPersonalPdfButton.textContent =
+          `🔒 進入閱讀個人 ${stockId} 專屬研究報告（僅供線上觀看）`;
+
+        openPersonalPdfButton.classList.remove(
+          "hidden"
+        );
+
+        openPersonalPdfButton.classList.add(
+          "flex"
+        );
+      }
+    }
+
+    async function probeWithHead(
+      url
+    ) {
+      const probeUrl =
+        new URL(url);
+
+      probeUrl.searchParams.set(
+        "_probe",
+        String(Date.now())
+      );
+
+      const response =
+        await fetch(
+          probeUrl.toString(),
+          {
+            method: "HEAD",
+            cache: "no-store",
+            credentials:
+              "same-origin",
+            redirect:
+              "follow"
+          }
+        );
+
+      if (
+        response.ok
+      ) {
+        return true;
+      }
+
+      if (
+        response.status !== 405 &&
+        response.status !== 501
+      ) {
+        return false;
+      }
+
+      /*
+       * 少數靜態主機不接受 HEAD。
+       * 使用 Range GET 只要求第一個位元組，
+       * 取得回應標頭後立即取消串流。
+       */
+      const rangeResponse =
+        await fetch(
+          probeUrl.toString(),
+          {
+            method: "GET",
+            cache: "no-store",
+            credentials:
+              "same-origin",
+            redirect:
+              "follow",
+            headers: {
+              Range:
+                "bytes=0-0"
+            }
+          }
+        );
+
+      if (
+        rangeResponse.body &&
+        typeof rangeResponse
+          .body.cancel ===
+          "function"
+      ) {
+        await rangeResponse
+          .body.cancel()
+          .catch(
+            () => {}
+          );
+      }
+
+      return (
+        rangeResponse.ok ||
+        rangeResponse.status ===
+          206
+      );
+    }
+
+    async function probePersonalPdf(
+      stockId
+    ) {
+      personalPdfProbeSequence += 1;
+
+      const sequence =
+        personalPdfProbeSequence;
+
+      currentPersonalPdfStockId =
+        stockId;
+
+      currentPersonalPdfUrl =
+        "";
+
+      const url =
+        buildPersonalPdfUrl(
+          stockId
+        );
+
+      setPersonalPdfState(
+        "checking",
+        stockId,
+        `正在檢查個人 ${stockId} 專屬研究報告...`
+      );
+
+      try {
+        const exists =
+          await probeWithHead(
+            url
+          );
+
+        if (
+          sequence !==
+          personalPdfProbeSequence
+        ) {
+          return;
+        }
+
+        if (!exists) {
+          setPersonalPdfState(
+            "missing",
+            stockId,
+            `目前尚未建立 reports/${stockId}.pdf。將同名 PDF 覆蓋至 reports 目錄後，重新搜尋即可啟用閱讀器。`
+          );
+
+          return;
+        }
+
+        currentPersonalPdfUrl =
+          url;
+
+        setPersonalPdfState(
+          "found",
+          stockId,
+          `已找到 ${stockId}.pdf，可啟動無下載工具列的 Canvas 線上閱讀器。`
+        );
+      } catch (error) {
+        if (
+          sequence !==
+          personalPdfProbeSequence
+        ) {
+          return;
+        }
+
+        setPersonalPdfState(
+          "error",
+          stockId,
+          "PDF 探測失敗。請確認 reports/股號.pdf 與 index.html 位於同一網域，並檢查 GitHub Pages 是否已完成部署。"
+        );
+      }
+    }
+
+    async function loadPdfJsModule() {
+      if (pdfJsModule) {
+        return pdfJsModule;
+      }
+
+      pdfJsModule =
+        await import(
+          PDFJS_MODULE_URL
+        );
+
+      pdfJsModule
+        .GlobalWorkerOptions
+        .workerSrc =
+        PDFJS_WORKER_URL;
+
+      return pdfJsModule;
+    }
+
+    function resetPdfReaderUi() {
+      pdfPagesContainer
+        .replaceChildren();
+
+      pdfPagesContainer
+        .classList.add(
+          "hidden"
+        );
+
+      pdfReaderError
+        .classList.add(
+          "hidden"
+        );
+
+      pdfReaderError.textContent =
+        "";
+
+      pdfReaderLoading
+        .classList.remove(
+          "hidden"
+        );
+
+      pdfReaderLoading.textContent =
+        "正在啟動安全 Canvas 閱讀器...";
+
+      pdfPageCount.textContent =
+        "等待載入";
+
+      pdfZoom =
+        1;
+
+      pdfZoomResetButton.textContent =
+        "100%";
+    }
+
+    async function disposePdfDocument() {
+      pdfRenderSequence += 1;
+
+      if (
+        activePdfFetchController
+      ) {
+        activePdfFetchController
+          .abort();
+
+        activePdfFetchController =
+          null;
+      }
+
+      if (
+        activePdfLoadingTask
+      ) {
+        try {
+          await activePdfLoadingTask
+            .destroy();
+        } catch (error) {
+          /*
+           * 已完成或已取消時可能拋錯，
+           * 不影響關閉流程。
+           */
+        }
+
+        activePdfLoadingTask =
+          null;
+      }
+
+      if (
+        activePdfDocument
+      ) {
+        try {
+          await activePdfDocument
+            .destroy();
+        } catch (error) {
+          /*
+           * 忽略重複 destroy。
+           */
+        }
+
+        activePdfDocument =
+          null;
+      }
+
+      pdfPagesContainer
+        .replaceChildren();
+    }
+
+    async function renderPdfDocument() {
+      if (
+        !activePdfDocument
+      ) {
+        return;
+      }
+
+      pdfRenderSequence += 1;
+
+      const sequence =
+        pdfRenderSequence;
+
+      pdfPagesContainer
+        .replaceChildren();
+
+      pdfReaderLoading
+        .classList.remove(
+          "hidden"
+        );
+
+      pdfReaderLoading.textContent =
+        `正在渲染 ${activePdfDocument.numPages} 頁研究報告...`;
+
+      pdfPagesContainer
+        .classList.add(
+          "hidden"
+        );
+
+      const availableWidth =
+        Math.max(
+          280,
+          Math.min(
+            pdfReaderSurface
+              .clientWidth - 24,
+            1180
+          )
+        );
+
+      const deviceScale =
+        Math.min(
+          2,
+          Math.max(
+            1,
+            window.devicePixelRatio ||
+            1
+          )
+        );
+
+      for (
+        let pageNumber = 1;
+        pageNumber <=
+          activePdfDocument.numPages;
+        pageNumber += 1
+      ) {
+        if (
+          sequence !==
+          pdfRenderSequence
+        ) {
+          return;
+        }
+
+        const page =
+          await activePdfDocument
+            .getPage(
+              pageNumber
+            );
+
+        const naturalViewport =
+          page.getViewport({
+            scale: 1
+          });
+
+        const fitScale =
+          availableWidth /
+          naturalViewport.width;
+
+        const viewport =
+          page.getViewport({
+            scale:
+              fitScale *
+              pdfZoom
+          });
+
+        const shell =
+          document.createElement(
+            "div"
+          );
+
+        shell.className =
+          "pdf-page-shell";
+
+        const canvas =
+          document.createElement(
+            "canvas"
+          );
+
+        canvas.className =
+          "pdf-page-canvas";
+
+        canvas.width =
+          Math.floor(
+            viewport.width *
+            deviceScale
+          );
+
+        canvas.height =
+          Math.floor(
+            viewport.height *
+            deviceScale
+          );
+
+        canvas.style.width =
+          `${Math.floor(
+            viewport.width
+          )}px`;
+
+        canvas.style.height =
+          `${Math.floor(
+            viewport.height
+          )}px`;
+
+        canvas.setAttribute(
+          "aria-label",
+          `第 ${pageNumber} 頁`
+        );
+
+        const watermark =
+          document.createElement(
+            "div"
+          );
+
+        watermark.className =
+          "pdf-page-watermark";
+
+        watermark.textContent =
+          `僅供線上閱讀 • ${currentPersonalPdfStockId}`;
+
+        shell.appendChild(
+          canvas
+        );
+
+        shell.appendChild(
+          watermark
+        );
+
+        pdfPagesContainer
+          .appendChild(
+            shell
+          );
+
+        const context =
+          canvas.getContext(
+            "2d",
+            {
+              alpha: false
+            }
+          );
+
+        await page.render({
+          canvasContext:
+            context,
+          viewport:
+            viewport,
+          transform:
+            deviceScale !== 1
+              ? [
+                  deviceScale,
+                  0,
+                  0,
+                  deviceScale,
+                  0,
+                  0
+                ]
+              : null,
+          intent:
+            "display"
+        }).promise;
+
+        pdfReaderLoading.textContent =
+          `正在渲染第 ${pageNumber} / ${activePdfDocument.numPages} 頁...`;
+      }
+
+      if (
+        sequence !==
+        pdfRenderSequence
+      ) {
+        return;
+      }
+
+      pdfReaderLoading
+        .classList.add(
+          "hidden"
+        );
+
+      pdfPagesContainer
+        .classList.remove(
+          "hidden"
+        );
+
+      pdfPageCount.textContent =
+        `共 ${activePdfDocument.numPages} 頁・縮放 ${Math.round(
+          pdfZoom * 100
+        )}%`;
+
+      pdfZoomResetButton.textContent =
+        `${Math.round(
+          pdfZoom * 100
+        )}%`;
+    }
+
+    async function openPersonalPdfReader() {
+      if (
+        !currentPersonalPdfUrl
+      ) {
+        return;
+      }
+
+      await disposePdfDocument();
+
+      resetPdfReaderUi();
+
+      pdfReaderTitle.textContent =
+        `🔒 ${currentPersonalPdfStockId} 個人專屬研究報告`;
+
+      pdfReaderMeta.textContent =
+        `${currentPersonalPdfStockId}.pdf・僅供 Canvas 線上閱讀`;
+
+      pdfReaderModal
+        .classList.remove(
+          "hidden"
+        );
+
+      document.body
+        .classList.add(
+          "pdf-modal-open"
+        );
+
+      closePdfReaderButton
+        .focus();
+
+      activePdfFetchController =
+        new AbortController();
+
+      try {
+        const pdfjs =
+          await loadPdfJsModule();
+
+        pdfReaderLoading.textContent =
+          "正在安全載入 PDF 資料...";
+
+        const response =
+          await fetch(
+            currentPersonalPdfUrl,
+            {
+              method:
+                "GET",
+              cache:
+                "no-store",
+              credentials:
+                "same-origin",
+              redirect:
+                "follow",
+              signal:
+                activePdfFetchController
+                  .signal
+            }
+          );
+
+        if (!response.ok) {
+          throw new Error(
+            `PDF 回傳 HTTP ${response.status}。`
+          );
+        }
+
+        const arrayBuffer =
+          await response
+            .arrayBuffer();
+
+        activePdfLoadingTask =
+          pdfjs.getDocument({
+            data:
+              arrayBuffer,
+            disableFontFace:
+              false,
+            useSystemFonts:
+              true
+          });
+
+        activePdfDocument =
+          await activePdfLoadingTask
+            .promise;
+
+        activePdfLoadingTask =
+          null;
+
+        await renderPdfDocument();
+      } catch (error) {
+        if (
+          error instanceof
+            DOMException &&
+          error.name ===
+            "AbortError"
+        ) {
+          return;
+        }
+
+        pdfReaderLoading
+          .classList.add(
+            "hidden"
+          );
+
+        pdfPagesContainer
+          .classList.add(
+            "hidden"
+          );
+
+        pdfReaderError.textContent =
+          error instanceof
+            Error
+            ? `PDF 閱讀失敗：${error.message}`
+            : "PDF 閱讀失敗。";
+
+        pdfReaderError
+          .classList.remove(
+            "hidden"
+          );
+
+        pdfPageCount.textContent =
+          "載入失敗";
+      }
+    }
+
+    async function closePersonalPdfReader() {
+      pdfReaderModal
+        .classList.add(
+          "hidden"
+        );
+
+      document.body
+        .classList.remove(
+          "pdf-modal-open"
+        );
+
+      await disposePdfDocument();
+
+      resetPdfReaderUi();
+
+      openPersonalPdfButton
+        .focus();
+    }
+
+    function clampPdfZoom(
+      value
+    ) {
+      return Math.min(
+        2.5,
+        Math.max(
+          0.65,
+          value
+        )
+      );
+    }
+
+    async function changePdfZoom(
+      delta
+    ) {
+      if (
+        !activePdfDocument
+      ) {
+        return;
+      }
+
+      pdfZoom =
+        clampPdfZoom(
+          Math.round(
+            (
+              pdfZoom +
+              delta
+            ) *
+            100
+          ) /
+          100
+        );
+
+      pdfZoomResetButton.textContent =
+        `${Math.round(
+          pdfZoom * 100
+        )}%`;
+
+      await renderPdfDocument();
+    }
+
+    function renderMacroDashboard(
+      payload
+    ) {
+      const macro =
+        payload &&
+        payload.macro &&
+        typeof payload.macro ===
+          "object"
+          ? payload.macro
+          : {};
+
+      const cpi =
+        macro.cpi &&
+        typeof macro.cpi ===
+          "object"
+          ? macro.cpi
+          : {
+              success: false,
+              error:
+                "CPI 資料未回傳。"
+            };
+
+      const fed =
+        macro.fed &&
+        typeof macro.fed ===
+          "object"
+          ? macro.fed
+          : {
+              success: false,
+              probabilities: [],
+              error:
+                "Fed 資料未回傳。"
+            };
+
+      macroLoadingPanel.classList.add(
+        "hidden"
+      );
+
+      macroContent.classList.remove(
+        "hidden"
+      );
+
+      macroContent.classList.add(
+        "grid"
+      );
+
+      const errors = [];
+
+      renderCpiCard(
+        cpi
+      );
+
+      renderFedCard(
+        fed
+      );
+
+      if (!cpi.success) {
+        errors.push(
+          `CPI：${cpi.error ||
+            "暫時無法解析"}`
+        );
+      }
+
+      if (!fed.success) {
+        errors.push(
+          `Fed：${fed.error ||
+            "暫時無法解析"}`
+        );
+      }
+
+      if (errors.length) {
+        macroErrorPanel.textContent =
+          errors.join("｜");
+
+        macroErrorPanel.classList.remove(
+          "hidden"
+        );
+      } else {
+        macroErrorPanel.textContent =
+          "";
+
+        macroErrorPanel.classList.add(
+          "hidden"
+        );
+      }
+
+      const successCount =
+        Number(
+          cpi.success === true
+        ) +
+        Number(
+          fed.success === true
+        );
+
+      macroStatusBadge.textContent =
+        successCount === 2
+          ? "資料完成"
+          : successCount === 1
+            ? "部分完成"
+            : "來源失敗";
+
+      macroStatusBadge.className =
+        successCount === 2
+          ? "shrink-0 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-2.5 py-1 text-[11px] font-bold text-emerald-300"
+          : successCount === 1
+            ? "shrink-0 rounded-full border border-amber-400/25 bg-amber-400/10 px-2.5 py-1 text-[11px] font-bold text-amber-300"
+            : "shrink-0 rounded-full border border-rose-400/25 bg-rose-400/10 px-2.5 py-1 text-[11px] font-bold text-rose-300";
+
+      macroUpdatedText.textContent =
+        `Investing.com・更新 ${
+          macro.fetchedAt ||
+          payload.updatedAt ||
+          formatCurrentTime()
+        }`;
+    }
+
+    function renderCpiCard(
+      cpi
+    ) {
+      if (
+        !cpi ||
+        cpi.success !== true
+      ) {
+        cpiStatusBadge.textContent =
+          "無法取得";
+
+        cpiStatusBadge.className =
+          "rounded-full border border-rose-400/25 bg-rose-400/10 px-2.5 py-1 text-[11px] font-bold text-rose-300";
+
+        cpiLatestDate.textContent =
+          "最新發布：—";
+
+        cpiActual.textContent =
+          "—";
+
+        cpiPrevious.textContent =
+          "—";
+
+        cpiNextRelease.textContent =
+          "日期與時間：—";
+
+        cpiNextForecast.textContent =
+          "市場預測：—";
+
+        return;
+      }
+
+      cpiStatusBadge.textContent =
+        "最新資料";
+
+      cpiStatusBadge.className =
+        "rounded-full border border-emerald-400/25 bg-emerald-400/10 px-2.5 py-1 text-[11px] font-bold text-emerald-300";
+
+      cpiLatestDate.textContent =
+        `最新發布：${cpi.latestReleaseDate ||
+          "未提供"}`;
+
+      cpiActual.textContent =
+        cpi.actual ||
+        "—";
+
+      cpiPrevious.textContent =
+        cpi.previous ||
+        "—";
+
+      cpiNextRelease.textContent =
+        `日期與時間：${cpi.nextReleaseDate ||
+          "尚未公布"} ${
+          cpi.nextReleaseTime &&
+          cpi.nextReleaseTime !==
+            "尚未公布"
+            ? cpi.nextReleaseTime
+            : ""
+        }`.trim();
+
+      cpiNextForecast.textContent =
+        `市場預測：${cpi.nextForecast ||
+          "尚未公布"}`;
+    }
+
+    function renderFedCard(
+      fed
+    ) {
+      fedProbabilityRows
+        .replaceChildren();
+
+      if (
+        !fed ||
+        fed.success !== true
+      ) {
+        stopFedCountdown();
+
+        fedStatusBadge.textContent =
+          "無法取得";
+
+        fedStatusBadge.className =
+          "rounded-full border border-rose-400/25 bg-rose-400/10 px-2.5 py-1 text-[11px] font-bold text-rose-300";
+
+        fedCountdown.textContent =
+          "—";
+
+        fedMeetingTime.textContent =
+          "—";
+
+        fedFuturePrice.textContent =
+          "—";
+
+        fedUpdatedAt.textContent =
+          "Investing.com 更新：—";
+
+        const empty =
+          document.createElement(
+            "div"
+          );
+
+        empty.className =
+          "px-3 py-5 text-center text-xs font-bold text-slate-500";
+
+        empty.textContent =
+          "目前沒有可顯示的利率機率資料。";
+
+        fedProbabilityRows
+          .appendChild(
+            empty
+          );
+
+        return;
+      }
+
+      fedStatusBadge.textContent =
+        "期貨定價";
+
+      fedStatusBadge.className =
+        "rounded-full border border-emerald-400/25 bg-emerald-400/10 px-2.5 py-1 text-[11px] font-bold text-emerald-300";
+
+      fedMeetingTime.textContent =
+        fed.meetingTaipei
+          ? `${fed.meetingTaipei}`
+          : fed.meetingTime ||
+            "未提供";
+
+      fedFuturePrice.textContent =
+        fed.futurePrice ||
+        "—";
+
+      fedUpdatedAt.textContent =
+        `Investing.com 更新：${fed.updatedAtSource ||
+          fed.fetchedAt ||
+          "未提供"}`;
+
+      const rows =
+        Array.isArray(
+          fed.probabilities
+        )
+          ? fed.probabilities
+          : [];
+
+      if (!rows.length) {
+        const empty =
+          document.createElement(
+            "div"
+          );
+
+        empty.className =
+          "px-3 py-5 text-center text-xs font-bold text-slate-500";
+
+        empty.textContent =
+          "目前沒有可顯示的利率機率資料。";
+
+        fedProbabilityRows
+          .appendChild(
+            empty
+          );
+      } else {
+        const fragment =
+          document.createDocumentFragment();
+
+        rows.forEach(
+          (row) => {
+            fragment.appendChild(
+              createFedProbabilityRow(
+                row
+              )
+            );
+          }
+        );
+
+        fedProbabilityRows
+          .appendChild(
+            fragment
+          );
+      }
+
+      startFedCountdown(
+        Number(
+          fed.meetingTimestamp ||
+          0
+        ),
+        fed.sourceCountdown ||
+        ""
+      );
+    }
+
+    function createFedProbabilityRow(
+      row
+    ) {
+      const wrapper =
+        document.createElement(
+          "div"
+        );
+
+      wrapper.className =
+        "px-2 py-2.5";
+
+      const grid =
+        document.createElement(
+          "div"
+        );
+
+      grid.className =
+        "grid grid-cols-4 gap-1 text-center text-[11px] font-bold";
+
+      const target =
+        document.createElement(
+          "span"
+        );
+
+      target.className =
+        "text-left text-slate-200";
+
+      target.textContent =
+        row.targetRate ||
+        "—";
+
+      const current =
+        document.createElement(
+          "span"
+        );
+
+      current.className =
+        "font-black text-sky-200";
+
+      current.textContent =
+        row.current ||
+        "—";
+
+      const previousDay =
+        document.createElement(
+          "span"
+        );
+
+      previousDay.className =
+        "text-slate-400";
+
+      previousDay.textContent =
+        row.previousDay ||
+        "—";
+
+      const previousWeek =
+        document.createElement(
+          "span"
+        );
+
+      previousWeek.className =
+        "text-slate-400";
+
+      previousWeek.textContent =
+        row.previousWeek ||
+        "—";
+
+      grid.append(
+        target,
+        current,
+        previousDay,
+        previousWeek
+      );
+
+      const track =
+        document.createElement(
+          "div"
+        );
+
+      track.className =
+        "macro-progress-track mt-2";
+
+      const bar =
+        document.createElement(
+          "div"
+        );
+
+      bar.className =
+        "macro-progress-bar";
+
+      bar.style.width =
+        `${clampProbability(
+          row.current
+        )}%`;
+
+      track.appendChild(
+        bar
+      );
+
+      wrapper.append(
+        grid,
+        track
+      );
+
+      return wrapper;
+    }
+
+    function clampProbability(
+      value
+    ) {
+      const numeric =
+        Number.parseFloat(
+          String(
+            value || ""
+          ).replace(
+            "%",
+            ""
+          )
+        );
+
+      if (
+        !Number.isFinite(
+          numeric
+        )
+      ) {
+        return 0;
+      }
+
+      return Math.min(
+        100,
+        Math.max(
+          0,
+          numeric
+        )
+      );
+    }
+
+    function startFedCountdown(
+      timestamp,
+      fallbackText
+    ) {
+      stopFedCountdown();
+
+      const update = () => {
+        if (
+          !timestamp ||
+          timestamp <=
+            Date.now()
+        ) {
+          fedCountdown.textContent =
+            fallbackText ||
+            "等待下一次會議資料";
+
+          return;
+        }
+
+        const totalMinutes =
+          Math.max(
+            0,
+            Math.floor(
+              (
+                timestamp -
+                Date.now()
+              ) /
+              60000
+            )
+          );
+
+        const days =
+          Math.floor(
+            totalMinutes /
+            (
+              24 *
+              60
+            )
+          );
+
+        const afterDays =
+          totalMinutes -
+          days *
+          24 *
+          60;
+
+        const hours =
+          Math.floor(
+            afterDays /
+            60
+          );
+
+        const minutes =
+          afterDays -
+          hours *
+          60;
+
+        fedCountdown.textContent =
+          `${days} 天 ${hours} 小時 ${minutes} 分`;
+      };
+
+      update();
+
+      fedCountdownTimer =
+        window.setInterval(
+          update,
+          30000
+        );
+    }
+
+    function stopFedCountdown() {
+      if (
+        fedCountdownTimer
+      ) {
+        window.clearInterval(
+          fedCountdownTimer
+        );
+
+        fedCountdownTimer =
+          null;
+      }
+    }
+
+    function showMacroRequestError(
+      message
+    ) {
+      macroLoadingPanel.classList.add(
+        "hidden"
+      );
+
+      macroContent.classList.remove(
+        "hidden"
+      );
+
+      macroContent.classList.add(
+        "grid"
+      );
+
+      macroStatusBadge.textContent =
+        "載入失敗";
+
+      macroStatusBadge.className =
+        "shrink-0 rounded-full border border-rose-400/25 bg-rose-400/10 px-2.5 py-1 text-[11px] font-bold text-rose-300";
+
+      macroUpdatedText.textContent =
+        "Investing.com 總經資料暫時無法載入";
+
+      macroErrorPanel.textContent =
+        message;
+
+      macroErrorPanel.classList.remove(
+        "hidden"
+      );
+
+      renderCpiCard({
+        success: false
+      });
+
+      renderFedCard({
+        success: false,
+        probabilities: []
+      });
+    }
+
+    function setStatus(
+      type,
+      text
+    ) {
+      const classMap = {
+        idle:
+          "shrink-0 rounded-full border border-slate-500/30 bg-slate-700/40 px-2.5 py-1 text-[11px] font-bold text-slate-300",
+
+        loading:
+          "shrink-0 rounded-full border border-amber-400/25 bg-amber-400/10 px-2.5 py-1 text-[11px] font-bold text-amber-300",
+
+        success:
+          "shrink-0 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-2.5 py-1 text-[11px] font-bold text-emerald-300",
+
+        error:
+          "shrink-0 rounded-full border border-rose-400/25 bg-rose-400/10 px-2.5 py-1 text-[11px] font-bold text-rose-300",
+
+        offline:
+          "shrink-0 rounded-full border border-slate-500/30 bg-slate-700/50 px-2.5 py-1 text-[11px] font-bold text-slate-300"
+      };
+
+      statusBadge.className =
+        classMap[type] ||
+        classMap.idle;
+
+      statusBadge.textContent =
+        text;
+    }
+
+    function setBusy(
+      isBusy
+    ) {
+      searchButton.disabled =
+        isBusy;
+
+      searchButton.textContent =
+        isBusy
+          ? "搜尋中"
+          : "搜尋個股";
+
+      stockInput.setAttribute(
+        "aria-busy",
+        String(isBusy)
+      );
+    }
+
+    function showLoading(
+      stockId
+    ) {
+      updateAlphaMemoCard(
+        stockId
+      );
+
+      updateBrokerLinks(
+        stockId
+      );
+
+      void probePersonalPdf(
+        stockId
+      );
+
+      newsList.replaceChildren();
+      reportsList.replaceChildren();
+
+      newsList.classList.add(
+        "hidden"
+      );
+
+      reportsList.classList.add(
+        "hidden"
+      );
+
+      newsEmptyPanel.classList.add(
+        "hidden"
+      );
+
+      reportsEmptyPanel.classList.add(
+        "hidden"
+      );
+
+      errorPanel.classList.add(
+        "hidden"
+      );
+
+      warningPanel.classList.add(
+        "hidden"
+      );
+
+      globalLoadingPanel.textContent =
+        `🔍 正在即時調閱【${stockId}】的美國 CPI、Fed 利率、券商研報、個人 PDF、最新新聞、法人研報與 AI 法說檔案...`;
+
+      globalLoadingPanel.classList.remove(
+        "hidden"
+      );
+
+      newsLoadingPanel.classList.remove(
+        "hidden"
+      );
+
+      reportsLoadingPanel.classList.remove(
+        "hidden"
+      );
+
+      symbolSummary.textContent =
+        `${stockId}.TW / .TWO`;
+
+      totalSummary.textContent =
+        "載入中";
+
+      newsCountBadge.textContent =
+        "搜尋中";
+
+      reportsCountBadge.textContent =
+        "搜尋中";
+
+      newsUpdatedText.textContent =
+        `正在取得 ${stockId} 的 Yahoo 個股 RSS`;
+
+      reportsUpdatedText.textContent =
+        "正在搜尋鉅亨研報與 PTT 股板";
+
+      currentQueryText.textContent =
+        `正在查詢：${stockId}`;
+
+      setStatus(
+        "loading",
+        "搜尋中"
+      );
+
+      setBusy(true);
+    }
+
+    function hideLoading() {
+      globalLoadingPanel.classList.add(
+        "hidden"
+      );
+
+      newsLoadingPanel.classList.add(
+        "hidden"
+      );
+
+      reportsLoadingPanel.classList.add(
+        "hidden"
+      );
+    }
+
+    function showError(
+      title,
+      message
+    ) {
+      hideLoading();
+
+      if (
+        macroContent.classList.contains(
+          "hidden"
+        )
+      ) {
+        showMacroRequestError(
+          message
+        );
+      }
+
+      errorTitle.textContent =
+        title;
+
+      errorMessage.textContent =
+        message;
+
+      errorPanel.classList.remove(
+        "hidden"
+      );
+
+      totalSummary.textContent =
+        "失敗";
+
+      setStatus(
+        "error",
+        "載入失敗"
+      );
+
+      setBusy(false);
+    }
+
+    function normalizeGasDeploymentUrl(
+      rawValue
+    ) {
+      const value =
+        String(
+          rawValue || ""
+        ).trim();
+
+      if (!value) {
+        throw new Error(
+          "GAS_URL 尚未設定。"
+        );
+      }
+
+      let url;
+
+      try {
+        url =
+          new URL(value);
+      } catch (error) {
+        throw new Error(
+          "GAS_URL 不是有效網址。"
+        );
+      }
+
+      if (
+        url.protocol !==
+        "https:"
+      ) {
+        throw new Error(
+          "GAS_URL 必須使用 HTTPS。"
+        );
+      }
+
+      if (
+        url.hostname !==
+        "script.google.com"
+      ) {
+        throw new Error(
+          "GAS_URL 必須使用 script.google.com 正式網域。"
+        );
+      }
+
+      let pathname =
+        url.pathname.replace(
+          /\/+$/,
+          ""
+        );
+
+      if (
+        pathname.endsWith(
+          "/dev"
+        )
+      ) {
+        pathname =
+          `${pathname.slice(
+            0,
+            -4
+          )}/exec`;
+      }
+
+      const deploymentMatch =
+        pathname.match(
+          /^\/macros\/s\/([A-Za-z0-9_-]+)\/exec$/
+        );
+
+      if (
+        !deploymentMatch
+      ) {
+        throw new Error(
+          "GAS_URL 必須是完整的 /macros/s/{DEPLOYMENT_ID}/exec 正式部署網址。"
+        );
+      }
+
+      if (
+        deploymentMatch[1] !==
+        GAS_CONFIG.deploymentId
+      ) {
+        throw new Error(
+          "GAS Deployment ID 與 GAS_URL 不一致。"
+        );
+      }
+
+      url.pathname =
+        `/macros/s/${
+          deploymentMatch[1]
+        }/exec`;
+
+      url.search =
+        "";
+
+      url.hash =
+        "";
+
+      return url;
+    }
+
+    function validateGasUrl() {
+      return normalizeGasDeploymentUrl(
+        GAS_CONFIG.deploymentUrl
+      ).toString();
+    }
+
+    function buildGasUrl(
+      parameters
+    ) {
+      const url =
+        normalizeGasDeploymentUrl(
+          GAS_CONFIG.deploymentUrl
+        );
+
+      Object.entries(
+        parameters || {}
+      ).forEach(
+        ([
+          key,
+          value
+        ]) => {
+          if (
+            value ===
+              undefined ||
+            value ===
+              null ||
+            value ===
+              ""
+          ) {
+            return;
+          }
+
+          url.searchParams.set(
+            key,
+            String(value)
+          );
+        }
+      );
+
+      url.searchParams.set(
+        "_ts",
+        String(Date.now())
+      );
+
+      return url.toString();
+    }
+
+    function buildRequestUrl(
+      stockId,
+      attempt
+    ) {
+      return buildGasUrl({
+        stockId:
+          stockId,
+
+        mode:
+          GAS_CONFIG.searchMode,
+
+        attempt:
+          attempt
+      });
+    }
+
+    function buildDiagnosticUrl() {
+      return buildGasUrl({
+        mode:
+          GAS_CONFIG.pingMode
+      });
+    }
+
+    function createTimeoutSignal(
+      outerSignal,
+      timeoutMs
+    ) {
+      const controller =
+        new AbortController();
+
+      let timedOut =
+        false;
+
+      const handleAbort = () => {
+        controller.abort();
+      };
+
+      if (
+        outerSignal.aborted
+      ) {
+        handleAbort();
+      } else {
+        outerSignal.addEventListener(
+          "abort",
+          handleAbort,
+          { once: true }
+        );
+      }
+
+      const timeoutId =
+        window.setTimeout(
+          () => {
+            timedOut =
+              true;
+
+            controller.abort();
+          },
+          timeoutMs
+        );
+
+      return {
+        signal:
+          controller.signal,
+
+        didTimeout() {
+          return timedOut;
+        },
+
+        cleanup() {
+          window.clearTimeout(
+            timeoutId
+          );
+
+          outerSignal.removeEventListener(
+            "abort",
+            handleAbort
+          );
+        }
+      };
+    }
+
+    function wait(
+      milliseconds,
+      signal
+    ) {
+      return new Promise(
+        (resolve, reject) => {
+          const timeoutId =
+            window.setTimeout(
+              resolve,
+              milliseconds
+            );
+
+          const handleAbort = () => {
+            window.clearTimeout(
+              timeoutId
+            );
+
+            reject(
+              new DOMException(
+                "請求已取消。",
+                "AbortError"
+              )
+            );
+          };
+
+          if (signal.aborted) {
+            handleAbort();
+            return;
+          }
+
+          signal.addEventListener(
+            "abort",
+            handleAbort,
+            { once: true }
+          );
+        }
+      );
+    }
+
+    function isRetryableStatus(
+      status
+    ) {
+      return [
+        408,
+        425,
+        429,
+        500,
+        502,
+        503,
+        504
+      ].includes(
+        status
+      );
+    }
+
+    function isHtmlResponse(
+      text,
+      contentType
+    ) {
+      const normalizedText =
+        String(
+          text || ""
+        )
+          .trim()
+          .toLowerCase();
+
+      const normalizedType =
+        String(
+          contentType || ""
+        )
+          .toLowerCase();
+
+      return (
+        normalizedType.includes(
+          "text/html"
+        ) ||
+        normalizedText.startsWith(
+          "<!doctype html"
+        ) ||
+        normalizedText.startsWith(
+          "<html"
+        ) ||
+        normalizedText.startsWith(
+          "<"
+        )
+      );
+    }
+
+    function extractGasErrorMessage(
+      text
+    ) {
+      const normalized =
+        String(
+          text || ""
+        )
+          .replace(
+            /<[^>]*>/g,
+            " "
+          )
+          .replace(
+            /\s+/g,
+            " "
+          )
+          .trim();
+
+      if (!normalized) {
+        return "";
+      }
+
+      return normalized.slice(
+        0,
+        180
+      );
+    }
+
+    function createGasHttpError(
+      response,
+      text,
+      requestUrl
+    ) {
+      const status =
+        Number(
+          response.status
+        );
+
+      const responsePreview =
+        extractGasErrorMessage(
+          text
+        );
+
+      let message;
+
+      if (
+        status === 404 ||
+        status === 410
+      ) {
+        message =
+          "GAS 正式部署網址不存在或已失效。請在 Apps Script 重新部署為網頁應用程式，並將新的 /exec Deployment ID 更新至 GAS_DEPLOYMENT_ID。";
+      } else if (
+        status === 401 ||
+        status === 403
+      ) {
+        message =
+          "GAS 拒絕公開存取。請確認網頁應用程式的存取權限允許所有使用者執行。";
+      } else if (
+        status === 429
+      ) {
+        message =
+          "GAS 請求過於頻繁，系統將依重試機制再次連線。";
+      } else if (
+        status >= 500
+      ) {
+        message =
+          `GAS 暫時發生伺服器錯誤（HTTP ${status}）。`;
+      } else {
+        message =
+          `GAS 回傳 HTTP ${status}。`;
+      }
+
+      if (
+        responsePreview &&
+        status !== 404 &&
+        status !== 410
+      ) {
+        message +=
+          ` 回應摘要：${responsePreview}`;
+      }
+
+      const error =
+        new Error(
+          message
+        );
+
+      error.name =
+        "GasHttpError";
+
+      error.status =
+        status;
+
+      error.requestUrl =
+        requestUrl;
+
+      error.responseUrl =
+        response.url ||
+        "";
+
+      error.retryable =
+        isRetryableStatus(
+          status
+        );
+
+      return error;
+    }
+
+    async function fetchOnce(
+      stockId,
+      attempt,
+      signal
+    ) {
+      const timeout =
+        createTimeoutSignal(
+          signal,
+          REQUEST_TIMEOUT_MS
+        );
+
+      const requestUrl =
+        buildRequestUrl(
+          stockId,
+          attempt
+        );
+
+      try {
+        const response =
+          await fetch(
+            requestUrl,
+            {
+              method:
+                "GET",
+
+              mode:
+                "cors",
+
+              cache:
+                "no-store",
+
+              credentials:
+                "omit",
+
+              redirect:
+                "follow",
+
+              referrerPolicy:
+                "no-referrer",
+
+              headers: {
+                Accept:
+                  "application/json, text/plain;q=0.9, */*;q=0.1"
+              },
+
+              signal:
+                timeout.signal
+            }
+          );
+
+        const contentType =
+          response.headers.get(
+            "content-type"
+          ) || "";
+
+        const text =
+          (
+            await response.text()
+          )
+            .replace(
+              /^\uFEFF/,
+              ""
+            )
+            .trim();
+
+        if (
+          !response.ok
+        ) {
+          throw createGasHttpError(
+            response,
+            text,
+            requestUrl
+          );
+        }
+
+        if (!text) {
+          throw new Error(
+            "GAS 回傳空白內容。請確認 doGet(e) 有回傳 ContentService JSON。"
+          );
+        }
+
+        if (
+          isHtmlResponse(
+            text,
+            contentType
+          )
+        ) {
+          const error =
+            new Error(
+              "GAS 回傳 HTML 網頁而不是 JSON。請確認使用正式 /exec 部署網址，且部署權限不是登入限定。"
+            );
+
+          error.name =
+            "GasHtmlResponseError";
+
+          error.status =
+            response.status;
+
+          error.requestUrl =
+            requestUrl;
+
+          error.responseUrl =
+            response.url ||
+            "";
+
+          error.retryable =
+            false;
+
+          throw error;
+        }
+
+        let payload;
+
+        try {
+          payload =
+            JSON.parse(
+              text
+            );
+        } catch (error) {
+          const parseError =
+            new Error(
+              "GAS 回傳內容不是有效 JSON。"
+            );
+
+          parseError.name =
+            "GasJsonParseError";
+
+          parseError.status =
+            response.status;
+
+          parseError.requestUrl =
+            requestUrl;
+
+          parseError.responseUrl =
+            response.url ||
+            "";
+
+          parseError.retryable =
+            false;
+
+          throw parseError;
+        }
+
+        if (
+          payload &&
+          typeof payload ===
+            "object" &&
+          payload.ok ===
+            false &&
+          (
+            payload.error ||
+            payload.message
+          )
+        ) {
+          const backendError =
+            new Error(
+              String(
+                payload.error ||
+                payload.message
+              )
+            );
+
+          backendError.name =
+            "GasBackendError";
+
+          backendError.status =
+            response.status;
+
+          backendError.requestUrl =
+            requestUrl;
+
+          backendError.responseUrl =
+            response.url ||
+            "";
+
+          backendError.retryable =
+            false;
+
+          throw backendError;
+        }
+
+        return payload;
+      } catch (error) {
+        if (
+          timeout.didTimeout() &&
+          !signal.aborted
+        ) {
+          const timeoutError =
+            new Error(
+              `GAS 請求超過 ${
+                Math.round(
+                  REQUEST_TIMEOUT_MS /
+                  1000
+                )
+              } 秒，準備重新連線。`
+            );
+
+          timeoutError.name =
+            "GasTimeoutError";
+
+          timeoutError.status =
+            408;
+
+          timeoutError.requestUrl =
+            requestUrl;
+
+          timeoutError.retryable =
+            true;
+
+          throw timeoutError;
+        }
+
+        throw error;
+      } finally {
+        timeout.cleanup();
+      }
+    }
+
+    async function requestData(
+      stockId,
+      signal
+    ) {
+      let lastError = null;
+
+      for (
+        let attempt = 1;
+        attempt <=
+          MAX_REQUEST_ATTEMPTS;
+        attempt += 1
+      ) {
+        try {
+          return await fetchOnce(
+            stockId,
+            attempt,
+            signal
+          );
+        } catch (error) {
+          if (
+            signal.aborted
+          ) {
+            throw new DOMException(
+              "請求已取消。",
+              "AbortError"
+            );
+          }
+
+          lastError =
+            error;
+
+          const status =
+            Number(
+              error &&
+              error.status
+            );
+
+          const retryable =
+            Boolean(
+              error &&
+              error.retryable ===
+                true
+            ) ||
+            error instanceof
+              TypeError ||
+            isRetryableStatus(
+              status
+            );
+
+          if (
+            !retryable ||
+            attempt ===
+              MAX_REQUEST_ATTEMPTS
+          ) {
+            break;
+          }
+
+          currentQueryText.textContent =
+            `連線暫時失敗，正在第 ${
+              attempt + 1
+            } 次嘗試`;
+
+          await wait(
+            RETRY_BASE_DELAY_MS *
+              Math.pow(
+                2,
+                attempt - 1
+              ),
+            signal
+          );
+        }
+      }
+
+      if (
+        lastError instanceof
+          TypeError
+      ) {
+        const networkError =
+          new Error(
+            "瀏覽器無法讀取 GAS 回應。請確認正式 /exec 部署仍有效、公開權限正確，並檢查網路或 CORS 阻擋。"
+          );
+
+        networkError.name =
+          "GasNetworkError";
+
+        throw networkError;
+      }
+
+      throw (
+        lastError ||
+        new Error(
+          "無法取得個股情報。"
+        )
+      );
+    }
+
+    function validatePayload(
+      payload,
+      requestedStockId
+    ) {
+      if (
+        !payload ||
+        typeof payload !==
+          "object"
+      ) {
+        throw new Error(
+          "後端回傳格式無效。"
+        );
+      }
+
+      if (
+        payload.success !==
+        true
+      ) {
+        throw new Error(
+          payload.error ||
+          "後端回傳未知錯誤。"
+        );
+      }
+
+      const responseStockId =
+        normalizeStockId(
+          payload.stockId
+        );
+
+      if (
+        responseStockId !==
+        requestedStockId
+      ) {
+        throw new Error(
+          `回傳股號 ${responseStockId} 與搜尋股號 ${requestedStockId} 不一致。`
+        );
+      }
+
+      if (
+        !Array.isArray(
+          payload.news
+        )
+      ) {
+        payload.news = [];
+      }
+
+      if (
+        !Array.isArray(
+          payload.reports
+        )
+      ) {
+        payload.reports = [];
+      }
+
+      if (
+        !payload.macro ||
+        typeof payload.macro !==
+          "object"
+      ) {
+        payload.macro = {
+          cpi: {
+            success: false,
+            error:
+              "後端未回傳 CPI 資料。"
+          },
+          fed: {
+            success: false,
+            probabilities: [],
+            error:
+              "後端未回傳 Fed 資料。"
+          },
+          fetchedAt:
+            payload.updatedAt ||
+            ""
+        };
+      }
+
+      payload.news =
+        payload.news
+          .slice()
+          .sort(
+            sortNewest
+          );
+
+      payload.reports =
+        payload.reports
+          .slice()
+          .sort(
+            sortNewest
+          );
+
+      return payload;
+    }
+
+    function sortNewest(
+      left,
+      right
+    ) {
+      return (
+        Number(
+          right &&
+          right.publishTimestamp
+            ? right
+                .publishTimestamp
+            : 0
+        ) -
+        Number(
+          left &&
+          left.publishTimestamp
+            ? left
+                .publishTimestamp
+            : 0
+        )
+      );
+    }
+
+    function renderNews(
+      payload
+    ) {
+      newsLoadingPanel.classList.add(
+        "hidden"
+      );
+
+      newsList.replaceChildren();
+
+      const fragment =
+        document.createDocumentFragment();
+
+      let renderedCount = 0;
+
+      payload.news.forEach(
+        (item, index) => {
+          const element =
+            createNewsCard(
+              item,
+              index
+            );
+
+          if (element) {
+            fragment.appendChild(
+              element
+            );
+
+            renderedCount += 1;
+          }
+        }
+      );
+
+      newsCountBadge.textContent =
+        `${renderedCount} 則`;
+
+      newsUpdatedText.textContent =
+        `更新時間：${
+          payload.updatedAt ||
+          formatCurrentTime()
+        }・由新到舊`;
+
+      if (
+        renderedCount === 0
+      ) {
+        newsList.classList.add(
+          "hidden"
+        );
+
+        newsEmptyMessage.textContent =
+          `Yahoo 股市此次沒有回傳 ${payload.symbol ||
+            activeStockId} 的個股新聞。`;
+
+        newsEmptyPanel.classList.remove(
+          "hidden"
+        );
+
+        return;
+      }
+
+      newsEmptyPanel.classList.add(
+        "hidden"
+      );
+
+      newsList.appendChild(
+        fragment
+      );
+
+      newsList.classList.remove(
+        "hidden"
+      );
+    }
+
+    function createNewsCard(
+      item,
+      index
+    ) {
+      const link =
+        sanitizeHttpUrl(
+          item.link
+        );
+
+      const title =
+        String(
+          item.title || ""
+        ).trim();
+
+      if (
+        !link ||
+        !title
+      ) {
+        return null;
+      }
+
+      const publishTime =
+        String(
+          item.publishTime ||
+          item.time ||
+          "時間未提供"
+        ).trim();
+
+      const article =
+        document.createElement(
+          "article"
+        );
+
+      article.className =
+        "group rounded-lg border border-gray-800 bg-[#0b1222]/82 transition duration-200 hover:border-cyan-400/40 hover:bg-[#111b31] active:scale-[0.995]";
+
+      const anchor =
+        document.createElement(
+          "a"
+        );
+
+      anchor.href =
+        link;
+
+      anchor.target =
+        "_blank";
+
+      anchor.rel =
+        "noopener noreferrer external";
+
+      anchor.className =
+        "block w-full px-2.5 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400";
+
+      const metadata =
+        document.createElement(
+          "p"
+        );
+
+      metadata.className =
+        "overflow-hidden text-ellipsis whitespace-nowrap font-mono text-[9px] font-bold leading-4 text-gray-400";
+
+      metadata.textContent =
+        `stock.yahoo.com // ${publishTime}`;
+
+      const heading =
+        document.createElement(
+          "h3"
+        );
+
+      heading.className =
+        "mt-1 break-words font-mono text-xs font-bold leading-[1.35rem] text-gray-100 transition group-hover:text-cyan-100 md:text-sm";
+
+      heading.textContent =
+        title;
+
+      anchor.appendChild(
+        metadata
+      );
+
+      anchor.appendChild(
+        heading
+      );
+
+      article.appendChild(
+        anchor
+      );
+
+      return article;
+    }
+
+    function renderReports(
+      payload
+    ) {
+      reportsLoadingPanel.classList.add(
+        "hidden"
+      );
+
+      reportsList.replaceChildren();
+
+      const fragment =
+        document.createDocumentFragment();
+
+      let renderedCount = 0;
+
+      payload.reports.forEach(
+        (item, index) => {
+          const element =
+            createReportCard(
+              item,
+              index
+            );
+
+          if (element) {
+            fragment.appendChild(
+              element
+            );
+
+            renderedCount += 1;
+          }
+        }
+      );
+
+      reportsCountBadge.textContent =
+        `${renderedCount} 則`;
+
+      reportsUpdatedText.textContent =
+        `鉅亨研報＋PTT 股板・更新 ${
+          payload.updatedAt ||
+          formatCurrentTime()
+        }`;
+
+      if (
+        renderedCount === 0
+      ) {
+        reportsList.classList.add(
+          "hidden"
+        );
+
+        reportsEmptyMessage.textContent =
+          `目前沒有找到 ${activeStockId} 的研報、目標價或深度分析。`;
+
+        reportsEmptyPanel.classList.remove(
+          "hidden"
+        );
+
+        return;
+      }
+
+      reportsEmptyPanel.classList.add(
+        "hidden"
+      );
+
+      reportsList.appendChild(
+        fragment
+      );
+
+      reportsList.classList.remove(
+        "hidden"
+      );
+    }
+
+    function createReportCard(
+      item,
+      index
+    ) {
+      const link =
+        sanitizeHttpUrl(
+          item.link
+        );
+
+      const title =
+        String(
+          item.title || ""
+        ).trim();
+
+      if (
+        !link ||
+        !title
+      ) {
+        return null;
+      }
+
+      const source =
+        String(
+          item.source ||
+          "深度分析"
+        ).trim();
+
+      const publishTime =
+        String(
+          item.time ||
+          "時間未提供"
+        ).trim();
+
+      const article =
+        document.createElement(
+          "article"
+        );
+
+      article.className =
+        "group rounded-lg border border-gray-800 bg-[#0b1222]/82 transition duration-200 hover:border-cyan-400/40 hover:bg-[#111b31] active:scale-[0.995]";
+
+      const anchor =
+        document.createElement(
+          "a"
+        );
+
+      anchor.href =
+        link;
+
+      anchor.target =
+        "_blank";
+
+      anchor.rel =
+        "noopener noreferrer external";
+
+      anchor.className =
+        "block w-full px-2.5 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400";
+
+      const metadata =
+        document.createElement(
+          "p"
+        );
+
+      metadata.className =
+        source ===
+          "PTT股板"
+          ? "overflow-hidden text-ellipsis whitespace-nowrap font-mono text-[9px] font-black leading-4 text-orange-300"
+          : "overflow-hidden text-ellipsis whitespace-nowrap font-mono text-[9px] font-black leading-4 text-cyan-300";
+
+      metadata.textContent =
+        `${source} // ${publishTime}`;
+
+      const heading =
+        document.createElement(
+          "h3"
+        );
+
+      heading.className =
+        "mt-1 break-words font-mono text-xs font-bold leading-[1.35rem] text-gray-100 transition group-hover:text-cyan-100 md:text-sm";
+
+      heading.textContent =
+        title;
+
+      anchor.appendChild(
+        metadata
+      );
+
+      anchor.appendChild(
+        heading
+      );
+
+      article.appendChild(
+        anchor
+      );
+
+      return article;
+    }
+
+    function renderWarnings(
+      warnings
+    ) {
+      const items =
+        Array.isArray(
+          warnings
+        )
+          ? warnings
+              .map(
+                (item) =>
+                  String(
+                    item || ""
+                  ).trim()
+              )
+              .filter(Boolean)
+          : [];
+
+      if (!items.length) {
+        warningPanel.textContent =
+          "";
+
+        warningPanel.classList.add(
+          "hidden"
+        );
+
+        return;
+      }
+
+      warningPanel.textContent =
+        items.join("｜");
+
+      warningPanel.classList.remove(
+        "hidden"
+      );
+    }
+
+    async function runSearch(
+      rawStockId
+    ) {
+      const requestedStockId =
+        normalizeStockId(
+          rawStockId
+        );
+
+      requestSequence += 1;
+
+      const sequence =
+        requestSequence;
+
+      if (
+        activeAbortController
+      ) {
+        activeAbortController.abort();
+      }
+
+      activeAbortController =
+        new AbortController();
+
+      activeStockId =
+        requestedStockId;
+
+      showLoading(
+        requestedStockId
+      );
+
+      try {
+        diagnosticLink.href =
+          buildDiagnosticUrl();
+      } catch (error) {
+        diagnosticLink.href =
+          "#";
+      }
+
+      if (!navigator.onLine) {
+        showError(
+          "目前沒有網路連線",
+          "請恢復手機網路後重新搜尋。"
+        );
+
+        setStatus(
+          "offline",
+          "目前離線"
+        );
+
+        return;
+      }
+
+      try {
+        const rawPayload =
+          await requestData(
+            requestedStockId,
+            activeAbortController
+              .signal
+          );
+
+        if (
+          sequence !==
+          requestSequence
+        ) {
+          return;
+        }
+
+        const payload =
+          validatePayload(
+            rawPayload,
+            requestedStockId
+          );
+
+        if (
+          sequence !==
+          requestSequence
+        ) {
+          return;
+        }
+
+        hideLoading();
+
+        renderMacroDashboard(
+          payload
+        );
+
+        renderNews(
+          payload
+        );
+
+        renderReports(
+          payload
+        );
+
+        renderWarnings(
+          payload.warnings
+        );
+
+        const symbol =
+          payload.symbol ||
+          `${requestedStockId}.TW`;
+
+        symbolSummary.textContent =
+          symbol;
+
+        const total =
+          payload.news.length +
+          payload.reports.length;
+
+        totalSummary.textContent =
+          `${total} 則`;
+
+        currentQueryText.textContent =
+          `目前查詢：${symbol}`;
+
+        document.title =
+          `台股總經終極情報｜${symbol}`;
+
+        setStatus(
+          "success",
+          "載入完成"
+        );
+
+        setBusy(false);
+      } catch (error) {
+        if (
+          sequence !==
+          requestSequence
+        ) {
+          return;
+        }
+
+        if (
+          error instanceof
+            DOMException &&
+          error.name ===
+            "AbortError"
+        ) {
+          return;
+        }
+
+        showError(
+          "系統連線失敗",
+          error instanceof
+            Error
+            ? error.message
+            : String(error)
+        );
+      }
+    }
+
+    searchForm.addEventListener(
+      "submit",
+      (event) => {
+        event.preventDefault();
+
+        try {
+          const currentStockId =
+            stockInput.value.trim();
+
+          const normalized =
+            normalizeStockId(
+              currentStockId
+            );
+
+          stockInput.value =
+            normalized;
+
+          void runSearch(
+            normalized
+          );
+
+          stockInput.blur();
+        } catch (error) {
+          showError(
+            "股票代號格式錯誤",
+            error instanceof
+              Error
+              ? error.message
+              : String(error)
+          );
+
+          stockInput.focus();
+          stockInput.select();
+        }
+      }
+    );
+
+    retryButton.addEventListener(
+      "click",
+      () => {
+        void runSearch(
+          activeStockId
+        );
+      }
+    );
+
+    openPersonalPdfButton
+      .addEventListener(
+        "click",
+        () => {
+          void openPersonalPdfReader();
+        }
+      );
+
+    closePdfReaderButton
+      .addEventListener(
+        "click",
+        () => {
+          void closePersonalPdfReader();
+        }
+      );
+
+    pdfZoomOutButton
+      .addEventListener(
+        "click",
+        () => {
+          void changePdfZoom(
+            -0.15
+          );
+        }
+      );
+
+    pdfZoomInButton
+      .addEventListener(
+        "click",
+        () => {
+          void changePdfZoom(
+            0.15
+          );
+        }
+      );
+
+    pdfZoomResetButton
+      .addEventListener(
+        "click",
+        () => {
+          if (
+            !activePdfDocument
+          ) {
+            return;
+          }
+
+          pdfZoom =
+            1;
+
+          void renderPdfDocument();
+        }
+      );
+
+    pdfReaderModal
+      .addEventListener(
+        "contextmenu",
+        (event) => {
+          event.preventDefault();
+        }
+      );
+
+    pdfReaderModal
+      .addEventListener(
+        "dragstart",
+        (event) => {
+          event.preventDefault();
+        }
+      );
+
+    document.addEventListener(
+      "keydown",
+      (event) => {
+        const modalOpen =
+          !pdfReaderModal
+            .classList
+            .contains(
+              "hidden"
+            );
+
+        if (!modalOpen) {
+          return;
+        }
+
+        const blockedShortcut =
+          (
+            event.ctrlKey ||
+            event.metaKey
+          ) &&
+          [
+            "s",
+            "p",
+            "u"
+          ].includes(
+            String(
+              event.key || ""
+            ).toLowerCase()
+          );
+
+        if (
+          blockedShortcut
+        ) {
+          event.preventDefault();
+          event.stopPropagation();
+          return;
+        }
+
+        if (
+          event.key ===
+          "Escape"
+        ) {
+          event.preventDefault();
+
+          void closePersonalPdfReader();
+        }
+      },
+      true
+    );
+
+    stockInput.addEventListener(
+      "keydown",
+      (event) => {
+        if (
+          event.key ===
+          "Escape"
+        ) {
+          stockInput.value =
+            activeStockId;
+
+          stockInput.blur();
+        }
+      }
+    );
+
+    window.addEventListener(
+      "offline",
+      () => {
+        setStatus(
+          "offline",
+          "目前離線"
+        );
+      }
+    );
+
+    window.addEventListener(
+      "online",
+      () => {
+        setStatus(
+          "idle",
+          "網路已恢復"
+        );
+      }
+    );
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+        activeStockId =
+          DEFAULT_STOCK_ID;
+
+        stockInput.value =
+          DEFAULT_STOCK_ID;
+
+        updateAlphaMemoCard(
+          DEFAULT_STOCK_ID
+        );
+
+        updateBrokerLinks(
+          DEFAULT_STOCK_ID
+        );
+
+        void probePersonalPdf(
+          DEFAULT_STOCK_ID
+        );
+
+        void runSearch(
+          DEFAULT_STOCK_ID
+        );
+      }
+    );
+
+    function sanitizeHttpUrl(
+      rawUrl
+    ) {
+      try {
+        const url =
+          new URL(
+            String(
+              rawUrl || ""
+            )
+          );
+
+        if (
+          url.protocol !==
+            "http:" &&
+          url.protocol !==
+            "https:"
+        ) {
+          return "";
+        }
+
+        return url.toString();
+      } catch (error) {
+        return "";
+      }
+    }
+
+    function formatCurrentTime() {
+      return new Intl.DateTimeFormat(
+        "zh-TW",
+        {
+          timeZone:
+            "Asia/Taipei",
+          year:
+            "numeric",
+          month:
+            "2-digit",
+          day:
+            "2-digit",
+          hour:
+            "2-digit",
+          minute:
+            "2-digit",
+          hour12:
+            false
+        }
+      ).format(
+        new Date()
+      );
+    }
+  
+
+    /**
+     * 桌機端量測三欄容器距離視窗頂部的實際位置，
+     * 以剩餘可用高度鎖定 40 / 40 / 20 三欄共同下緣。
+     * 手機端立即解除固定高度與內部捲動限制。
+     */
+    function syncTacticalDashboardHeight() {
+      const dashboard =
+        document.getElementById(
+          "tacticalThreeColumnGrid"
+        );
+
+      if (!dashboard) {
+        return;
+      }
+
+      if (
+        !window.matchMedia(
+          "(min-width: 1024px)"
+        ).matches
+      ) {
+        document.documentElement
+          .style.removeProperty(
+            "--tactical-grid-height"
+          );
+
+        dashboard.style.height =
+          "";
+
+        return;
+      }
+
+      const rect =
+        dashboard.getBoundingClientRect();
+
+      const bottomGap =
+        12;
+
+      const availableHeight =
+        Math.max(
+          360,
+          Math.floor(
+            window.innerHeight -
+            rect.top -
+            bottomGap
+          )
+        );
+
+      document.documentElement
+        .style.setProperty(
+          "--tactical-grid-height",
+          `${availableHeight}px`
+        );
+
+      dashboard.style.height =
+        `${availableHeight}px`;
+    }
+
+    let tacticalLayoutFrame =
+      0;
+
+    function scheduleTacticalDashboardHeight() {
+      window.cancelAnimationFrame(
+        tacticalLayoutFrame
+      );
+
+      tacticalLayoutFrame =
+        window.requestAnimationFrame(
+          syncTacticalDashboardHeight
+        );
+    }
+
+    window.addEventListener(
+      "resize",
+      scheduleTacticalDashboardHeight,
+      {
+        passive: true
+      }
+    );
+
+    window.addEventListener(
+      "orientationchange",
+      scheduleTacticalDashboardHeight,
+      {
+        passive: true
+      }
+    );
+
+    window.addEventListener(
+      "load",
+      scheduleTacticalDashboardHeight,
+      {
+        once: true
+      }
+    );
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+        scheduleTacticalDashboardHeight();
+
+        const observedElements = [
+          document.querySelector(
+            "header"
+          ),
+          document.querySelector(
+            '[aria-label="查詢摘要"]'
+          ),
+          document.getElementById(
+            "globalLoadingPanel"
+          )
+        ].filter(Boolean);
+
+        if (
+          typeof ResizeObserver ===
+          "function"
+        ) {
+          const resizeObserver =
+            new ResizeObserver(
+              scheduleTacticalDashboardHeight
+            );
+
+          observedElements.forEach(
+            (element) => {
+              resizeObserver.observe(
+                element
+              );
+            }
+          );
+        }
+
+        const loadingPanel =
+          document.getElementById(
+            "globalLoadingPanel"
+          );
+
+        if (
+          loadingPanel &&
+          typeof MutationObserver ===
+            "function"
+        ) {
+          const mutationObserver =
+            new MutationObserver(
+              scheduleTacticalDashboardHeight
+            );
+
+          mutationObserver.observe(
+            loadingPanel,
+            {
+              attributes: true,
+              attributeFilter: [
+                "class",
+                "style",
+                "hidden"
+              ],
+              childList: true,
+              subtree: true
+            }
+          );
+        }
+      }
+    );
+</script>
+<script>
+    (() => {
+      "use strict";
+
+      const peel =
+        document.querySelector(
+          "[data-corner-peel]"
+        );
+
+      if (!peel) {
+        return;
+      }
+
+      const trigger =
+        peel.querySelector(
+          "[data-corner-peel-trigger]"
+        );
+
+      const closePeel = () => {
+        peel.classList.remove(
+          "is-open"
+        );
+
+        trigger.setAttribute(
+          "aria-expanded",
+          "false"
+        );
+      };
+
+      const openPeel = () => {
+        peel.classList.add(
+          "is-open"
+        );
+
+        trigger.setAttribute(
+          "aria-expanded",
+          "true"
+        );
+      };
+
+      trigger.addEventListener(
+        "click",
+        (event) => {
+          event.stopPropagation();
+
+          if (
+            peel.classList.contains(
+              "is-open"
+            )
+          ) {
+            closePeel();
+          } else {
+            openPeel();
+          }
+        }
+      );
+
+      peel.addEventListener(
+        "click",
+        (event) => {
+          event.stopPropagation();
+        }
+      );
+
+      document.addEventListener(
+        "click",
+        closePeel
+      );
+
+      document.addEventListener(
+        "keydown",
+        (event) => {
+          if (
+            event.key ===
+            "Escape"
+          ) {
+            closePeel();
+            trigger.focus({
+              preventScroll: true
+            });
+          }
+        }
+      );
+
+      window.addEventListener(
+        "pageshow",
+        closePeel
+      );
+    })();
+  </script></body>
+</html>
