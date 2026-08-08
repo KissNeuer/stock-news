@@ -586,20 +586,20 @@
 </nav>
 
   <div id="app" class="flex min-h-screen w-full min-w-0 flex-col overflow-visible lg:h-screen lg:min-h-0 lg:w-screen lg:overflow-hidden">
-    <header class="z-50 mx-4 mt-4 shrink-0 rounded-xl border border-slate-800/60 bg-[#070a12]/95 px-3 py-2.5 shadow-matrix backdrop-blur-xl sm:px-4">
-      <div class="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-2">
-        <h1 class="min-w-0 flex flex-1 items-center justify-start font-mono text-sm font-black tracking-tight text-white sm:text-base lg:text-lg">
-          <a href="./index.html" aria-label="返回 FINANCIAL HUB" title="返回 FINANCIAL HUB"><img src="logo.png" alt="Logo" class="h-7 w-7 object-contain mr-2"></a>
-          <span>INSIGHT <span class="text-cyan-300">．</span> TECH-FIN OBSERVE</span>
+    <header class="z-50 mx-4 mt-4 shrink-0 rounded-xl border border-slate-800/60 bg-[#070a12]/95 p-4 shadow-matrix backdrop-blur-xl lg:px-4 lg:py-2.5">
+      <div class="flex min-w-0 flex-col items-start gap-2 lg:flex-row lg:items-center lg:justify-between lg:gap-4">
+        <h1 class="flex w-full min-w-0 items-center justify-start font-mono text-sm font-black tracking-tight text-white sm:text-base lg:w-auto lg:flex-1 lg:text-lg">
+          <a href="./index.html" aria-label="返回 FINANCIAL HUB" title="返回 FINANCIAL HUB" class="shrink-0"><img src="logo.png" alt="Logo" class="h-7 w-7 object-contain mr-2"></a>
+          <span class="min-w-0">INSIGHT <span class="text-cyan-300">．</span> TECH-FIN OBSERVE</span>
         </h1>
 
-        <div class="ml-auto flex shrink-0 items-center gap-2">
-          <div class="rounded-lg border border-slate-800 bg-slate-900/75 px-2.5 py-1.5 text-right font-mono">
+        <div class="flex w-full items-center gap-4 pt-0.5 lg:ml-auto lg:w-auto lg:shrink-0 lg:gap-2 lg:pt-0">
+          <div class="shrink-0 rounded-lg border border-slate-800 bg-slate-900/75 px-2.5 py-1.5 text-right font-mono">
             <span class="mr-1 text-[8px] font-bold uppercase tracking-widest text-slate-600">NEXT</span>
             <span id="countdown" class="text-[11px] font-black tabular-nums text-cyan-300">05:00</span>
           </div>
           <button id="refreshButton" type="button"
-            class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-cyan-400/30 bg-cyan-400/10 px-3 py-2 text-[11px] font-black text-cyan-200 transition hover:border-cyan-300/65 hover:bg-cyan-300/15 active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-50">
+            class="inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border border-cyan-400/30 bg-cyan-400/10 px-3 py-2 text-[11px] font-black text-cyan-200 transition hover:border-cyan-300/65 hover:bg-cyan-300/15 active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-50">
             <span id="refreshIcon" aria-hidden="true">↻</span>
             立即重新整理
           </button>
