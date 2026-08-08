@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="INSIGHT ． TECH-FIN OBSERVE 科技與財經長文觀察終端">
+  <title>CABUNI // INSIGHT ． TECH-FIN OBSERVE</title>
+  <link rel="icon" type="image/png" href="logo.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            mono: ['JetBrains Mono', 'Noto Sans Mono', 'Consolas', 'monospace'],
+            sans: ['Inter', 'Noto Sans TC', 'system-ui', 'sans-serif']
+          },
+          boxShadow: {
+            matrix: '0 18px 55px rgba(0,0,0,.34), 0 0 0 1px rgba(148,163,184,.035)',
+            live: '0 0 18px rgba(52,211,153,.18)'
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    :root {
+      --grid-line: rgba(34, 211, 238, 0.045);
+      --panel-edge: rgba(51, 65, 85, 0.62);
+      --panel-bg: rgba(5, 8, 16, 0.92);
+      --panel-head: rgba(8, 14, 28, 0.94);
+      --cyber-cyan: #22d3ee;
+      --cyber-emerald: #34d399;
+    }
+
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    @media (min-width: 1024px) {
+      html, body {
+        height: 100%;
+        overflow: hidden;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(34, 211, 238, 0.34) rgba(2, 6, 23, 0.28);
+    }
+
+    *::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    *::-webkit-scrollbar-track {
+      background: rgba(2, 6, 23, 0.28);
+    }
+
+    *::-webkit-scrollbar-thumb {
+      border: 2px solid rgba(2, 6, 23, 0.28);
+      border-radius: 999px;
+      background: rgba(34, 211, 238, 0.30);
+    }
+
+    body {
+      min-width: 320px;
+      background-color: #05050a;
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+        radial-gradient(circle at 10% -10%, rgba(34, 211, 238, 0.12), transparent 30%),
+        radial-gradient(circle at 88% -4%, rgba(59, 130, 246, 0.07), transparent 28%),
+        radial-gradient(circle at 50% 115%, rgba(16, 185, 129, 0.035), transparent 35%);
+      background-size: 34px 34px, 34px 34px, auto, auto, auto;
+    }
+
+    .source-scroll {
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(34, 211, 238, 0.34) transparent;
+    }
+
+    .source-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .source-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .source-scroll::-webkit-scrollbar-thumb {
+      border: 0;
+      border-radius: 999px;
+      background: rgba(34, 211, 238, 0.28);
+      box-shadow: 0 0 8px rgba(34, 211, 238, 0.18);
+    }
+
+    .source-scroll::-webkit-scrollbar-thumb:hover {
+      background: rgba(34, 211, 238, 0.48);
+    }
+
+    .article-row {
+      content-visibility: auto;
+      contain-intrinsic-size: 76px;
+      flex: 0 0 auto;
+      overflow: visible;
+    }
+
+    .source-scroll {
+      scroll-snap-type: y proximity;
+      scroll-padding-block: 8px;
+    }
+
+    .source-scroll .article-row {
+      scroll-snap-align: start;
+      min-height: 25%;
+    }
+
+    @media (min-width: 1024px) {
+      .source-scroll .article-row {
+        min-height: 33.333333%;
+      }
+    }
+
+    .line-clamp-2 {
+      display: -webkit-box;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+
+    .scanline::after {
+      content: '';
+      position: fixed;
+      z-index: 80;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(to bottom, transparent 49%, rgba(255,255,255,.015) 50%, transparent 51%);
+      background-size: 100% 4px;
+      mix-blend-mode: overlay;
+    }
+
+    .live-dot {
+      animation: live-pulse 1.8s infinite;
+    }
+
+    @keyframes live-pulse {
+      0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, .55); }
+      70% { box-shadow: 0 0 0 7px rgba(52, 211, 153, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  
+
+    /* =======================================================
+       CABUNI CORNER PAGE PEEL NAVIGATION // THREE-WAY MATRIX
+       ======================================================= */
+
+    .corner-peel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 100;
+      width: min(360px, calc(100vw - 10px));
+      height: 228px;
+      pointer-events: none;
+      font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        "Liberation Mono",
+        "Noto Sans Mono CJK TC",
+        "Microsoft JhengHei",
+        monospace;
+      isolation: isolate;
+    }
+
+    .corner-peel-trigger {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 3;
+      display: block;
+      width: 68px;
+      height: 68px;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      border: 0;
+      border-left: 1px solid rgba(6, 182, 212, 0.30);
+      border-bottom: 1px solid rgba(6, 182, 212, 0.30);
+      color: #67e8f9;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(17, 24, 44, 0.22) 0%,
+          rgba(17, 24, 44, 0.72) 58%,
+          rgba(8, 47, 73, 0.82) 100%
+        );
+      clip-path: polygon(100% 0, 100% 100%, 0 0);
+      cursor: pointer;
+      pointer-events: auto;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      filter:
+        drop-shadow(-6px 8px 12px rgba(0, 0, 0, 0.34))
+        drop-shadow(-1px 1px 5px rgba(6, 182, 212, 0.16));
+      transform-origin: top right;
+      transition:
+        width 300ms ease-out,
+        height 300ms ease-out,
+        filter 300ms ease-out,
+        background 300ms ease-out,
+        border-color 300ms ease-out;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .corner-peel-trigger::before {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.06),
+          transparent 38%,
+          rgba(34, 211, 238, 0.05)
+        );
+      content: "";
+      clip-path: inherit;
+    }
+
+    .corner-peel-trigger::after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 1px;
+      height: 96px;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(103, 232, 249, 0.88),
+          rgba(6, 182, 212, 0)
+        );
+      content: "";
+      opacity: 0.55;
+      transform: rotate(45deg);
+      transform-origin: top right;
+    }
+
+    .corner-peel-code {
+      position: absolute;
+      top: 15px;
+      right: 4px;
+      z-index: 2;
+      display: block;
+      width: 48px;
+      color: #a5f3fc;
+      font-size: 8px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: 0.055em;
+      text-align: center;
+      text-shadow:
+        0 0 8px rgba(34, 211, 238, 0.72);
+      transform: rotate(45deg);
+      transition:
+        opacity 180ms ease,
+        transform 300ms ease-out;
+    }
+
+    .corner-peel-panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 2;
+      width: min(344px, calc(100vw - 10px));
+      min-height: 208px;
+      padding: 45px 14px 14px 30px;
+      overflow: hidden;
+      border: 1px solid rgba(6, 182, 212, 0.50);
+      border-top: 0;
+      border-right: 0;
+      border-radius: 0 0 0 16px;
+      color: #e5eef5;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(17, 24, 44, 0.975) 0%,
+          rgba(13, 21, 39, 0.965) 62%,
+          rgba(8, 47, 73, 0.94) 100%
+        );
+      box-shadow:
+        0 18px 38px rgba(0, 0, 0, 0.42),
+        0 0 20px rgba(6, 182, 212, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      clip-path:
+        polygon(
+          20% 0,
+          100% 0,
+          100% 100%,
+          0 100%,
+          0 24%
+        );
+      transform:
+        translate3d(20px, -16px, 0)
+        scale(0.68);
+      transform-origin: top right;
+      transition:
+        opacity 220ms ease-out,
+        visibility 0s linear 300ms,
+        transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .corner-peel-panel::before {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(103, 232, 249, 0.08),
+          transparent 42%,
+          rgba(34, 211, 238, 0.035)
+        );
+      content: "";
+    }
+
+    .corner-peel-panel::after {
+      position: absolute;
+      top: 13px;
+      right: 14px;
+      color: rgba(103, 232, 249, 0.52);
+      font-size: 8px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      content: "ROUTE MATRIX";
+    }
+
+    .corner-peel-list {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .corner-peel-item {
+      display: flex;
+      min-height: 38px;
+      align-items: center;
+      padding: 8px 10px;
+      border: 1px solid rgba(71, 85, 105, 0.55);
+      border-radius: 7px;
+      color: #a8b4c4;
+      background: rgba(2, 8, 23, 0.42);
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.35;
+      letter-spacing: 0.018em;
+      text-decoration: none;
+      transition:
+        border-color 180ms ease,
+        color 180ms ease,
+        background 180ms ease,
+        box-shadow 180ms ease,
+        transform 180ms ease;
+    }
+
+    a.corner-peel-item:hover,
+    a.corner-peel-item:focus-visible {
+      border-color: rgba(34, 211, 238, 0.64);
+      color: #cffafe;
+      background: rgba(8, 47, 73, 0.52);
+      box-shadow:
+        0 0 14px rgba(6, 182, 212, 0.13);
+      outline: none;
+      transform: translateX(-2px);
+    }
+
+    .corner-peel-item.is-current {
+      cursor: default;
+      user-select: none;
+    }
+
+    .corner-peel-item.is-current-green {
+      border-color: rgba(0, 255, 136, 0.42);
+      color: #00ff88;
+      background: rgba(0, 255, 136, 0.075);
+      box-shadow:
+        inset 3px 0 0 rgba(0, 255, 136, 0.74),
+        0 0 12px rgba(0, 255, 136, 0.07);
+    }
+
+    .corner-peel-item.is-current-blue {
+      border-color: rgba(56, 189, 248, 0.48);
+      color: #38bdf8;
+      background: rgba(14, 165, 233, 0.09);
+      box-shadow:
+        inset 3px 0 0 rgba(56, 189, 248, 0.82),
+        0 0 12px rgba(14, 165, 233, 0.09);
+    }
+
+    .corner-peel-item.is-current-purple {
+      border-color: rgba(192, 132, 252, 0.48);
+      color: #c084fc;
+      background: rgba(147, 51, 234, 0.09);
+      box-shadow:
+        inset 3px 0 0 rgba(192, 132, 252, 0.82),
+        0 0 12px rgba(168, 85, 247, 0.09);
+    }
+
+    .corner-peel:focus-within .corner-peel-panel,
+    .corner-peel.is-open .corner-peel-panel {
+      pointer-events: auto;
+      opacity: 1;
+      visibility: visible;
+      transform:
+        translate3d(0, 0, 0)
+        scale(1);
+      transition:
+        opacity 220ms ease-out,
+        visibility 0s linear 0s,
+        transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .corner-peel:focus-within .corner-peel-trigger,
+    .corner-peel.is-open .corner-peel-trigger {
+      width: 90px;
+      height: 90px;
+      border-left-color: rgba(34, 211, 238, 0.48);
+      border-bottom-color: rgba(34, 211, 238, 0.48);
+      background:
+        linear-gradient(
+          135deg,
+          rgba(17, 24, 44, 0.34) 0%,
+          rgba(17, 24, 44, 0.96) 62%,
+          rgba(8, 47, 73, 0.95) 100%
+        );
+      filter:
+        drop-shadow(-8px 10px 16px rgba(0, 0, 0, 0.42))
+        drop-shadow(-2px 2px 8px rgba(6, 182, 212, 0.25));
+    }
+
+    .corner-peel:focus-within .corner-peel-code,
+    .corner-peel.is-open .corner-peel-code {
+      opacity: 0.82;
+      transform:
+        translate(-7px, 7px)
+        rotate(45deg);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .corner-peel:hover .corner-peel-panel {
+        pointer-events: auto;
+        opacity: 1;
+        visibility: visible;
+        transform:
+          translate3d(0, 0, 0)
+          scale(1);
+        transition:
+          opacity 220ms ease-out,
+          visibility 0s linear 0s,
+          transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .corner-peel:hover .corner-peel-trigger {
+        width: 90px;
+        height: 90px;
+        border-left-color: rgba(34, 211, 238, 0.48);
+        border-bottom-color: rgba(34, 211, 238, 0.48);
+        background:
+          linear-gradient(
+            135deg,
+            rgba(17, 24, 44, 0.34) 0%,
+            rgba(17, 24, 44, 0.96) 62%,
+            rgba(8, 47, 73, 0.95) 100%
+          );
+        filter:
+          drop-shadow(-8px 10px 16px rgba(0, 0, 0, 0.42))
+          drop-shadow(-2px 2px 8px rgba(6, 182, 212, 0.25));
+      }
+
+      .corner-peel:hover .corner-peel-code {
+        opacity: 0.82;
+        transform:
+          translate(-7px, 7px)
+          rotate(45deg);
+      }
+    }
+
+    @media (min-width: 768px) {
+      .corner-peel-item {
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .corner-peel {
+        width: min(324px, calc(100vw - 8px));
+        height: 224px;
+      }
+
+      .corner-peel-panel {
+        width: min(316px, calc(100vw - 8px));
+        min-height: 205px;
+        padding-left: 24px;
+      }
+
+      .corner-peel-trigger {
+        width: 62px;
+        height: 62px;
+      }
+
+      .corner-peel-code {
+        top: 13px;
+        right: 2px;
+        font-size: 7px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .corner-peel-trigger,
+      .corner-peel-code,
+      .corner-peel-panel,
+      .corner-peel-item {
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+</style>
+</head>
+<body class="scanline h-auto min-h-screen w-full overflow-x-hidden overflow-y-auto bg-gray-950 text-gray-100 flex flex-col antialiased selection:bg-cyan-300 selection:text-slate-950 lg:h-screen lg:w-screen lg:overflow-hidden">
+<nav aria-label="網站快速切換" class="corner-peel fixed top-0 right-0 z-[100]" data-corner-peel>
+  <button
+    aria-controls="cornerPeelMenu"
+    aria-expanded="false"
+    aria-haspopup="true"
+    aria-label="開啟網站導航選單"
+    class="corner-peel-trigger transition-all duration-300 ease-out backdrop-blur-md bg-[#11182c]/40 border-l border-b border-cyan-500/30"
+    data-corner-peel-trigger
+    type="button">
+    <span class="corner-peel-code">[// NAV]</span>
+  </button>
+  <div
+    class="corner-peel-panel bg-[#11182c]/95 border border-cyan-500/50 shadow-[0_0_20px_rgba(6,182,212,0.15)] rounded-bl-xl p-4 font-mono text-xs md:text-sm"
+    data-corner-peel-panel
+    id="cornerPeelMenu">
+    <ol class="corner-peel-list">
+      <li>
+        <a class="corner-peel-item" href="./index.html">01 // FINANCIAL HUB ↗</a>
+      </li>
+      <li>
+        <a class="corner-peel-item" href="./stock.html">02 // CYBER FIN-HUB ↗</a>
+      </li>
+      <li>
+        <span aria-current="page" class="corner-peel-item is-current is-current-purple">03 // INSIGHT OBSERVE </span>
+      </li>
+    </ol>
+  </div>
+</nav>
+
+  <div id="app" class="flex min-h-screen w-full min-w-0 flex-col overflow-visible lg:h-screen lg:min-h-0 lg:w-screen lg:overflow-hidden">
+    <header class="z-50 mx-4 mt-4 shrink-0 rounded-xl border border-slate-800/60 bg-[#070a12]/95 px-3 py-2.5 shadow-matrix backdrop-blur-xl sm:px-4">
+      <div class="flex min-w-0 flex-wrap items-center gap-x-4 gap-y-2">
+        <h1 class="min-w-0 flex flex-1 items-center justify-start font-mono text-sm font-black tracking-tight text-white sm:text-base lg:text-lg">
+          <a href="./index.html" aria-label="返回 FINANCIAL HUB" title="返回 FINANCIAL HUB"><img src="logo.png" alt="Logo" class="h-7 w-7 object-contain mr-2"></a>
+          <span>INSIGHT <span class="text-cyan-300">．</span> TECH-FIN OBSERVE</span>
+        </h1>
+
+        <div class="ml-auto flex shrink-0 items-center gap-2">
+          <div class="rounded-lg border border-slate-800 bg-slate-900/75 px-2.5 py-1.5 text-right font-mono">
+            <span class="mr-1 text-[8px] font-bold uppercase tracking-widest text-slate-600">NEXT</span>
+            <span id="countdown" class="text-[11px] font-black tabular-nums text-cyan-300">05:00</span>
+          </div>
+          <button id="refreshButton" type="button"
+            class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-cyan-400/30 bg-cyan-400/10 px-3 py-2 text-[11px] font-black text-cyan-200 transition hover:border-cyan-300/65 hover:bg-cyan-300/15 active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-50">
+            <span id="refreshIcon" aria-hidden="true">↻</span>
+            立即重新整理
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="w-full shrink-0 px-4 pt-2">
+      <div class="w-full rounded-lg border border-slate-800/60 bg-[#070a12]/92 px-3 py-2 shadow-matrix backdrop-blur-xl sm:px-4">
+        <div id="syncStatus"
+          class="w-full whitespace-normal break-words font-mono text-[10px] font-bold uppercase leading-relaxed tracking-[0.08em] text-slate-400 sm:text-[11px]"
+          aria-live="polite">
+          SYNC STANDBY // 0/9 GAS 來源正常，共 0 則新聞 | ONLINE 0 | ITEMS 0
+        </div>
+      </div>
+    </div>
+
+    <main class="matrix-main grid w-full min-w-0 grid-cols-1 gap-4 overflow-visible p-4 lg:flex-1 lg:min-h-0 lg:grid-cols-3 lg:overflow-hidden">
+      <section class="matrix-column flex min-w-0 flex-col overflow-visible rounded-xl lg:min-h-0 lg:overflow-hidden border border-emerald-400/16 bg-[#060914]/90 shadow-matrix backdrop-blur-sm">
+        <div class="shrink-0 border-b border-slate-800 bg-gradient-to-r from-emerald-400/10 to-transparent px-3 py-2.5">
+          <div class="flex items-center justify-between gap-3">
+            <div class="min-w-0">
+              <h2 class="truncate text-base font-black tracking-tight text-slate-100">趨勢／速報</h2>
+              <p class="mt-0.5 font-mono text-[9px] font-bold tracking-[0.16em] text-emerald-400">TRENDS ． FLASH</p>
+            </div>
+            <span id="sectionCount-trends_flash" class="rounded-md border border-emerald-500/25 bg-emerald-950/20 px-2 py-1 font-mono text-[10px] font-black text-emerald-400">0</span>
+          </div>
+        </div>
+        <div id="section-trends_flash" class="flex min-h-0 flex-1 flex-col gap-3 overflow-visible p-3 lg:overflow-hidden"></div>
+      </section>
+
+      <section class="matrix-column flex min-w-0 flex-col overflow-visible rounded-xl lg:min-h-0 lg:overflow-hidden border border-cyan-400/16 bg-[#060914]/90 shadow-matrix backdrop-blur-sm">
+        <div class="shrink-0 border-b border-slate-800 bg-gradient-to-r from-cyan-400/10 to-transparent px-3 py-2.5">
+          <div class="flex items-center justify-between gap-3">
+            <div class="min-w-0">
+              <h2 class="truncate text-base font-black tracking-tight text-slate-100">產業／風向</h2>
+              <p class="mt-0.5 font-mono text-[9px] font-bold tracking-[0.16em] text-cyan-400">SECTORS ． COMPASS</p>
+            </div>
+            <span id="sectionCount-sectors_compass" class="rounded-md border border-cyan-500/25 bg-cyan-950/20 px-2 py-1 font-mono text-[10px] font-black text-cyan-400">0</span>
+          </div>
+        </div>
+        <div id="section-sectors_compass" class="flex min-h-0 flex-1 flex-col gap-3 overflow-visible p-3 lg:overflow-hidden"></div>
+      </section>
+
+      <section class="matrix-column flex min-w-0 flex-col overflow-visible rounded-xl lg:min-h-0 lg:overflow-hidden border border-purple-400/16 bg-[#060914]/90 shadow-matrix backdrop-blur-sm">
+        <div class="shrink-0 border-b border-slate-800 bg-gradient-to-r from-purple-400/10 to-transparent px-3 py-2.5">
+          <div class="flex items-center justify-between gap-3">
+            <div class="min-w-0">
+              <h2 class="truncate text-base font-black tracking-tight text-slate-100">前景／觀察</h2>
+              <p class="mt-0.5 font-mono text-[9px] font-bold tracking-[0.16em] text-purple-400">OUTLOOK ． INSIGHT</p>
+            </div>
+            <span id="sectionCount-outlook_insight" class="rounded-md border border-purple-500/25 bg-purple-950/20 px-2 py-1 font-mono text-[10px] font-black text-purple-400">0</span>
+          </div>
+        </div>
+        <div id="section-outlook_insight" class="flex min-h-0 flex-1 flex-col gap-3 overflow-visible p-3 lg:overflow-hidden"></div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="pointer-events-none fixed bottom-4 left-1/2 z-[90] hidden max-w-[calc(100vw-2rem)] -translate-x-1/2 rounded-lg border border-rose-400/25 bg-slate-950/95 px-4 py-3 text-xs font-bold text-rose-200 shadow-2xl backdrop-blur-xl" role="status"></div>
+
+  <script>
+    'use strict';
+
+    const gasUrl = "https://script.google.com/macros/s/AKfycbySJB8E8X3oTa0Ik6cqxgWhMZS9BMlKc5Y7EDtykqGuvhekYNd8tiJNxOAwH6psxWd_KA/exec";
+
+    const APP = Object.freeze({
+      refreshSeconds: 300,
+      requestTimeoutMs: 60000,
+      sourceCount: 9,
+      sectionOrder: Object.freeze(['trends_flash', 'sectors_compass', 'outlook_insight'])
+    });
+
+    const SOURCE_DEFINITIONS = Object.freeze([
+      Object.freeze({ id: 'technews', abbr: 'TN', name: 'TechNews 科技新報', section: 'trends_flash', backendSection: 'us_global', locked: false, showTags: false }),
+      Object.freeze({ id: 'inside', abbr: 'INS', name: 'INSIDE', section: 'trends_flash', backendSection: 'us_global', locked: false, showTags: false }),
+      Object.freeze({ id: 'futu_insight', abbr: 'FT', name: '富途牛牛精選要聞', section: 'trends_flash', backendSection: 'tw_taiwan', locked: false, showTags: false }),
+      Object.freeze({ id: 'uanalyze', abbr: 'UA', name: '優分析文章區', section: 'sectors_compass', backendSection: 'tw_taiwan', locked: false, showTags: false }),
+      Object.freeze({ id: 'cmoney', abbr: 'CM', name: 'CMoney 投資網誌', section: 'sectors_compass', backendSection: 'tw_taiwan', locked: false, showTags: false }),
+      Object.freeze({ id: 'ithome', abbr: 'IT', name: 'iThome 電腦報', section: 'sectors_compass', backendSection: 'tw_taiwan', locked: false, showTags: true }),
+      Object.freeze({ id: 'tnl_business', abbr: 'TNL', name: '關鍵評論網商業專區', section: 'outlook_insight', backendSection: 'us_global', locked: false, showTags: false }),
+      Object.freeze({ id: 'digitimes', abbr: 'DT', name: 'DIGITIMES 電子時報', section: 'outlook_insight', backendSection: 'cn_hk_apac', locked: true, showTags: false }),
+      Object.freeze({ id: 'yahoo_expert', abbr: 'YH', name: 'Yahoo 達人觀點專欄', section: 'outlook_insight', backendSection: 'tw_taiwan', locked: false, showTags: false })
+    ]);
+
+    const state = {
+      payload: null,
+      normalized: null,
+      loading: false,
+      nextRefreshAt: Date.now() + APP.refreshSeconds * 1000,
+      countdownTimer: null,
+      requestSequence: 0,
+      jsonpSequence: 0
+    };
+
+    const elements = {};
+
+    document.addEventListener('DOMContentLoaded', initialize);
+
+    function initialize() {
+      cacheElements();
+      renderSourceShells();
+      bindEvents();
+      startCountdown();
+      loadData(false);
+    }
+
+    function cacheElements() {
+      elements.syncStatus = document.getElementById('syncStatus');
+      elements.countdown = document.getElementById('countdown');
+      elements.refreshButton = document.getElementById('refreshButton');
+      elements.refreshIcon = document.getElementById('refreshIcon');
+      elements.toast = document.getElementById('toast');
+
+      APP.sectionOrder.forEach((sectionId) => {
+        elements[`section_${sectionId}`] = document.getElementById(`section-${sectionId}`);
+        elements[`sectionCount_${sectionId}`] = document.getElementById(`sectionCount-${sectionId}`);
+      });
+    }
+
+    function bindEvents() {
+      elements.refreshButton.addEventListener('click', () => loadData(true));
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && Date.now() >= state.nextRefreshAt && !state.loading) {
+          loadData(false);
+        }
+      });
+    }
+
+    function renderSourceShells() {
+      APP.sectionOrder.forEach((sectionId) => {
+        const definitions = SOURCE_DEFINITIONS.filter((source) => source.section === sectionId);
+        elements[`section_${sectionId}`].innerHTML = definitions.map(sourceShellHtml).join('');
+      });
+      renderLoadingState();
+    }
+
+    function sourceShellHtml(source) {
+      const lockBadge = source.locked
+        ? '<span class="shrink-0 text-[10px] text-amber-400/90 drop-shadow-[0_0_5px_rgba(251,191,36,0.28)]" title="標題與短導言">🔒</span>'
+        : '';
+
+      const tickerBadgeClass = source.section === 'trends_flash'
+        ? 'border-emerald-500/30 bg-emerald-950/20 text-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.08)]'
+        : source.section === 'sectors_compass'
+          ? 'border-cyan-500/30 bg-cyan-950/20 text-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.08)]'
+          : 'border-purple-500/30 bg-purple-950/20 text-purple-400 shadow-[0_0_10px_rgba(192,132,252,0.08)]';
+
+      return `
+        <article id="source-${escapeHtml(source.id)}" class="flex h-72 min-h-72 min-w-0 flex-col overflow-hidden rounded-lg border border-slate-800/60 bg-[#050812]/92 shadow-[inset_0_1px_0_rgba(255,255,255,0.018)] lg:h-auto lg:min-h-0 lg:flex-1 lg:basis-0">
+          <header class="flex shrink-0 items-center gap-3 border-b border-slate-800/60 bg-[#08101d]/92 px-3 py-2.5">
+            <div class="flex min-w-0 flex-1 items-center gap-2">
+              <span class="inline-flex shrink-0 items-center justify-center rounded-sm border px-1.5 py-0.5 font-mono text-[10px] font-bold leading-none tracking-[0.08em] ${tickerBadgeClass}">
+                ${escapeHtml(source.abbr)}
+              </span>
+              <h3 class="truncate text-[11px] font-black tracking-wide text-slate-100">${escapeHtml(source.name)}</h3>
+              ${lockBadge}
+            </div>
+            <div class="flex shrink-0 items-center gap-1.5 font-mono">
+              <span id="sourceStatusDot-${escapeHtml(source.id)}" class="h-2 w-2 rounded-full bg-slate-600"></span>
+              <span id="sourceStatus-${escapeHtml(source.id)}" class="text-[9px] font-black tracking-[0.12em] text-slate-600">CACHE</span>
+              <span id="sourceCount-${escapeHtml(source.id)}" class="ml-1 min-w-5 text-right text-[9px] font-black tabular-nums text-slate-600">0</span>
+            </div>
+          </header>
+          <div id="sourceList-${escapeHtml(source.id)}" class="source-scroll min-h-0 flex-1 overflow-x-hidden overflow-y-auto"></div>
+        </article>`;
+    }
+
+    async function loadData(forceRefresh) {
+      if (state.loading) {
+        return;
+      }
+
+      const sequence = ++state.requestSequence;
+      state.loading = true;
+      setLoadingState(true);
+      setSyncText('SYNCING');
+
+      if (!state.payload) {
+        renderLoadingState();
+      }
+
+      try {
+        const payload = await fetchPayload(forceRefresh);
+        if (sequence !== state.requestSequence) {
+          return;
+        }
+
+        state.payload = payload;
+        state.normalized = normalizePayload(payload);
+        renderDashboard(state.normalized);
+        updateCompleteStatus(state.normalized);
+      } catch (error) {
+        if (sequence !== state.requestSequence) {
+          return;
+        }
+
+        if (!state.normalized) {
+          renderNetworkFailure(error);
+          updateErrorStatus(0, 0);
+        } else {
+          state.normalized = markAllSourcesOffline(state.normalized);
+          renderDashboard(state.normalized);
+          updateErrorStatus(0, state.normalized.totalItems);
+        }
+        showToast('同步異常，已切換快取模式');
+      } finally {
+        if (sequence === state.requestSequence) {
+          state.loading = false;
+          setLoadingState(false);
+          resetCountdown();
+        }
+      }
+    }
+
+    async function fetchPayload(forceRefresh) {
+      const endpoint = buildEndpoint(forceRefresh);
+      let primaryError = null;
+
+      try {
+        return await fetchJson(endpoint);
+      } catch (error) {
+        primaryError = error;
+      }
+
+      try {
+        return await fetchJsonp(endpoint);
+      } catch (jsonpError) {
+        const primaryMessage = primaryError && primaryError.message ? primaryError.message : String(primaryError || 'unknown');
+        const jsonpMessage = jsonpError && jsonpError.message ? jsonpError.message : String(jsonpError || 'unknown');
+        throw new Error(`GAS 連線失敗；fetch: ${primaryMessage}；JSONP: ${jsonpMessage}`);
+      }
+    }
+
+    function buildEndpoint(forceRefresh) {
+      const endpoint = new URL(gasUrl);
+      endpoint.searchParams.set('format', 'json');
+      endpoint.searchParams.set('limit', '10');
+      endpoint.searchParams.set('_ts', String(Date.now()));
+      if (forceRefresh) {
+        endpoint.searchParams.set('refresh', '1');
+      }
+      return endpoint;
+    }
+
+    async function fetchJson(endpoint) {
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(() => controller.abort(), APP.requestTimeoutMs);
+
+      try {
+        const response = await fetch(endpoint.toString(), {
+          method: 'GET',
+          mode: 'cors',
+          credentials: 'omit',
+          cache: 'no-store',
+          redirect: 'follow',
+          headers: {
+            Accept: 'application/json'
+          },
+          signal: controller.signal
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status} ${response.statusText || ''}`.trim());
+        }
+
+        let payload;
+        try {
+          payload = await response.json();
+        } catch (error) {
+          throw new Error(`JSON 解析失敗：${error.message || String(error)}`);
+        }
+
+        validatePayload(payload);
+        return payload;
+      } catch (error) {
+        if (error && error.name === 'AbortError') {
+          throw new Error('GAS fetch 請求逾時');
+        }
+        throw error;
+      } finally {
+        window.clearTimeout(timeoutId);
+      }
+    }
+
+    function fetchJsonp(endpoint) {
+      return new Promise((resolve, reject) => {
+        const callbackName = `__insightStreamJsonp_${Date.now()}_${++state.jsonpSequence}`;
+        const script = document.createElement('script');
+        const jsonpEndpoint = new URL(endpoint.toString());
+        jsonpEndpoint.searchParams.delete('refresh');
+        jsonpEndpoint.searchParams.set('callback', callbackName);
+        jsonpEndpoint.searchParams.set('_jsonp', String(Date.now()));
+
+        let settled = false;
+        const cleanup = () => {
+          window.clearTimeout(timeoutId);
+          if (script.parentNode) {
+            script.parentNode.removeChild(script);
+          }
+          try {
+            delete window[callbackName];
+          } catch (_) {
+            window[callbackName] = undefined;
+          }
+        };
+
+        const fail = (message) => {
+          if (settled) {
+            return;
+          }
+          settled = true;
+          cleanup();
+          reject(new Error(message));
+        };
+
+        window[callbackName] = (payload) => {
+          if (settled) {
+            return;
+          }
+          try {
+            validatePayload(payload);
+            settled = true;
+            cleanup();
+            resolve(payload);
+          } catch (error) {
+            fail(error.message || String(error));
+          }
+        };
+
+        script.async = true;
+        script.src = jsonpEndpoint.toString();
+        script.referrerPolicy = 'no-referrer';
+        script.onerror = () => fail('GAS JSONP 載入失敗');
+
+        const timeoutId = window.setTimeout(() => fail('GAS JSONP 請求逾時'), APP.requestTimeoutMs);
+        document.head.appendChild(script);
+      });
+    }
+
+    function validatePayload(payload) {
+      if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+        throw new Error('後端資料結構不是 JSON Object');
+      }
+
+      const hasChannels = payload.channels && typeof payload.channels === 'object' && !Array.isArray(payload.channels);
+      const hasSections = payload.sections && typeof payload.sections === 'object' && !Array.isArray(payload.sections);
+      const hasItems = Array.isArray(payload.items);
+
+      if (!hasChannels && !hasSections && !hasItems) {
+        throw new Error('後端缺少 channels、sections 或 items 欄位');
+      }
+
+      if (hasChannels) {
+        SOURCE_DEFINITIONS.forEach((source) => {
+          if (!Object.prototype.hasOwnProperty.call(payload.channels, source.id)) {
+            throw new Error(`後端缺少 Channel Key：${source.id}`);
+          }
+          if (!Array.isArray(payload.channels[source.id])) {
+            throw new Error(`Channel ${source.id} 必須是陣列`);
+          }
+        });
+      }
+    }
+
+    function normalizePayload(payload) {
+      const statuses = Array.isArray(payload.sources) ? payload.sources : [];
+      const statusMap = new Map(statuses.map((status) => [status.id, status]));
+      const itemsBySource = {};
+
+      SOURCE_DEFINITIONS.forEach((source) => {
+        const sourceItems = readSourceItems(payload, source)
+          .filter((item) => item && item.title && item.url);
+
+        itemsBySource[source.id] = (source.id === 'cmoney'
+          ? sourceItems.filter(isCurrentCmoneyFrontendItem)
+          : sourceItems
+        ).sort((a, b) => dateToMillis(b.publishedAt) - dateToMillis(a.publishedAt));
+      });
+
+      const totalItems = SOURCE_DEFINITIONS.reduce((sum, source) => sum + itemsBySource[source.id].length, 0);
+      const healthySources = SOURCE_DEFINITIONS.reduce((sum, source) => {
+        const status = statusMap.get(source.id);
+        return sum + (isLiveStatus(status, itemsBySource[source.id]) ? 1 : 0);
+      }, 0);
+
+      const sectionCounts = {};
+      APP.sectionOrder.forEach((sectionId) => {
+        sectionCounts[sectionId] = SOURCE_DEFINITIONS
+          .filter((source) => source.section === sectionId)
+          .reduce((sum, source) => sum + itemsBySource[source.id].length, 0);
+      });
+
+      return {
+        payload,
+        statusMap,
+        itemsBySource,
+        totalItems,
+        healthySources,
+        sectionCounts
+      };
+    }
+
+    function readSourceItems(payload, source) {
+      if (payload && payload.channels && Array.isArray(payload.channels[source.id])) {
+        return payload.channels[source.id].slice();
+      }
+
+      const backendSection = source.backendSection || source.section;
+      const nested = payload && payload.sections && payload.sections[backendSection];
+      if (nested && !Array.isArray(nested) && Array.isArray(nested[source.id])) {
+        return nested[source.id].slice();
+      }
+
+      if (Array.isArray(nested)) {
+        return nested.filter((item) => item && item.sourceId === source.id);
+      }
+
+      if (Array.isArray(payload.items)) {
+        return payload.items.filter((item) => item && item.sourceId === source.id);
+      }
+
+      return [];
+    }
+
+    function isCurrentCmoneyFrontendItem(item) {
+      if (!item || /100\s*萬人的理財之路/i.test(String(item.title || ''))) {
+        return false;
+      }
+
+      const date = item.publishedAt ? new Date(item.publishedAt) : null;
+      if (!date || Number.isNaN(date.getTime())) {
+        return false;
+      }
+
+      const year = new Intl.DateTimeFormat('en', {
+        timeZone: 'Asia/Taipei',
+        year: 'numeric'
+      }).format(date);
+
+      const currentYear = new Intl.DateTimeFormat('en', {
+        timeZone: 'Asia/Taipei',
+        year: 'numeric'
+      }).format(new Date());
+
+      return year === currentYear;
+    }
+
+    function isLiveStatus(status, items) {
+      if (!Array.isArray(items) || items.length === 0) {
+        return false;
+      }
+      if (!status) {
+        return true;
+      }
+
+      const mode = String(status.mode || '').toLowerCase();
+      if (mode === 'cache' || mode === 'offline') {
+        return false;
+      }
+      return status.ok !== false;
+    }
+
+    function markAllSourcesOffline(normalized) {
+      const statusMap = new Map();
+      SOURCE_DEFINITIONS.forEach((source) => {
+        const items = normalized.itemsBySource[source.id] || [];
+        statusMap.set(source.id, {
+          id: source.id,
+          mode: 'cache',
+          ok: false,
+          itemCount: items.length,
+          method: 'frontend memory fallback'
+        });
+      });
+
+      return {
+        ...normalized,
+        statusMap,
+        healthySources: 0
+      };
+    }
+
+    function renderDashboard(normalized) {
+      SOURCE_DEFINITIONS.forEach((source) => {
+        renderSource(source, normalized.itemsBySource[source.id], normalized.statusMap.get(source.id));
+      });
+
+      APP.sectionOrder.forEach((sectionId) => {
+        elements[`sectionCount_${sectionId}`].textContent = formatInteger(normalized.sectionCounts[sectionId]);
+      });
+    }
+
+    function renderSource(source, items, status) {
+      const list = document.getElementById(`sourceList-${source.id}`);
+      const statusLabel = document.getElementById(`sourceStatus-${source.id}`);
+      const statusDot = document.getElementById(`sourceStatusDot-${source.id}`);
+      const count = document.getElementById(`sourceCount-${source.id}`);
+      const live = isLiveStatus(status, items);
+
+      count.textContent = formatInteger(items.length);
+      statusLabel.textContent = live ? 'LIVE' : 'CACHE';
+      statusLabel.className = live
+        ? 'animate-pulse text-[9px] font-black tracking-[0.12em] text-emerald-400 drop-shadow-[0_0_6px_rgba(52,211,153,0.5)]'
+        : 'text-[9px] font-black tracking-[0.12em] text-slate-600';
+      statusDot.className = live
+        ? 'live-dot h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.9)]'
+        : 'h-2 w-2 rounded-full bg-slate-600';
+
+      if (!items.length) {
+        list.innerHTML = source.id === 'futu_insight'
+          ? futuInsightEmptyHtml()
+          : emptySourceHtml(status);
+        return;
+      }
+
+      list.innerHTML = items.map((item, index) => articleRowHtml(item, source, index)).join('');
+    }
+
+    function articleRowHtml(item, source, index) {
+      const safeUrl = sanitizeExternalUrl(item.url);
+      const title = truncateUnicode(item.title || '未命名文章', 150);
+      const displaySourceName = source.id === 'futu_insight' ? source.name : (item.source || source.name);
+      const lock = source.locked ? '<span class="mr-1 text-amber-300" title="標題與短導言">🔒</span>' : '';
+      const borderClass = index === 0 ? '' : 'border-t border-slate-800/75';
+
+      return `
+        <div class="article-row ${borderClass} px-2.5 py-2.5 transition-colors hover:bg-cyan-950/10">
+          <a href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer" class="group block w-full py-0.5 outline-none">
+            <div class="flex min-w-0 w-full items-start gap-2">
+              <span class="mt-1 shrink-0 font-mono text-[8px] font-black leading-none text-slate-700">${String(index + 1).padStart(2, '0')}</span>
+              <div class="min-w-0 flex-1 py-0.5">
+                <h4 class="line-clamp-2 text-[11px] font-bold leading-[1.6] text-slate-300 transition-colors group-hover:text-cyan-400">
+                  ${lock}${escapeHtml(title)}
+                </h4>
+                <div class="mt-1.5 flex min-w-0 items-center gap-1.5 pb-0.5 font-mono text-[8px] font-bold uppercase leading-[1.5] tracking-wide text-slate-600">
+                  <span class="truncate text-slate-500">${escapeHtml(displaySourceName)}</span>
+                  <span>//</span>
+                  <time class="shrink-0 text-slate-500">${escapeHtml(formatArticleTime(item.publishedAt))}</time>
+                </div>
+              </div>
+              <span class="mt-1 shrink-0 text-[9px] leading-none text-slate-700 transition group-hover:text-cyan-300">↗</span>
+            </div>
+          </a>
+        </div>`;
+    }
+
+    function renderLoadingState() {
+      SOURCE_DEFINITIONS.forEach((source) => {
+        const list = document.getElementById(`sourceList-${source.id}`);
+        if (!list) {
+          return;
+        }
+        list.innerHTML = Array.from({ length: 4 }, () => `
+          <div class="article-row border-t border-slate-800/70 px-2.5 py-3 first:border-t-0">
+            <div class="ml-5 h-2.5 w-5/6 animate-pulse rounded bg-slate-800"></div>
+            <div class="ml-5 mt-2.5 h-2 w-1/3 animate-pulse rounded bg-slate-900"></div>
+          </div>`).join('');
+      });
+    }
+
+    function renderNetworkFailure(error) {
+      SOURCE_DEFINITIONS.forEach((source) => {
+        const list = document.getElementById(`sourceList-${source.id}`);
+        const statusLabel = document.getElementById(`sourceStatus-${source.id}`);
+        const statusDot = document.getElementById(`sourceStatusDot-${source.id}`);
+        const count = document.getElementById(`sourceCount-${source.id}`);
+
+        statusLabel.textContent = 'CACHE';
+        statusLabel.className = 'text-[9px] font-black tracking-[0.12em] text-slate-600';
+        statusDot.className = 'h-2 w-2 rounded-full bg-slate-600';
+        count.textContent = '0';
+        list.innerHTML = emptySourceHtml();
+      });
+      APP.sectionOrder.forEach((sectionId) => {
+        elements[`sectionCount_${sectionId}`].textContent = '0';
+      });
+    }
+
+    function futuInsightEmptyHtml() {
+      return `
+        <div class="flex min-h-24 items-center justify-center px-4 py-5 text-center">
+          <div class="font-mono text-[9px] font-bold tracking-[0.12em] text-slate-600">
+            CACHE ． 富途牛牛精選要聞暫無可用資料
+          </div>
+        </div>`;
+    }
+
+    function emptySourceHtml() {
+      return '<div class="min-h-24"></div>';
+    }
+
+    function updateCompleteStatus(normalized) {
+      elements.syncStatus.textContent = `SYNC COMPLETE // ${normalized.healthySources}/9 GAS 來源正常，共 ${normalized.totalItems} 則新聞 | ONLINE ${normalized.healthySources} | ITEMS ${normalized.totalItems}`;
+      elements.syncStatus.className = 'w-full whitespace-normal break-words font-mono text-[10px] font-bold uppercase leading-relaxed tracking-[0.08em] text-emerald-300 sm:text-[11px]';
+    }
+
+    function updateErrorStatus(healthySources, totalItems) {
+      elements.syncStatus.textContent = `SYNC ERROR // ${healthySources}/9 GAS 來源正常，共 ${totalItems} 則新聞 | ONLINE ${healthySources} | ITEMS ${totalItems}`;
+      elements.syncStatus.className = 'w-full whitespace-normal break-words font-mono text-[10px] font-bold uppercase leading-relaxed tracking-[0.08em] text-rose-300 sm:text-[11px]';
+    }
+
+    function setSyncText(prefix) {
+      const normalized = state.normalized;
+      const healthy = normalized ? normalized.healthySources : 0;
+      const total = normalized ? normalized.totalItems : 0;
+      elements.syncStatus.textContent = `${prefix} // ${healthy}/9 GAS 來源正常，共 ${total} 則新聞 | ONLINE ${healthy} | ITEMS ${total}`;
+      elements.syncStatus.className = 'w-full whitespace-normal break-words font-mono text-[10px] font-bold uppercase leading-relaxed tracking-[0.08em] text-cyan-300 sm:text-[11px]';
+    }
+
+    function startCountdown() {
+      updateCountdown();
+      state.countdownTimer = window.setInterval(updateCountdown, 1000);
+    }
+
+    function updateCountdown() {
+      const remainingMs = Math.max(0, state.nextRefreshAt - Date.now());
+      const totalSeconds = Math.ceil(remainingMs / 1000);
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      elements.countdown.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+      if (remainingMs <= 0 && !state.loading) {
+        loadData(false);
+      }
+    }
+
+    function resetCountdown() {
+      state.nextRefreshAt = Date.now() + APP.refreshSeconds * 1000;
+      updateCountdown();
+    }
+
+    function setLoadingState(loading) {
+      elements.refreshButton.disabled = loading;
+      elements.refreshIcon.classList.toggle('animate-spin', loading);
+    }
+
+    function showToast(message) {
+      elements.toast.textContent = message;
+      elements.toast.classList.remove('hidden');
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => elements.toast.classList.add('hidden'), 4200);
+    }
+
+    function formatArticleTime(value) {
+      if (!value) {
+        return '時間未提供';
+      }
+
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) {
+        return String(value);
+      }
+
+      const targetDay = dateKeyInTaipei(date);
+      const today = new Date();
+      const todayKey = dateKeyInTaipei(today);
+      const yesterdayKey = dateKeyInTaipei(new Date(today.getTime() - 86400000));
+      const time = new Intl.DateTimeFormat('zh-TW', {
+        timeZone: 'Asia/Taipei',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      }).format(date);
+
+      if (targetDay === todayKey) {
+        return `今天 ${time}`;
+      }
+      if (targetDay === yesterdayKey) {
+        return `昨天 ${time}`;
+      }
+
+      return new Intl.DateTimeFormat('zh-TW', {
+        timeZone: 'Asia/Taipei',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      }).format(date);
+    }
+
+    function dateKeyInTaipei(date) {
+      const parts = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Asia/Taipei',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      }).formatToParts(date);
+      const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+      return `${values.year}-${values.month}-${values.day}`;
+    }
+
+    function dateToMillis(value) {
+      const time = value ? new Date(value).getTime() : 0;
+      return Number.isFinite(time) ? time : 0;
+    }
+
+    function formatInteger(value) {
+      return new Intl.NumberFormat('zh-TW', { maximumFractionDigits: 0 }).format(Number(value) || 0);
+    }
+
+    function truncateUnicode(value, maxLength) {
+      const chars = Array.from(String(value || ''));
+      return chars.length <= maxLength ? chars.join('') : `${chars.slice(0, maxLength).join('')}…`;
+    }
+
+    function sanitizeExternalUrl(value) {
+      try {
+        const url = new URL(String(value || ''));
+        return ['http:', 'https:'].includes(url.protocol) ? url.toString() : '#';
+      } catch (_) {
+        return '#';
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const peel = document.querySelector("[data-corner-peel]");
+      if (!peel) {
+        return;
+      }
+
+      const trigger = peel.querySelector("[data-corner-peel-trigger]");
+      const panel = peel.querySelector("[data-corner-peel-panel]");
+
+      if (!trigger || !panel) {
+        return;
+      }
+
+      const setOpen = (open) => {
+        peel.classList.toggle("is-open", open);
+        trigger.setAttribute("aria-expanded", open ? "true" : "false");
+      };
+
+      const closePeel = () => setOpen(false);
+
+      trigger.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setOpen(!peel.classList.contains("is-open"));
+      });
+
+      document.addEventListener("pointerdown", (event) => {
+        if (!peel.contains(event.target)) {
+          closePeel();
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          closePeel();
+          trigger.focus({ preventScroll: true });
+        }
+      });
+
+      window.addEventListener("pageshow", closePeel);
+    })();
+  </script>
+</body>
+</html>
