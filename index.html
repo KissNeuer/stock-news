@@ -830,8 +830,9 @@
       }
     }
   
+    
     /* =======================================================
-       CABUNI CORNER PAGE PEEL NAVIGATION
+       CABUNI CORNER PAGE PEEL NAVIGATION // THREE-WAY MATRIX
        ======================================================= */
 
     .corner-peel {
@@ -839,8 +840,8 @@
       top: 0;
       right: 0;
       z-index: 100;
-      width: min(300px, calc(100vw - 12px));
-      height: 174px;
+      width: min(360px, calc(100vw - 10px));
+      height: 228px;
       pointer-events: none;
       font-family:
         ui-monospace,
@@ -849,6 +850,8 @@
         Monaco,
         Consolas,
         "Liberation Mono",
+        "Noto Sans Mono CJK TC",
+        "Microsoft JhengHei",
         monospace;
       isolation: isolate;
     }
@@ -865,12 +868,14 @@
       padding: 0;
       overflow: hidden;
       border: 0;
+      border-left: 1px solid rgba(6, 182, 212, 0.30);
+      border-bottom: 1px solid rgba(6, 182, 212, 0.30);
       color: #67e8f9;
       background:
         linear-gradient(
           135deg,
-          rgba(17, 24, 44, 0.24) 0%,
-          rgba(17, 24, 44, 0.78) 58%,
+          rgba(17, 24, 44, 0.22) 0%,
+          rgba(17, 24, 44, 0.72) 58%,
           rgba(8, 47, 73, 0.82) 100%
         );
       clip-path: polygon(100% 0, 100% 100%, 0 0);
@@ -886,15 +891,22 @@
         width 300ms ease-out,
         height 300ms ease-out,
         filter 300ms ease-out,
-        background 300ms ease-out;
+        background 300ms ease-out,
+        border-color 300ms ease-out;
       -webkit-tap-highlight-color: transparent;
     }
 
     .corner-peel-trigger::before {
       position: absolute;
       inset: 0;
-      border-left: 1px solid rgba(6, 182, 212, 0.38);
-      border-bottom: 1px solid rgba(6, 182, 212, 0.38);
+      pointer-events: none;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.06),
+          transparent 38%,
+          rgba(34, 211, 238, 0.05)
+        );
       content: "";
       clip-path: inherit;
     }
@@ -904,15 +916,15 @@
       top: 0;
       right: 0;
       width: 1px;
-      height: 94px;
+      height: 96px;
       background:
         linear-gradient(
           180deg,
-          rgba(103, 232, 249, 0.8),
+          rgba(103, 232, 249, 0.88),
           rgba(6, 182, 212, 0)
         );
       content: "";
-      opacity: 0.52;
+      opacity: 0.55;
       transform: rotate(45deg);
       transform-origin: top right;
     }
@@ -921,6 +933,7 @@
       position: absolute;
       top: 15px;
       right: 4px;
+      z-index: 2;
       display: block;
       width: 48px;
       color: #a5f3fc;
@@ -930,7 +943,7 @@
       letter-spacing: 0.055em;
       text-align: center;
       text-shadow:
-        0 0 8px rgba(34, 211, 238, 0.65);
+        0 0 8px rgba(34, 211, 238, 0.72);
       transform: rotate(45deg);
       transition:
         opacity 180ms ease,
@@ -942,11 +955,11 @@
       top: 0;
       right: 0;
       z-index: 2;
-      width: min(286px, calc(100vw - 12px));
-      min-height: 150px;
-      padding: 44px 14px 14px 28px;
+      width: min(344px, calc(100vw - 10px));
+      min-height: 208px;
+      padding: 45px 14px 14px 30px;
       overflow: hidden;
-      border: 1px solid rgba(6, 182, 212, 0.5);
+      border: 1px solid rgba(6, 182, 212, 0.50);
       border-top: 0;
       border-right: 0;
       border-radius: 0 0 0 16px;
@@ -976,8 +989,8 @@
           0 24%
         );
       transform:
-        translate3d(18px, -14px, 0)
-        scale(0.7);
+        translate3d(20px, -16px, 0)
+        scale(0.68);
       transform-origin: top right;
       transition:
         opacity 220ms ease-out,
@@ -1003,7 +1016,7 @@
       position: absolute;
       top: 13px;
       right: 14px;
-      color: rgba(103, 232, 249, 0.5);
+      color: rgba(103, 232, 249, 0.52);
       font-size: 8px;
       font-weight: 900;
       letter-spacing: 0.12em;
@@ -1029,10 +1042,10 @@
       border-radius: 7px;
       color: #a8b4c4;
       background: rgba(2, 8, 23, 0.42);
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 800;
       line-height: 1.35;
-      letter-spacing: 0.025em;
+      letter-spacing: 0.018em;
       text-decoration: none;
       transition:
         border-color 180ms ease,
@@ -1044,11 +1057,11 @@
 
     a.corner-peel-item:hover,
     a.corner-peel-item:focus-visible {
-      border-color: rgba(34, 211, 238, 0.62);
+      border-color: rgba(34, 211, 238, 0.64);
       color: #cffafe;
       background: rgba(8, 47, 73, 0.52);
       box-shadow:
-        0 0 14px rgba(6, 182, 212, 0.12);
+        0 0 14px rgba(6, 182, 212, 0.13);
       outline: none;
       transform: translateX(-2px);
     }
@@ -1059,24 +1072,32 @@
     }
 
     .corner-peel-item.is-current-green {
-      border-color: rgba(0, 255, 136, 0.4);
+      border-color: rgba(0, 255, 136, 0.42);
       color: #00ff88;
       background: rgba(0, 255, 136, 0.075);
       box-shadow:
-        inset 3px 0 0 rgba(0, 255, 136, 0.72),
-        0 0 12px rgba(0, 255, 136, 0.06);
+        inset 3px 0 0 rgba(0, 255, 136, 0.74),
+        0 0 12px rgba(0, 255, 136, 0.07);
     }
 
     .corner-peel-item.is-current-blue {
-      border-color: rgba(34, 211, 238, 0.46);
-      color: #67e8f9;
-      background: rgba(6, 182, 212, 0.09);
+      border-color: rgba(56, 189, 248, 0.48);
+      color: #38bdf8;
+      background: rgba(14, 165, 233, 0.09);
       box-shadow:
-        inset 3px 0 0 rgba(34, 211, 238, 0.8),
-        0 0 12px rgba(6, 182, 212, 0.08);
+        inset 3px 0 0 rgba(56, 189, 248, 0.82),
+        0 0 12px rgba(14, 165, 233, 0.09);
     }
 
-    .corner-peel:hover .corner-peel-panel,
+    .corner-peel-item.is-current-purple {
+      border-color: rgba(192, 132, 252, 0.48);
+      color: #c084fc;
+      background: rgba(147, 51, 234, 0.09);
+      box-shadow:
+        inset 3px 0 0 rgba(192, 132, 252, 0.82),
+        0 0 12px rgba(168, 85, 247, 0.09);
+    }
+
     .corner-peel:focus-within .corner-peel-panel,
     .corner-peel.is-open .corner-peel-panel {
       pointer-events: auto;
@@ -1091,11 +1112,12 @@
         transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    .corner-peel:hover .corner-peel-trigger,
     .corner-peel:focus-within .corner-peel-trigger,
     .corner-peel.is-open .corner-peel-trigger {
-      width: 88px;
-      height: 88px;
+      width: 90px;
+      height: 90px;
+      border-left-color: rgba(34, 211, 238, 0.48);
+      border-bottom-color: rgba(34, 211, 238, 0.48);
       background:
         linear-gradient(
           135deg,
@@ -1108,7 +1130,6 @@
         drop-shadow(-2px 2px 8px rgba(6, 182, 212, 0.25));
     }
 
-    .corner-peel:hover .corner-peel-code,
     .corner-peel:focus-within .corner-peel-code,
     .corner-peel.is-open .corner-peel-code {
       opacity: 0.82;
@@ -1117,19 +1138,60 @@
         rotate(45deg);
     }
 
+    @media (hover: hover) and (pointer: fine) {
+      .corner-peel:hover .corner-peel-panel {
+        pointer-events: auto;
+        opacity: 1;
+        visibility: visible;
+        transform:
+          translate3d(0, 0, 0)
+          scale(1);
+        transition:
+          opacity 220ms ease-out,
+          visibility 0s linear 0s,
+          transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .corner-peel:hover .corner-peel-trigger {
+        width: 90px;
+        height: 90px;
+        border-left-color: rgba(34, 211, 238, 0.48);
+        border-bottom-color: rgba(34, 211, 238, 0.48);
+        background:
+          linear-gradient(
+            135deg,
+            rgba(17, 24, 44, 0.34) 0%,
+            rgba(17, 24, 44, 0.96) 62%,
+            rgba(8, 47, 73, 0.95) 100%
+          );
+        filter:
+          drop-shadow(-8px 10px 16px rgba(0, 0, 0, 0.42))
+          drop-shadow(-2px 2px 8px rgba(6, 182, 212, 0.25));
+      }
+
+      .corner-peel:hover .corner-peel-code {
+        opacity: 0.82;
+        transform:
+          translate(-7px, 7px)
+          rotate(45deg);
+      }
+    }
+
     @media (min-width: 768px) {
       .corner-peel-item {
-        font-size: 11px;
+        font-size: 12px;
       }
     }
 
     @media (max-width: 520px) {
       .corner-peel {
-        width: min(278px, calc(100vw - 8px));
+        width: min(324px, calc(100vw - 8px));
+        height: 224px;
       }
 
       .corner-peel-panel {
-        width: min(270px, calc(100vw - 8px));
+        width: min(316px, calc(100vw - 8px));
+        min-height: 205px;
         padding-left: 24px;
       }
 
@@ -1153,26 +1215,36 @@
         transition-duration: 0.01ms !important;
       }
     }
+
 </style>
 </head>
-<body><nav aria-label="網站快速切換" class="corner-peel fixed top-0 right-0 z-[100]" data-corner-peel="">
-<button aria-controls="cornerPeelMenu" aria-expanded="false" aria-label="開啟網站導航選單" class="corner-peel-trigger" data-corner-peel-trigger="" type="button">
-<span class="corner-peel-code">[// NAV]</span>
-</button>
-<div class="corner-peel-panel" id="cornerPeelMenu">
-<ol class="corner-peel-list">
-<li>
-<span aria-current="page" class="corner-peel-item is-current is-current-green">
-            01 // FINANCIAL HUB
-          </span>
-</li>
-<li>
-<a class="corner-peel-item" href="./stock.html">
-            02 // CYBER FIN-HUB ↗
-          </a>
-</li>
-</ol>
-</div>
+<body><nav aria-label="網站快速切換" class="corner-peel fixed top-0 right-0 z-[100]" data-corner-peel>
+  <button
+    aria-controls="cornerPeelMenu"
+    aria-expanded="false"
+    aria-haspopup="true"
+    aria-label="開啟網站導航選單"
+    class="corner-peel-trigger transition-all duration-300 ease-out backdrop-blur-md bg-[#11182c]/40 border-l border-b border-cyan-500/30"
+    data-corner-peel-trigger
+    type="button">
+    <span class="corner-peel-code">[// NAV]</span>
+  </button>
+  <div
+    class="corner-peel-panel bg-[#11182c]/95 border border-cyan-500/50 shadow-[0_0_20px_rgba(6,182,212,0.15)] rounded-bl-xl p-4 font-mono text-xs md:text-sm"
+    data-corner-peel-panel
+    id="cornerPeelMenu">
+    <ol class="corner-peel-list">
+      <li>
+        <span aria-current="page" class="corner-peel-item is-current is-current-green">01 // FINANCIAL HUB </span>
+      </li>
+      <li>
+        <a class="corner-peel-item" href="./stock.html">02 // CYBER FIN-HUB ↗</a>
+      </li>
+      <li>
+        <a class="corner-peel-item" href="./TECH-FINOBSERVE.html">03 // INSIGHT OBSERVE ↗</a>
+      </li>
+    </ol>
+  </div>
 </nav>
 <main class="app-shell">
 <header class="terminal-header">
@@ -2134,90 +2206,45 @@ initialize();
     (() => {
       "use strict";
 
-      const peel =
-        document.querySelector(
-          "[data-corner-peel]"
-        );
-
+      const peel = document.querySelector("[data-corner-peel]");
       if (!peel) {
         return;
       }
 
-      const trigger =
-        peel.querySelector(
-          "[data-corner-peel-trigger]"
-        );
+      const trigger = peel.querySelector("[data-corner-peel-trigger]");
+      const panel = peel.querySelector("[data-corner-peel-panel]");
 
-      const closePeel = () => {
-        peel.classList.remove(
-          "is-open"
-        );
+      if (!trigger || !panel) {
+        return;
+      }
 
-        trigger.setAttribute(
-          "aria-expanded",
-          "false"
-        );
+      const setOpen = (open) => {
+        peel.classList.toggle("is-open", open);
+        trigger.setAttribute("aria-expanded", open ? "true" : "false");
       };
 
-      const openPeel = () => {
-        peel.classList.add(
-          "is-open"
-        );
+      const closePeel = () => setOpen(false);
 
-        trigger.setAttribute(
-          "aria-expanded",
-          "true"
-        );
-      };
+      trigger.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setOpen(!peel.classList.contains("is-open"));
+      });
 
-      trigger.addEventListener(
-        "click",
-        (event) => {
-          event.stopPropagation();
-
-          if (
-            peel.classList.contains(
-              "is-open"
-            )
-          ) {
-            closePeel();
-          } else {
-            openPeel();
-          }
+      document.addEventListener("pointerdown", (event) => {
+        if (!peel.contains(event.target)) {
+          closePeel();
         }
-      );
+      });
 
-      peel.addEventListener(
-        "click",
-        (event) => {
-          event.stopPropagation();
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          closePeel();
+          trigger.focus({ preventScroll: true });
         }
-      );
+      });
 
-      document.addEventListener(
-        "click",
-        closePeel
-      );
-
-      document.addEventListener(
-        "keydown",
-        (event) => {
-          if (
-            event.key ===
-            "Escape"
-          ) {
-            closePeel();
-            trigger.focus({
-              preventScroll: true
-            });
-          }
-        }
-      );
-
-      window.addEventListener(
-        "pageshow",
-        closePeel
-      );
+      window.addEventListener("pageshow", closePeel);
     })();
   </script></body>
 </html>
