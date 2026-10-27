@@ -1364,6 +1364,7 @@ const COUNTDOWN_INTERVAL_MS = 1_000;
 const FETCH_TIMEOUT_MS = 25_000;
 const MAX_ITEMS_PER_SOURCE = 8;
 const CACHE_KEY = "global-total-news-official-gas-cache-v1";
+const REUTERS_FEED_VERSION = "google-news-v1";
 
 const SOURCE_META = Object.freeze([
   Object.freeze({
@@ -1421,6 +1422,10 @@ function buildGasRequestUrl(source) {
 
   if (!VALID_GAS_SOURCES.has(gasSource)) {
     throw new Error(`未授權的 GAS source 代號：${gasSource || "EMPTY"}`);
+  }
+
+  if (gasSource === "reuters") {
+    return `${GAS_URL}?source=${gasSource}&feedVersion=${REUTERS_FEED_VERSION}`;
   }
 
   return `${GAS_URL}?source=${gasSource}`;
@@ -1701,6 +1706,14 @@ function extractItemBlocks(text) {
 
 function parseOfficialRssText(rawText, source) {
   const rssText = unwrapGasPayload(rawText);
+
+  if (source.id === "reuters") {
+    const upstreamError = cleanExtractedText(extractRegexField(rssText, "error"));
+    if (upstreamError) {
+      throw new Error(upstreamError);
+    }
+  }
+
   const itemBlocks = extractItemBlocks(rssText);
 
   if (itemBlocks.length === 0) {
@@ -1729,6 +1742,11 @@ function parseOfficialRssText(rawText, source) {
       const validDate = !Number.isNaN(dateObject.getTime());
 
       if (!title || !link) {
+        return null;
+      }
+
+      // Reuters must retain its actual publication time; never invent "now".
+      if (source.id === "reuters" && !validDate) {
         return null;
       }
 
@@ -1804,7 +1822,9 @@ async function fetchSource(source) {
     return {
       source,
       items,
-      channel: `GAS:${source.gasSource}`
+      channel: source.id === "reuters"
+        ? `GAS:${source.gasSource} / Google News RSS`
+        : `GAS:${source.gasSource}`
     };
   } catch (error) {
     const reason =
@@ -2039,6 +2059,7 @@ function saveCache() {
       CACHE_KEY,
       JSON.stringify({
         savedAt: new Date().toISOString(),
+        reutersFeedVersion: REUTERS_FEED_VERSION,
         sources
       })
     );
@@ -2059,6 +2080,11 @@ function restoreCache() {
     let restored = 0;
 
     SOURCE_META.forEach((source) => {
+      // Only retire the Reuters sitemap cache; keep the other five media intact.
+      if (source.id === "reuters" && cache.reutersFeedVersion !== REUTERS_FEED_VERSION) {
+        return;
+      }
+
       const items = Array.isArray(cache?.sources?.[source.id])
         ? cache.sources[source.id].slice(0, MAX_ITEMS_PER_SOURCE)
         : [];
